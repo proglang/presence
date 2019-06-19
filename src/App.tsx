@@ -4,12 +4,19 @@
 // https://opensource.org/licenses/MIT
 
 import React from 'react';
+import * as Route from './components/routes/Routes';
+import { Switch } from 'react-router-dom'
+
+import NavBar from './components/navigation/NavBar'
+import { Error404 } from "./components/pages/ErrorPage";
 
 function App() {
   return (
-    <div className="App">
-      Test
-      </div>
+    <NavBar>
+      <Switch>
+          <Route.Public component={Error404} />
+      </Switch>
+    </NavBar>
   );
 }
 

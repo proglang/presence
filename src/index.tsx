@@ -18,6 +18,10 @@ import rootReducer from './rootReducer';
 
 // Loca
 import { IntlProvider } from 'react-intl-redux'
+import { init as initLoca } from './loca/loca';
+
+// Style
+import 'semantic-ui-css/semantic.min.css';
 
 // App
 import App from './App';
@@ -27,6 +31,8 @@ import { APP_PATH } from './utils/settings';
 //*                     Implementation                    //
 //* ////////////////////////////////////////////////////////
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+initLoca()(store.dispatch);
+
 // App
 ReactDOM.render(
     <Provider store={store}>
