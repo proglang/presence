@@ -11,6 +11,7 @@
     "@types/react-intl-redux": "^0.1.11",
     "@types/react-redux": "^7.0.9",
     "@types/react-router-dom": "^4.3.3",
+    "flag-icon-css": "^3.3.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-intl": "^2.9.0",

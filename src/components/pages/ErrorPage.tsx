@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
-import { Message, Icon, Button, Accordion } from 'semantic-ui-react'
+import { Message, Icon, Button, Accordion, Container } from 'semantic-ui-react'
 
 export interface ICodeErrorProps {
     data?: any;
@@ -20,7 +20,7 @@ class ErrorInternal extends React.Component<IErrorProps & RouteComponentProps<{}
         const { code, children, data, location, canReport } = this.props;
         const js = JSON.stringify({ code: code, data: data, page: location.pathname });
         return (
-            <div>
+            <Container as="main">
                 {children}
                 <Message icon info>
                     <Icon name="bug" />
@@ -30,11 +30,11 @@ class ErrorInternal extends React.Component<IErrorProps & RouteComponentProps<{}
                             <Message.Item>__loca__ Code: {code}</Message.Item>
                             <Message.Item>__loca__ Page: {location.pathname}</Message.Item>
                         </Message.List>
-                        {data!==undefined && <Accordion panels={[ {key:'details', title: '__loca__ Additional Data', content:JSON.stringify(data)} ] }/>}
+                        {data !== undefined && <Accordion panels={[{ key: 'details', title: '__loca__ Additional Data', content: JSON.stringify(data) }]} />}
                         {canReport && <Button onClick={() => console.log(js)}>__loca__ Send Report! (Todo)</Button>}
                     </Message.Content>
                 </Message>
-            </div>
+            </Container>
         );
     }
 }
@@ -43,16 +43,16 @@ export const Error = withRouter(ErrorInternal);
 class Error404Internal extends React.Component<ICodeErrorProps & RouteComponentProps<{}>> {
     public render() {
         return (
-                <Error {...this.props} code={404}>
-                    <Message icon error>
-                        <Icon name="exclamation triangle" />
-                        <Message.Content>
-                            <Message.Header>__loca__ Page not found!</Message.Header>
-                            <i>{this.props.location.pathname}</i><br />
-                            __loca__ We could not find the above page on our servers.
+            <Error {...this.props} code={404}>
+                <Message icon error>
+                    <Icon name="exclamation triangle" />
+                    <Message.Content>
+                        <Message.Header>__loca__ Page not found!</Message.Header>
+                        <i>{this.props.location.pathname}</i><br />
+                        __loca__ We could not find the above page on our servers.
                         </Message.Content>
-                    </Message>
-                </Error>
+                </Message>
+            </Error>
         );
     }
 }

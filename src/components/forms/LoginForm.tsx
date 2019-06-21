@@ -7,7 +7,7 @@ import React, { ChangeEvent } from 'react';
 import {  injectIntl, InjectedIntlProps } from 'react-intl';
 import { ILoginData } from '../../user/auth'
 import {LoginFormBase} from './LoginFormBase'
-import InputField from '../fields/ValidationInputField';
+import InputField from '../util/ValidationInputField';
 
 
 export interface ILoginFormProps {

@@ -24,7 +24,7 @@ const messages: {[key:string]: {[key:string]:string}} = {
    de: messages_de
 }
 const images:{[key:string]:string} = {
-    en: 'uk'
+    en: 'gb'
 }
 
 /// switch Language and update redux state

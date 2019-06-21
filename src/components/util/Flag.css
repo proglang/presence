@@ -1,0 +1,35 @@
+/**
+ * Copyright (c) 2019 Stefan Schweizer
+ * 
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
+.flag-border {
+    position: relative;
+    box-shadow:inset 0px 0px 0px 2px #000;
+    width:100%;
+    padding-top: 100%;
+}
+.flag-border.active {
+    box-shadow:inset 0px 0px 0px 2px #f00;
+}
+.flag-border:hover {
+    cursor: pointer;
+}
+.flag-border::before {
+    content:"";
+    display: block;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    background-color: rgba(0,0,0,0.1);
+    opacity: 0;
+    transition: .2s ease-in;
+}
+.flag-border:hover::before {
+    opacity: 1;
+}

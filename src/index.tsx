@@ -23,6 +23,9 @@ import { init as initLoca } from './loca/loca';
 // Style
 import 'semantic-ui-css/semantic.min.css';
 
+// Flags
+import 'flag-icon-css/css/flag-icon.min.css'
+
 // App
 import App from './App';
 import { APP_PATH } from './utils/settings';

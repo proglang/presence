@@ -5,7 +5,7 @@
 
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom'
-import { Tab, TabProps } from 'semantic-ui-react'
+import { Tab, TabProps, Container } from 'semantic-ui-react'
 import { injectIntl, InjectedIntlProps } from 'react-intl';
 
 import LoginForm from '../forms/LoginForm'
@@ -37,11 +37,21 @@ class LoginPage extends React.Component<ILoginPageProps & InjectedIntlProps & Ro
             { key: 'login', menuItem: this.props.intl.formatMessage({ id: 'user.login.label' }), pane: <Tab.Pane key="1" attached={false}><LoginForm /></Tab.Pane> },
             // { key: 'token', menuItem: this.props.intl.formatMessage({ id: 'user.token.login' }), pane: <Tab.Pane attached={false}><LoginTokenForm token={data} /></Tab.Pane> },
             { key: 'register', menuItem: this.props.intl.formatMessage({ id: 'user.register.label' }), pane: <Tab.Pane key="3" attached={false}><RegisterForm /></Tab.Pane> },
-            { key: 'pw', menuItem: this.props.intl.formatMessage({ id: 'user.forgot_pw.label' }), pane: <Tab.Pane key="4"  attached={false}><ForgotPasswordForm /></Tab.Pane> },
+            { key: 'pw', menuItem: this.props.intl.formatMessage({ id: 'user.forgot_pw.label' }), pane: <Tab.Pane key="4" attached={false}><ForgotPasswordForm /></Tab.Pane> },
         ]
         var index = panes.findIndex((el) => el.key === type)
         index = index >= 0 ? index : 0
-        return (<Tab onTabChange={this.onTabChange} activeIndex={index} renderActiveOnly={false} menu={{ attached: false, secondary: true, pointing: true }} panes={panes} />);
+        return (
+            <Container as="main">
+                <Tab
+                    onTabChange={this.onTabChange}
+                    activeIndex={index}
+                    renderActiveOnly={false}
+                    menu={{ attached: false, secondary: true, pointing: true }}
+                    panes={panes}
+                />
+            </Container>
+        );
     }
 }
 

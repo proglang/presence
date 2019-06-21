@@ -6,7 +6,7 @@
 import * as React from 'react';
 import { Icon, Image, Menu, Sidebar, Container, Popup, Responsive, IconProps } from "semantic-ui-react";
 import { NavLink as Link, NavLinkProps, withRouter, RouteComponentProps } from 'react-router-dom';
-import { FormattedMessage, injectIntl, InjectedIntlProps } from 'react-intl';
+import { FormattedMessage} from 'react-intl';
 
 interface INavLinkItem {
     mobile?: boolean;
@@ -38,8 +38,8 @@ class _NavLinkItem extends React.Component<INavLinkItem & RouteComponentProps<{}
 const NavLinkItem = withRouter(_NavLinkItem);
 
 const getLeft = [
-    <NavLinkItem link={{ to: "/", exact: true }} label="nav.home" />,
-    <NavLinkItem link={{ to: "/login", exact: false }} icon={{ name: "sign in" }} label="Login" />,
+    <NavLinkItem link={{ to: "/", exact: true }} icon={{ name: "home" }} label="nav.home" />,
+    <NavLinkItem link={{ to: "/config", exact: false }} icon={{ name: "settings" }} label="nav.config" />,
     <NavLinkItem link={{ to: "/login", exact: false }} icon={{ name: "sign in" }} label="Login" />
 ]
 const getRight = [
