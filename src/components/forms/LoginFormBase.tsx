@@ -63,9 +63,9 @@ class LoginFormBaseNI extends React.Component<ILoginFormBaseProps & DispatchProp
         const { children, button } = this.props;
         return (
             <Form onSubmit={() => this.onSubmit(children)} loading={loading} error={Object.keys(errors).length !== 0}>
-                {React.Children.map(children, node => {
+                {React.Children.map(children, (node, index) => {
                     const tsnode = node as React.ReactElement<any>;
-                    return React.cloneElement(tsnode, { error: errors[tsnode.props.name] })
+                    return React.cloneElement(tsnode, {key:index, error: errors[tsnode.props.name] })
                 })}
                 <Form.Button fluid primary>{this.props.intl.formatMessage({ id: button })}</Form.Button>
                 <Message error>

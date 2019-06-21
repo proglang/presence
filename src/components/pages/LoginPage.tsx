@@ -9,7 +9,7 @@ import { Tab, TabProps } from 'semantic-ui-react'
 import { injectIntl, InjectedIntlProps } from 'react-intl';
 
 import LoginForm from '../forms/LoginForm'
-import LoginTokenForm from '../forms/TokenLoginForm'
+// import LoginTokenForm from '../forms/TokenLoginForm'
 import RegisterForm from '../forms/RegisterForm'
 import ForgotPasswordForm from '../forms/ForgotPasswordForm'
 
@@ -30,20 +30,19 @@ class LoginPage extends React.Component<ILoginPageProps & InjectedIntlProps & Ro
         this.props.history.push(basepath + "/" + pane.key);
     }
     public render() {
-        const { type, data } = this.props.match.params;
+        const { type/*, data*/ } = this.props.match.params;
         const panes = [
             //! Attached false: Workaround for https://github.com/Semantic-Org/Semantic-UI-React/issues/3412
-            { key: 'login', menuItem: this.props.intl.formatMessage({ id: 'user.login.label' }), pane: <Tab.Pane attached={false}><LoginForm /></Tab.Pane> },
+            //! key in pane needed: Workaround for React Warning
+            { key: 'login', menuItem: this.props.intl.formatMessage({ id: 'user.login.label' }), pane: <Tab.Pane key="1" attached={false}><LoginForm /></Tab.Pane> },
             // { key: 'token', menuItem: this.props.intl.formatMessage({ id: 'user.token.login' }), pane: <Tab.Pane attached={false}><LoginTokenForm token={data} /></Tab.Pane> },
-            { key: 'register', menuItem: this.props.intl.formatMessage({ id: 'user.register.label' }), pane: <Tab.Pane attached={false}><RegisterForm /></Tab.Pane> },
-            { key: 'pw', menuItem: this.props.intl.formatMessage({ id: 'user.forgot_pw.label' }), pane: <Tab.Pane attached={false}><ForgotPasswordForm /></Tab.Pane> },
+            { key: 'register', menuItem: this.props.intl.formatMessage({ id: 'user.register.label' }), pane: <Tab.Pane key="3" attached={false}><RegisterForm /></Tab.Pane> },
+            { key: 'pw', menuItem: this.props.intl.formatMessage({ id: 'user.forgot_pw.label' }), pane: <Tab.Pane key="4"  attached={false}><ForgotPasswordForm /></Tab.Pane> },
         ]
         var index = panes.findIndex((el) => el.key === type)
         index = index >= 0 ? index : 0
-        return (
-            <Tab onTabChange={this.onTabChange} activeIndex={index} renderActiveOnly={false} menu={{ attached: false, secondary: true, pointing: true }} panes={panes} />
-        );
+        return (<Tab onTabChange={this.onTabChange} activeIndex={index} renderActiveOnly={false} menu={{ attached: false, secondary: true, pointing: true }} panes={panes} />);
     }
 }
 
-export default injectIntl(LoginPage);;
+export default injectIntl(LoginPage);
