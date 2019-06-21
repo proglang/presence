@@ -6,6 +6,7 @@
 import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Message, Icon, Button, Accordion, Container } from 'semantic-ui-react'
+import { FormattedMessage } from 'react-intl';
 
 export interface ICodeErrorProps {
     data?: any;
@@ -14,7 +15,6 @@ export interface ICodeErrorProps {
 export interface IErrorProps extends ICodeErrorProps {
     code: number;
 }
-// Todo: Translate Errorpages
 class ErrorInternal extends React.Component<IErrorProps & RouteComponentProps<{}>> {
     public render() {
         const { code, children, data, location, canReport } = this.props;
@@ -25,13 +25,13 @@ class ErrorInternal extends React.Component<IErrorProps & RouteComponentProps<{}
                 <Message icon info>
                     <Icon name="bug" />
                     <Message.Content>
-                        <Message.Header>__loca__ Additional Information</Message.Header>
+                        <Message.Header><FormattedMessage id="error.additionalInfo"/></Message.Header>
                         <Message.List>
-                            <Message.Item>__loca__ Code: {code}</Message.Item>
-                            <Message.Item>__loca__ Page: {location.pathname}</Message.Item>
+                            <Message.Item><FormattedMessage id="error.code" defaultMessage="Code: {code}" values={{code}} /></Message.Item>
+                            <Message.Item><FormattedMessage id="error.page" defaultMessage="Page: {page}" values={{page:location.pathname}} /></Message.Item>
                         </Message.List>
-                        {data !== undefined && <Accordion panels={[{ key: 'details', title: '__loca__ Additional Data', content: JSON.stringify(data) }]} />}
-                        {canReport && <Button onClick={() => console.log(js)}>__loca__ Send Report! (Todo)</Button>}
+                        {data !== undefined && <Accordion panels={[{ key: 'details', title: <FormattedMessage id="error.additionalData"/>, content: JSON.stringify(data) }]} />}
+                        {canReport && <Button onClick={() => console.log(js)}><FormattedMessage id="error.send"/></Button>}
                     </Message.Content>
                 </Message>
             </Container>
@@ -47,9 +47,9 @@ class Error404Internal extends React.Component<ICodeErrorProps & RouteComponentP
                 <Message icon error>
                     <Icon name="exclamation triangle" />
                     <Message.Content>
-                        <Message.Header>__loca__ Page not found!</Message.Header>
+                        <Message.Header><FormattedMessage id="error.404.header"/></Message.Header>
                         <i>{this.props.location.pathname}</i><br />
-                        __loca__ We could not find the above page on our servers.
+                        <FormattedMessage id="error.404.message"/>
                         </Message.Content>
                 </Message>
             </Error>

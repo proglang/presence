@@ -5,7 +5,7 @@
 
 import * as React from 'react';
 import LanguageSelect from '../util/LanguageSelect'
-import { FormattedMessage, injectIntl, InjectedIntlProps } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Container } from 'semantic-ui-react';
 
 export interface IConfigPageProps {
