@@ -54,7 +54,7 @@ const getLeft = (mobile: boolean): {data:(key:number)=>React.ReactNode}[] => [
     { data:(key)=><NavLinkItem key={key} isMobile={mobile} link={{to:"/test"}} label="abc"/> }
 ]
 const getRight = (mobile: boolean): {data:(key:number)=>React.ReactNode}[] => [
-    { data:(key)=><NavLinkItem key={key} isMobile={mobile} link={{to:"/test"}} label="abc"/> }
+    { data:(key)=><NavLinkItem key={key} isMobile={mobile} link={{to:"/login", exact: false}} label="Login"/> }
 ]
 
 
