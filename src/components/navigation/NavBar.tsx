@@ -39,10 +39,15 @@ const NavLinkItem = withRouter(_NavLinkItem);
 
 const getLeft = [
     <NavLinkItem link={{ to: "/", exact: true }} icon={{ name: "home" }} label="nav.home" />,
-    <NavLinkItem link={{ to: "/config", exact: false }} icon={{ name: "settings" }} label="nav.config" />,
-    <NavLinkItem link={{ to: "/login", exact: false }} icon={{ name: "sign in" }} label="Login" />
+
+    <NavLinkItem link={{ to: "/exam/student", exact: false }} icon={{ name: "graduation cap" }} label="nav.exam.student" />,
+    <NavLinkItem link={{ to: "/exam/user", exact: false }} icon={{ name: "address book" }} label="nav.exam.user" />,
+    <NavLinkItem link={{ to: "/exam/log", exact: false }} icon={{ name: "tasks" }} label="nav.exam.log" />,
+
+    <NavLinkItem link={{ to: "/about", exact: false }} icon={{ name: "question circle" }} label="nav.about" />
 ]
 const getRight = [
+    <NavLinkItem link={{ to: "/config", exact: false }} icon={{ name: "settings" }} label="nav.config" />,
     <NavLinkItem link={{ to: "/login", exact: false }} icon={{ name: "sign in" }} label="nav.login" />
 ]
 

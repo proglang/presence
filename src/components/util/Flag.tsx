@@ -5,7 +5,6 @@
 
 import * as React from 'react';
 import './Flag.css'
-import LanguageSelect from './LanguageSelect';
 
 export interface IFlagBorderProps {
   lang: string;
@@ -19,7 +18,7 @@ export default class Flag extends React.Component<IFlagBorderProps & any, any> {
     var cl = "flag-icon-background flag-icon-squared flag-border flag-icon-" + lang
     cl = cl + (border ? " active" : "")
     cl = cl + (onClick ? " clickable" : "")
-    if (onClick) return <a onClick={onClick} className={cl} />
+    if (onClick) return <i onClick={onClick} className={cl} />
     return <i className={cl} />
   }
 }

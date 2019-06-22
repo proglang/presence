@@ -11,6 +11,7 @@ import NavBar from './components/navigation/NavBar'
 import Footer from './components/footer/Footer';
 
 import LoginPage from './components/pages/LoginPage';
+import ExamUserPage from './components/pages/ExamUserPage';
 import ConfigPage from './components/pages/ConfigPage';
 import { Error404 } from "./components/pages/ErrorPage";
 
@@ -21,6 +22,7 @@ function App() {
   <Switch>
     <Route.Public path="/" exact render={()=>null} />
     <Route.Public path="/login/:type?/:data?" exact component={LoginPage} />
+    <Route.User path="/exam/user/:type?" exact component={ExamUserPage} />
     <Route.Public path="/config" exact component={ConfigPage} />
     <Route.Public component={Error404} />
   </Switch>
