@@ -81,7 +81,7 @@ export class AddUserListForm extends React.Component<IAddUserListFormProps, IAdd
                 <input {...getInputProps()} />
               </Header>
               <Button primary onClick={getRootProps().onClick}>Add Document</Button>
-              <FilterTable onClick={console.log} header={[1,2,3]} data={[[1,2,3],[4,5,6,7,8]]} verifier={{2:()=>false}} showErrCol showOverflowData/>
+              <FilterTable onClick={console.log} header={[1,2,3]} data={[[2,3,<p>4</p>],[1,2,3,4],[3,4,5,6,7]]} verifier={{2:()=>true}} showErrCol showOverflowData/>
             </Segment>
           </div>
         )}

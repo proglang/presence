@@ -33,7 +33,6 @@ export class FlagSelection extends React.Component<IFlagSelectionProps> {
   public render() {
     var { columns, langs, onClick } = this.props;
     columns = columns ? columns : 5;
-    console.log(this.props)
     return <div
       {...{ ...this.props, langs:undefined,  columns: undefined, onClick: undefined, border: undefined }}
       style={{ ...this.props.style, display: "inline-grid", gridTemplateColumns: "auto ".repeat(columns) }}
