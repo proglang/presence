@@ -1,0 +1,35 @@
+/**
+ * Copyright (c) 2019 Stefan Schweizer
+ * 
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+.footer {
+    width: 100%;
+    background-color: black;
+    color: white;
+    min-height: 2em;
+    text-align: right;
+}
+
+.ui.tempdata {
+    background-color: rgba(0, 119, 255, 0.40)
+}
+
+.ui.tempdata .ui.table {
+    background-color: rgba(255, 255, 255, 0.5)
+}
+
+.ui.tempdata .ui.table thead th {
+    background-color: rgba(0, 0, 0, 0.5)
+}
+
+.ui.tempdata .ui.sortable.table thead th:hover {
+    background-color: rgba(0, 0, 0, 0.4)
+}
+
+/*
+.ui.tempdata .ui.table thead th input {
+    background-color: rgba(255,255,255,0.5)
+}
+*/

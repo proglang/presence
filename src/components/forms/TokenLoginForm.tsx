@@ -5,7 +5,7 @@
 import React, { ChangeEvent } from 'react';
 import {  injectIntl, InjectedIntlProps } from 'react-intl';
 import { ITokenLoginData } from '../../user/auth'
-import {LoginFormBase} from './LoginFormBase'
+import {FormBase} from './FormBase'
 import InputField from '../util/ValidationInputField';
 
 
@@ -22,15 +22,15 @@ class TokenLoginForm extends React.Component<ITokenLoginFormProps & InjectedIntl
     }
     onChange = (e: ChangeEvent<HTMLInputElement>) => this.setState({ data: { ...this.state.data, [e.target.name]: e.target.value } });
     public render() {
-        const pwl = this.props.intl.formatMessage({ id: "auth.password.label" })
-        const el = this.props.intl.formatMessage({ id: "auth.email.label" })
-        const tl = this.props.intl.formatMessage({ id: "auth.token.label" })
+        const pwl = this.props.intl.formatMessage({ id: "auth.label.password" })
+        const el = this.props.intl.formatMessage({ id: "auth.label.email" })
+        const tl = this.props.intl.formatMessage({ id: "auth.label.token" })
         const { data } = this.state;
         // Todo: Input Validation
         // Todo: Add QR-Code Scanner
         //Todo: Submit Function
         return (
-            <LoginFormBase button="auth.token.button" onSubmit={() => new Promise((res, rej) => res('test'))}>
+            <FormBase button="auth.label.submit.token" onSubmit={() => new Promise((res, rej) => res('test'))}>
                 <InputField
                     icon="user"
                     iconPosition="left"
@@ -62,7 +62,7 @@ class TokenLoginForm extends React.Component<ITokenLoginFormProps & InjectedIntl
                     value={data.token}
                     onChange={this.onChange}
                 />
-            </LoginFormBase>)
+            </FormBase>)
     }
 }
 export default injectIntl(TokenLoginForm);

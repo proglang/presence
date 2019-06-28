@@ -6,20 +6,19 @@
 import * as React from 'react';
 import { Icon, Table, Input, InputOnChangeData } from "semantic-ui-react";
 
-// Todo: Filter
 export interface IFilterTableProps {
   showErrCol?: boolean;
   showOverflowData?: boolean;
   header: any[];
   data: any[][];
   verifier?: { [key: number]: (val: any) => boolean };
-  filter?: boolean | { [key: number]: boolean | ((val: any) => boolean) }
+  filter?: true | { [key: number]: true }
   onClick?: (row: number, col: number) => void;
-  onHover?: (row: number, col: number, enter: boolean) => void;
+  // onHover?: (row: number, col: number, enter: boolean) => void;
 }
 
 type TableStyle = 'err' | 'valid' | 'warning'
-type TableFilter = { [key: number]: string }
+type TableFilter = string[]
 interface IFilterTableStateData {
   row: any[]
   index: number
@@ -30,22 +29,26 @@ export interface IFilterTableState {
   sortCol?: number;
   sortDir?: "ascending" | "descending"
   sortUpdate?: boolean;
-  filter?: TableFilter;
+  filter: TableFilter;
   filterUpdate?: boolean;
 }
 export default class FilterTable extends React.Component<IFilterTableProps, IFilterTableState> {
   constructor(props: IFilterTableProps) {
     super(props);
 
+    var filter: string[] = [];
+    filter.length = props.header.length;
+    filter.fill("")
     this.state = {
-      data: []
+      data: [],
+      filter,
+      filterUpdate: true
     }
-    this.setStateData();
+    this.componentWillUpdate(props, this.state);
   }
-  setStateData = () => {
-    const { data, header, verifier } = this.props;
-    this.state.data.splice(0, this.state.data.length); // clear state data;
-
+  setStateData = (props: IFilterTableProps) => {
+    const { data, header, verifier } = props;
+    var statedata: any = []
     data.forEach((row, index) => {
       var rowData: any[];
       var err: TableStyle[] = [];
@@ -70,39 +73,63 @@ export default class FilterTable extends React.Component<IFilterTableProps, IFil
         rowData.push(has_err ? <Icon name='attention' /> : <Icon color='green' name='checkmark' />)
       }
       // set data:
-      this.state.data.push({ row: rowData, index: index, err: has_err ? err : undefined })
+      statedata.push({ row: rowData, index: index, err: has_err ? err : undefined })
     })
+    return statedata
   }
 
-  filterTable = () => {
-    const {filter, filterUpdate} = this.state;
-    if (!filter || !filterUpdate) return;
-    this.setStateData();
-    var table = this.state.data;
-    Object.entries(filter).forEach(([col, filterval]:any) => {
-      table = table.filter((value: IFilterTableStateData, index: number) => {
-        const coldata = value.row[col];
-        // Todo: Recursive through multiple levels
-        if (typeof (coldata) === "object") {
-          try {
-            // Todo: Change this to another method which doesn't require throw!
-            Object.values(coldata).forEach((val: any) => {
-              if (val.props && val.props.children) {
-                if (String(val.props.children).toLowerCase().includes(filterval.toLowerCase()))
-                  throw (new Error())
-              }
-            });
-          } catch{ return true; }
-        } else {
-          return String(coldata).toLowerCase().includes(filterval.toLowerCase())
+  public componentWillReceiveProps() {
+    this.setState({ filterUpdate: true });
+  }
+  public componentWillUpdate(nextProps: any, nextState: any) {
+    if (nextState.filterUpdate) {
+      nextState.data = this.setStateData(nextProps);
+      nextState.data = this.filterTable(nextState)
+      nextState.sortUpdate = true;
+    }
+    if (nextState.sortUpdate) {
+      var { data, sortCol, sortDir } = nextState
+      if (sortCol !== undefined) {
+        const scol = this.getSortColID(sortCol);
+        data.sort((a: IFilterTableStateData, b: IFilterTableStateData): number => this.getValue(a.row[scol]) > this.getValue(b.row[scol]) ? 1 : -1)
+        if (sortDir === 'descending') data.reverse();
+        nextState.data = data;
+      }
+    }
+    nextState.sortUpdate = false;
+    nextState.filterUpdate = false;
+
+  }
+  getValue = (data: any) => {
+    var ret: string = "";
+    if (typeof (data) === "object") {
+      if (data.props && data.props.children) {
+        ret = ret + this.getValue(data.props.children);
+      }
+      Object.values(data).forEach((val: any) => {
+        if (val && val.props && val.props.children) {
+          ret = ret + this.getValue(val.props.children);
         }
-        return false;
+      })
+    } else {
+      ret = String(data);
+    }
+    return ret;
+  }
+
+  filterTable = (state: IFilterTableState) => {
+    var { data: table, filter } = state;
+    Object.entries(filter).forEach(([col, filterval]: any) => {
+      if (filterval === "") return;
+      table = table.filter((value: IFilterTableStateData) => {
+        const coldata = this.getValue(value.row[col]);
+        return coldata.toLowerCase().includes(filterval.toLowerCase())
       })
     })
-    this.setState({ data: table, filterUpdate:false, sortUpdate:true })
+    return table
   }
 
-  getSortCol = (col: number) => {
+  getSortColID = (col: number) => {
     var scol = col;
     if (scol < 0) {
       // superfluous data
@@ -120,15 +147,7 @@ export default class FilterTable extends React.Component<IFilterTableProps, IFil
     }
     return scol;
   }
-  doSort = () => {
-    var { data, sortCol, sortDir, sortUpdate } = this.state
-    if (sortCol!==undefined && sortUpdate) {
-      const scol = this.getSortCol(sortCol);
-      data.sort((a: IFilterTableStateData, b: IFilterTableStateData): number => a.row[scol] > b.row[scol] ? 1 : -1)
-      if (sortDir === 'descending') data.reverse();
-      this.setState({ data, sortUpdate:false })
-    }
-  }
+
   handleSort = (col: number) => {
     var { sortCol, sortDir } = this.state
     if (sortCol === col) {
@@ -140,22 +159,42 @@ export default class FilterTable extends React.Component<IFilterTableProps, IFil
   }
 
   OnFilterChange = (e: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
-    const { filter } = this.state;
-    this.setState({ filter: { ...filter, [data.index]: data.value }, filterUpdate: true })
+    var { filter } = this.state;
+    filter[data.index] = data.value;
+    this.setState({ filter, filterUpdate: true })
   }
   public render() {
-    const { showErrCol, showOverflowData, header, onClick } = this.props;
-    const { data, sortCol, sortDir } = this.state;
-    this.filterTable()
-    this.doSort();
+    const { showErrCol, showOverflowData, header, onClick, filter } = this.props;
+    const { data, sortCol, sortDir, filter: filterVal } = this.state;
+    var colcount = header.length + (showOverflowData ? 1 : 0) + (showErrCol ? 1 : 0);
+    colcount = colcount <= 0 ? 1 : colcount > 16 ? 16 : colcount
     return (
       <Table celled striped sortable>
         <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>
-              <Input index={0} type="text" onChange={this.OnFilterChange} />
-            </Table.HeaderCell>
-          </Table.Row>
+          {!!filter &&
+            <Table.Row>
+              {header.map((val, index) => {
+                const show = filter === true || filter[index] === true
+                return <Table.HeaderCell key={index} style={{ padding: 0 }}>
+                  {show &&
+                    <Input
+                      fluid
+                      index={index}
+                      type="text"
+                      onChange={this.OnFilterChange}
+                      value={filterVal[index]}
+                      icon={filterVal[index] ? <Icon name='delete' link onClick={() => {
+                        filterVal[index] = "";
+                        this.setState({ filter: filterVal, filterUpdate: true })
+                      }}
+                      /> : null}
+                    />
+                  }
+                </Table.HeaderCell>
+
+              })}
+            </Table.Row>
+          }
           <Table.Row>
             {header.map((data, index) => <Table.HeaderCell sorted={sortCol === index ? sortDir : undefined} onClick={() => this.handleSort(index)} key={index}>{data}</Table.HeaderCell>)}
             {showOverflowData && <Table.HeaderCell sorted={sortCol === -1 ? sortDir : undefined} onClick={() => this.handleSort(-1)}>__LOCA__ SUPERFLUOUS</Table.HeaderCell>}
@@ -172,6 +211,7 @@ export default class FilterTable extends React.Component<IFilterTableProps, IFil
                     <Table.Cell
                       onClick={() => onClick && onClick(row.index, col_id)}
                       selectable={!!onClick}
+                      collapsing={col_id==colcount-1}
                       key={col_id}
                       error={row.err && row.err[col_id] === 'err'}
                       warning={row.err && row.err[col_id] === 'warning'}>
@@ -182,6 +222,14 @@ export default class FilterTable extends React.Component<IFilterTableProps, IFil
               </Table.Row>)
           })}
         </Table.Body>
+        {data.length !== this.props.data.length &&
+          <Table.Footer>
+            <Table.Row>
+              <Table.Cell colSpan={colcount}>
+                <p>{data.length}/{this.props.data.length}</p>
+              </Table.Cell>
+            </Table.Row>
+          </Table.Footer>}
       </Table>
     );
   }

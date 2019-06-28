@@ -10,27 +10,27 @@ import { FormattedMessage, injectIntl, InjectedIntlProps } from 'react-intl';
 import {connect, DispatchProp} from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
 
-interface ILoginFormBase_Errors {
+interface IFormBase_Errors {
     msg?: string[];
     global?: string;
     [key: string]: boolean | string | string[] | undefined;
 }
-interface ILoginFormBase_State {
-    errors: ILoginFormBase_Errors;
+interface IFormBase_State {
+    errors: IFormBase_Errors;
     loading: boolean;
 }
-interface ILoginFormBaseProps extends InjectedIntlProps {
+interface IFormBaseProps extends InjectedIntlProps {
     onSubmit: (val:Dispatch<AnyAction>) => Promise<any>;
     button: string;
 }
 
-class LoginFormBaseNI extends React.Component<ILoginFormBaseProps & DispatchProp, any> {
-    state: ILoginFormBase_State = {
+class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp, any> {
+    state: IFormBase_State = {
         errors: {},
         loading: false
     }
     onSubmit(children: React.ReactNode) {
-        const errors: ILoginFormBase_Errors = {};
+        const errors: IFormBase_Errors = {};
         errors.msg = []
         React.Children.forEach(children, (child) => {
             // Todo: Check Node Type -> Validation depending on type
@@ -79,4 +79,4 @@ class LoginFormBaseNI extends React.Component<ILoginFormBaseProps & DispatchProp
 
     }
 }
-export const LoginFormBase = connect()(injectIntl(LoginFormBaseNI));
+export const FormBase = connect()(injectIntl(FormBaseNI));

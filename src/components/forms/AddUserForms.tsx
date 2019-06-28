@@ -4,10 +4,15 @@
 // https://opensource.org/licenses/MIT
 
 import * as React from 'react';
-import { Button, Segment, Header, Icon } from "semantic-ui-react";
+import { Button, Segment, Header, Icon, Form } from "semantic-ui-react";
 import ReactDropzone, { DropEvent } from "react-dropzone";
 
 import FilterTable from "../util/FilterTable";
+import xlsx from "../../utils/xlsx";
+
+import { injectIntl, InjectedIntlProps } from 'react-intl';
+import { FormBase } from './FormBase'
+import InputField from '../util/ValidationInputField';
 
 //Todo: Validation
 //Todo: Move UserEntry to separate file
@@ -21,7 +26,7 @@ export interface IAddUserListFormProps {
 }
 
 export interface IAddUserListFormState {
-  data: IUserEntry[],
+  data: any[][],
   file?: string
 }
 
@@ -38,18 +43,16 @@ export class AddUserListForm extends React.Component<IAddUserListFormProps, IAdd
     return true;
   }
   readJSON = (file: File): Promise<any> => {
-    return new Promise((resolve, reject) => { 
-      resolve();
-      //userFile.readJSON(file).then(data => resolve(data)).catch(e => reject(e)) 
+    return new Promise((resolve, reject) => {
+      xlsx.readJSON(file).then(data => resolve(data)).catch(e => reject(e))
     })
   }
   readTable = (file: File): Promise<any[]> => {
     return new Promise((resolve, reject) => {
-      resolve();
-      /*userFile.readSheet(file).then((d) => {
+      xlsx.readSheet(file).then((d) => {
         d.shift();
         resolve(d);
-      }).catch(e => reject(e));*/
+      }).catch(e => reject(e));
     })
   }
 
@@ -65,52 +68,98 @@ export class AddUserListForm extends React.Component<IAddUserListFormProps, IAdd
     const name = acc[0].name
     const ext = name.split('.').pop();
     if (ext === undefined) return;
-    this.extfn[ext](acc[0]).then(d => this.setState({  data: d, file: name  })); // Todo: Catch errors
+    this.extfn[ext](acc[0]).then(d => this.setState({ data: d, file: name })).catch(e => console.log(e)); // Todo: Catch errors
   }
-
+  apply = () => {
+    console.log("sending data...") //Todo: Send Data
+  }
   render() {
     const types = Object.keys(this.extfn).map(item => '.' + item);
-    // const { data, file } = this.state;
+    const { data, file } = this.state;
     return (
-      <ReactDropzone multiple={false} accept={types} onDrop={this.onDrop}>
-        {({ getRootProps, getInputProps }) => (
-          <div {...getRootProps()} onClick={undefined}>
+      <Segment basic>
+        {!file && <ReactDropzone multiple={false} accept={types} onDrop={this.onDrop}>
+          {({ getRootProps, getInputProps }) => (
             <Segment placeholder>
-              <Header icon>
-                <Icon name='file excel' />
-                <input {...getInputProps()} />
-              </Header>
-              <Button primary onClick={getRootProps().onClick}>Add Document</Button>
-              <FilterTable onClick={console.log} header={[1,2,3]} data={[[2,3,<p>4</p>],[1,2,3,4],[3,4,5,6,7]]} verifier={{2:()=>true}} showErrCol showOverflowData/>
+              <div {...getRootProps()} onClick={undefined}>
+                <Header icon textAlign="center">
+                  <Icon name='file excel' />
+                  <input {...getInputProps()} />
+                </Header>
+                <Button primary onClick={getRootProps().onClick}>__LOCA__ ADD DOCUMENT</Button>
+              </div>
             </Segment>
-          </div>
-        )}
-      </ReactDropzone>
+          )}
+        </ReactDropzone>}
+        {!!file && <Segment as="section" className="tempdata">
+          <Button primary onClick={this.apply}>__LOCA__ Send</Button>
+          <Button secondary onClick={() => this.setState({ data: [], file: undefined })}>__LOCA__ CLEAR</Button>
+          <FilterTable header={["__LOCA__ NAME", "__LOCA__ EMAIL", "__LOCA__ NOTE"]} data={data} filter={true} verifier={{ 2: () => true }} showErrCol showOverflowData={false} />
+        </Segment>
+        }
+      </Segment>
     );
   }
 }
 
 
 export interface IAddUserFormProps {
-  data: IUserEntry[];
 }
 
 export interface IAddUserFormState {
+  data: IUserEntry;
 }
 
-export class AddUserForm extends React.Component<IAddUserFormProps, IAddUserFormState> {
-  constructor(props: IAddUserFormProps) {
-    super(props);
-
-    this.state = {
+class AddUserFormC extends React.Component<IAddUserFormProps & InjectedIntlProps, IAddUserFormState> {
+    state: IAddUserFormState = {
+        data: {
+          name: "",
+          email: "",
+          note: "",
+        }
     }
-  }
-
-  public render() {
-    return (
-      <div>
-
-      </div>
-    );
-  }
+    onChange = (e: React.ChangeEvent<HTMLInputElement>) => this.setState({ data: { ...this.state.data, [e.target.name]: e.target.value } });
+    public render() {
+        const nl = this.props.intl.formatMessage({ id: "exam.user.label.name" })
+        const usl = this.props.intl.formatMessage({ id: "exam.user.label.email" })
+        const nol = this.props.intl.formatMessage({ id: "exam.user.label.note" })
+        const { data } = this.state;
+        //Todo: Input Validation
+        //Todo: Submit Function
+        return (
+            <FormBase button="exam.user.label.submit" onSubmit={() => new Promise((res, rej) => res('test'))}>
+                <InputField
+                    icon="user"
+                    iconPosition="left"
+                    name="name"
+                    label={nl}
+                    placeholder={nl}
+                    value={data.name}
+                    onChange={this.onChange}
+                    validator={() => { return true }}
+                />
+                <InputField
+                    icon="user"
+                    iconPosition="left"
+                    name="email"
+                    type="email"
+                    label={usl}
+                    placeholder={usl}
+                    value={data.email}
+                    onChange={this.onChange}
+                    validator={() => { return true }}
+                />
+                <InputField
+                    icon="user"
+                    iconPosition="left"
+                    name="note"
+                    type="text"
+                    label={nol}
+                    placeholder={nol}
+                    value={data.note}
+                    onChange={this.onChange}
+                />
+            </FormBase>)
+    }
 }
+export const AddUserForm = injectIntl(AddUserFormC);

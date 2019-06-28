@@ -25,6 +25,7 @@ import 'semantic-ui-css/semantic.min.css';
 
 // Flags
 import 'flag-icon-css/css/flag-icon.min.css'
+import './style.css'
 
 // App
 import App from './App';

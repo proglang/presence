@@ -6,7 +6,7 @@
 import React from 'react';
 import { injectIntl, InjectedIntlProps } from 'react-intl';
 import { IRegisterData } from '../../user/auth'
-import { LoginFormBase } from './LoginFormBase'
+import { FormBase } from './FormBase'
 import InputField from '../util/ValidationInputField';
 import { Form, CheckboxProps } from 'semantic-ui-react';
 
@@ -25,16 +25,16 @@ class RegisterForm extends React.Component<IRegisterFormProps & InjectedIntlProp
     onChange = (e: React.ChangeEvent<HTMLInputElement>) => this.setState({ data: { ...this.state.data, [e.target.name]: e.target.value } });
     onCBtnChange = (e: React.FormEvent<HTMLInputElement>, data:CheckboxProps) => this.setState({ data: { ...this.state.data, [data.name||'']: data.value } });
     public render() {
-        const nl = this.props.intl.formatMessage({ id: "auth.name.label" })
-        const pwl = this.props.intl.formatMessage({ id: "auth.password.label" })
-        const pwrl = this.props.intl.formatMessage({ id: "auth.password.repeat.label" })
-        const usl = this.props.intl.formatMessage({ id: "auth.email.label" })
-        const tosl = this.props.intl.formatMessage({ id: "auth.tos.label" })
+        const nl = this.props.intl.formatMessage({ id: "auth.label.name" })
+        const pwl = this.props.intl.formatMessage({ id: "auth.label.password" })
+        const pwrl = this.props.intl.formatMessage({ id: "auth.label.password.repeat" })
+        const usl = this.props.intl.formatMessage({ id: "auth.label.email" })
+        const tosl = this.props.intl.formatMessage({ id: "auth.label.tos" })
         const { data } = this.state;
         //Todo: Input Validation
         //Todo: Submit Function
         return (
-            <LoginFormBase button="auth.register.button" onSubmit={() => new Promise((res, rej) => res('test'))}>
+            <FormBase button="auth.label.submit" onSubmit={() => new Promise((res, rej) => res('test'))}>
                 <InputField
                     icon="user"
                     iconPosition="left"
@@ -81,7 +81,7 @@ class RegisterForm extends React.Component<IRegisterFormProps & InjectedIntlProp
                     value={data.password}
                     onChange={this.onCBtnChange}
                     />
-            </LoginFormBase>)
+            </FormBase>)
     }
 }
 export default injectIntl(RegisterForm);
