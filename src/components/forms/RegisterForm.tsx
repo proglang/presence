@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { injectIntl, InjectedIntlProps } from 'react-intl';
-import { IRegisterData } from '../../user/auth'
+import { IRegisterData } from '../../api/auth'
 import { FormBase } from './FormBase'
 import InputField from '../util/ValidationInputField';
 import { Form, CheckboxProps } from 'semantic-ui-react';

@@ -5,7 +5,7 @@
 
 import React, { ChangeEvent } from 'react';
 import {  injectIntl, InjectedIntlProps } from 'react-intl';
-import { ILoginData } from '../../user/auth'
+import { ILoginData } from '../../api/auth'
 import {FormBase} from './FormBase'
 import InputField from '../util/ValidationInputField';
 

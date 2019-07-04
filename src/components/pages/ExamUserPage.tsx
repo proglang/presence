@@ -10,6 +10,7 @@ import { injectIntl, InjectedIntlProps } from 'react-intl';
 export interface IExamUserPageProps {
 }
 
+// Todo: Add selected pane to state
 class ExamUserPage extends React.Component<IExamUserPageProps & InjectedIntlProps, any> {
   
   public render() {

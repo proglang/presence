@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 import React, { ChangeEvent } from 'react';
 import {  injectIntl, InjectedIntlProps } from 'react-intl';
-import { ITokenLoginData } from '../../user/auth'
+import { ITokenLoginData } from '../../api/auth'
 import {FormBase} from './FormBase'
 import InputField from '../util/ValidationInputField';
 

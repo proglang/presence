@@ -13,6 +13,8 @@ import xlsx from "../../utils/xlsx";
 import { injectIntl, InjectedIntlProps } from 'react-intl';
 import { FormBase } from './FormBase'
 import InputField from '../util/ValidationInputField';
+import { connect, DispatchProp } from 'react-redux';
+
 
 //Todo: Validation
 //Todo: Move UserEntry to separate file
@@ -110,56 +112,76 @@ export interface IAddUserFormState {
   data: IUserEntry;
 }
 
-class AddUserFormC extends React.Component<IAddUserFormProps & InjectedIntlProps, IAddUserFormState> {
-    state: IAddUserFormState = {
-        data: {
-          name: "",
-          email: "",
-          note: "",
-        }
+class AddUserFormC extends React.Component<IAddUserFormProps & InjectedIntlProps & DispatchProp & test, IAddUserFormState> {
+  state: IAddUserFormState = {
+    data: {
+      name: "",
+      email: "",
+      note: "",
     }
-    onChange = (e: React.ChangeEvent<HTMLInputElement>) => this.setState({ data: { ...this.state.data, [e.target.name]: e.target.value } });
-    public render() {
-        const nl = this.props.intl.formatMessage({ id: "exam.user.label.name" })
-        const usl = this.props.intl.formatMessage({ id: "exam.user.label.email" })
-        const nol = this.props.intl.formatMessage({ id: "exam.user.label.note" })
-        const { data } = this.state;
-        //Todo: Input Validation
-        //Todo: Submit Function
-        return (
-            <FormBase button="exam.user.label.submit" onSubmit={() => new Promise((res, rej) => res('test'))}>
-                <InputField
-                    icon="user"
-                    iconPosition="left"
-                    name="name"
-                    label={nl}
-                    placeholder={nl}
-                    value={data.name}
-                    onChange={this.onChange}
-                    validator={() => { return true }}
-                />
-                <InputField
-                    icon="user"
-                    iconPosition="left"
-                    name="email"
-                    type="email"
-                    label={usl}
-                    placeholder={usl}
-                    value={data.email}
-                    onChange={this.onChange}
-                    validator={() => { return true }}
-                />
-                <InputField
-                    icon="user"
-                    iconPosition="left"
-                    name="note"
-                    type="text"
-                    label={nol}
-                    placeholder={nol}
-                    value={data.note}
-                    onChange={this.onChange}
-                />
-            </FormBase>)
-    }
+  }
+  onChange = (e: React.ChangeEvent<HTMLInputElement>) => this.setState({ data: { ...this.state.data, [e.target.name]: e.target.value } });
+  public render() {
+    const nl = this.props.intl.formatMessage({ id: "exam.user.label.name" })
+    const usl = this.props.intl.formatMessage({ id: "exam.user.label.email" })
+    const nol = this.props.intl.formatMessage({ id: "exam.user.label.note" })
+    console.log(this.props)
+    const { data } = this.state;
+    //Todo: Input Validation
+    //Todo: Submit Function
+    return (
+      <FormBase button="exam.user.label.submit" onSubmit={() => new Promise((res, rej) => res('test'))}>
+        <InputField
+          icon="user"
+          iconPosition="left"
+          name="name"
+          label={nl}
+          placeholder={nl}
+          value={data.name}
+          onChange={this.onChange}
+          validator={() => { return true }}
+        />
+        <InputField
+          icon="user"
+          iconPosition="left"
+          name="email"
+          type="email"
+          label={usl}
+          placeholder={usl}
+          value={data.email}
+          onChange={this.onChange}
+          validator={() => { return true }}
+        />
+        <InputField
+          icon="user"
+          iconPosition="left"
+          name="note"
+          type="text"
+          label={nol}
+          placeholder={nol}
+          value={data.note}
+          onChange={this.onChange}
+        />
+        <Button onClick={() => this.props.dispatch(debug(123))}>
+          {String(this.props.redux.getData())}
+                </Button>
+      </FormBase>)
+  }
 }
-export const AddUserForm = injectIntl(AddUserFormC);
+interface test {
+  redux: {
+    getData:()=>any
+  }
+}
+const mapStateToProps1 = (state: any):test => {
+  console.log(state);
+
+  return ({
+    redux: {
+      getData:() => state.dbg
+    }
+  })
+}
+
+const debug = (debug: any) => ({ type: "TOGGLE_DEBUG", debug });
+export const AddUserForm = connect(mapStateToProps1)(injectIntl(AddUserFormC));
