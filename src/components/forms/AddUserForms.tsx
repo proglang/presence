@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import * as React from 'react';
-import { Button, Segment, Header, Icon, Form } from "semantic-ui-react";
+import { Button, Segment, Header, Icon } from "semantic-ui-react";
 import ReactDropzone, { DropEvent } from "react-dropzone";
 
 import FilterTable from "../util/FilterTable";
@@ -125,7 +125,6 @@ class AddUserFormC extends React.Component<IAddUserFormProps & InjectedIntlProps
     const nl = this.props.intl.formatMessage({ id: "exam.user.label.name" })
     const usl = this.props.intl.formatMessage({ id: "exam.user.label.email" })
     const nol = this.props.intl.formatMessage({ id: "exam.user.label.note" })
-    console.log(this.props)
     const { data } = this.state;
     //Todo: Input Validation
     //Todo: Submit Function
@@ -165,6 +164,9 @@ class AddUserFormC extends React.Component<IAddUserFormProps & InjectedIntlProps
         <Button onClick={() => this.props.dispatch(debug(123))}>
           {String(this.props.redux.getData())}
                 </Button>
+        <Button onClick={() => this.props.dispatch(test())}>
+          test
+                </Button>
       </FormBase>)
   }
 }
@@ -184,4 +186,5 @@ const mapStateToProps1 = (state: any):test => {
 }
 
 const debug = (debug: any) => ({ type: "TOGGLE_DEBUG", debug });
+const test = () => ({ type: "TEST" });
 export const AddUserForm = connect(mapStateToProps1)(injectIntl(AddUserFormC));

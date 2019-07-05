@@ -211,7 +211,7 @@ export default class FilterTable extends React.Component<IFilterTableProps, IFil
                     <Table.Cell
                       onClick={() => onClick && onClick(row.index, col_id)}
                       selectable={!!onClick}
-                      collapsing={col_id==colcount-1}
+                      collapsing={col_id===colcount-1}
                       key={col_id}
                       error={row.err && row.err[col_id] === 'err'}
                       warning={row.err && row.err[col_id] === 'warning'}>
