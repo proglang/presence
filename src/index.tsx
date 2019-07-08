@@ -37,6 +37,10 @@ import { APP_PATH } from './utils/settings';
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 initLoca()(store.dispatch);
 
+// Todo: remove this. debug purposes only!
+var _w:any = window;
+_w.store = store;
+
 // App
 ReactDOM.render(
     <Provider store={store}>

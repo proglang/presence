@@ -20,3 +20,5 @@ export interface IRegisterData extends ILoginData {
 export interface IForgottenPasswordData {
     email: string;
 }
+
+export const LOGOUT = "LOGOUT"
