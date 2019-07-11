@@ -1,16 +1,23 @@
-import {LOGOUT} from './auth'
+import { LOGOUT } from './auth'
 
-export interface IExamUserData {
+export interface IExamAddUserData {
     name: string;
     email: string;
     note?: string;
+
 }
-export interface IExamAddUserData extends IExamUserData {
-    token: string;
+export interface IExamUserData extends IExamAddUserData {
+    token?: string;
+    useDate?: number; // date
+    createDate: number; // date
 }
 
 const UPDATE_EXAM_USER_DATA = "UPDATE_EXAM_USER_DATA";
-const INITIAL_STATE: IExamUserData[] = [{ name: 'dummy', email: 'dummy' }, { name: 'dummy1', email: 'dummy1' }, { name: 'dummy2', email: 'dummy2' }]
+const INITIAL_STATE: IExamUserData[] = [
+    { name: 'dummy', email: 'dummy', createDate: 1, useDate: Date.now() },
+    { name: 'dummy1', email: 'dummy1', createDate: 2 },
+    { name: 'dummy2', email: 'dummy2', createDate: 3 }
+]
 
 const UpdateData = (data: IExamUserData[]) => ({ type: UPDATE_EXAM_USER_DATA, data });
 

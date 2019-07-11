@@ -14,7 +14,7 @@ import { injectIntl, InjectedIntlProps } from 'react-intl';
 import { FormBase } from './FormBase'
 import InputField from '../util/ValidationInputField';
 import { connect } from 'react-redux';
-import {sendData, IExamUserData} from '../../api/examUserData';
+import {sendData, IExamAddUserData} from '../../api/examUserData';
 
 //Todo: Validation
 export interface IAddUserListFormProps {
@@ -66,8 +66,8 @@ class AddUserListFormC extends React.Component<IAddUserListFormProps & InjectedI
   }
   apply = () => {
     // IExamUserData
-    const mydata:IExamUserData[] = this.state.data.reduce(
-      (result:IExamUserData[], data:any[]):IExamUserData[] => {
+    const mydata:IExamAddUserData[] = this.state.data.reduce(
+      (result:IExamAddUserData[], data:any[]):IExamAddUserData[] => {
         //Todo: Validation
         result.push({name: data[0], email: data[1], note: data[2]})
         return result
@@ -111,7 +111,7 @@ export interface IAddUserFormProps {
 }
 
 export interface IAddUserFormState {
-  data: IExamUserData;
+  data: IExamAddUserData;
 }
 
 class AddUserFormC extends React.Component<IAddUserFormProps & InjectedIntlProps & { sendData: any}, IAddUserFormState> {

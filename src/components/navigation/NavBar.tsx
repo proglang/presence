@@ -6,7 +6,8 @@
 import * as React from 'react';
 import { Icon, Image, Menu, Sidebar, Container, Popup, Responsive, IconProps } from "semantic-ui-react";
 import { NavLink as Link, NavLinkProps, withRouter, RouteComponentProps } from 'react-router-dom';
-import { FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 
 interface INavLinkItem {
     mobile?: boolean;
@@ -14,10 +15,17 @@ interface INavLinkItem {
     link: NavLinkProps;
     icon?: IconProps;
     label?: string;
+    type: "guest"|"public"|"user"
 }
-class _NavLinkItem extends React.Component<INavLinkItem & RouteComponentProps<{}>> {
+class _NavLinkItem extends React.Component<INavLinkItem & ReduxProps &RouteComponentProps<{}>> {
     public render() {
-        const { mobile, link, icon, label, location } = this.props;
+        const { mobile, link, icon, label, location,type, redux } = this.props;
+        if (type==="guest" && !!redux.login) {
+            return null;
+        }
+        if (type==="user") {
+            if (!redux.login) return null;
+        }
         if (!mobile) { // Desktop
             return (
                 <Popup basic content={label && <FormattedMessage id={label} />} disabled={!icon || !label} trigger={
@@ -35,24 +43,41 @@ class _NavLinkItem extends React.Component<INavLinkItem & RouteComponentProps<{}
         );
     }
 }
-const NavLinkItem = withRouter(_NavLinkItem);
+
+interface ReduxProps {
+    redux: {
+        login: boolean;
+        access: { [key: string]: boolean }
+    }
+}
+const mapStateToProps = (state: any): ReduxProps => {
+    return ({
+        redux: {
+            login: !!state.auth.name,
+            access: {}
+        }
+    })
+}
+
+const NavLinkItem = connect(mapStateToProps)(withRouter(_NavLinkItem));
 
 const getLeft = [
-    <NavLinkItem link={{ to: "/", exact: true }} icon={{ name: "home" }} label="nav.home" />,
+    <NavLinkItem type="public" link={{ to: "/", exact: true }} icon={{ name: "home" }} label="nav.home" />,
+ 
+    <NavLinkItem type="user" link={{ to: "/exam/student", exact: false }} icon={{ name: "graduation cap" }} label="nav.exam.student" />,
+    <NavLinkItem type="user" link={{ to: "/exam/user", exact: false }} icon={{ name: "address book" }} label="nav.exam.user" />,
+    <NavLinkItem type="user" link={{ to: "/exam/log", exact: false }} icon={{ name: "tasks" }} label="nav.exam.log" />,
 
-    <NavLinkItem link={{ to: "/exam/student", exact: false }} icon={{ name: "graduation cap" }} label="nav.exam.student" />,
-    <NavLinkItem link={{ to: "/exam/user", exact: false }} icon={{ name: "address book" }} label="nav.exam.user" />,
-    <NavLinkItem link={{ to: "/exam/log", exact: false }} icon={{ name: "tasks" }} label="nav.exam.log" />,
-
-    <NavLinkItem link={{ to: "/about", exact: false }} icon={{ name: "question circle" }} label="nav.about" />
+    <NavLinkItem type="public" link={{ to: "/about", exact: false }} icon={{ name: "question circle" }} label="nav.about" />
 ]
 const getRight = [
-    <NavLinkItem link={{ to: "/config", exact: false }} icon={{ name: "settings" }} label="nav.config" />,
-    <NavLinkItem link={{ to: "/login", exact: false }} icon={{ name: "sign in" }} label="nav.login" />
+    <NavLinkItem type="public" link={{ to: "/config", exact: false }} icon={{ name: "settings" }} label="nav.config" />,
+    <NavLinkItem type="guest" link={{ to: "/login", exact: false }} icon={{ name: "sign in" }} label="nav.login" />,
+    <NavLinkItem type="user" link={{ to: "/logout", exact: false }}  icon={{ name: "log out" }} label="nav.logout" />
 ]
 
 
-export default class NavBar extends React.Component<any> {
+export default class NavBar extends React.Component<{}> {
     state = {
         visible: false
     }
@@ -86,6 +111,7 @@ export default class NavBar extends React.Component<any> {
                         icon="labeled"
                         inverted
                         vertical
+                        width="thin"
                         visible={visible}
                     >
                         {getLeft.map((item, index) => React.cloneElement(item, { key: index, mobile: true, sidebar: true }))}
