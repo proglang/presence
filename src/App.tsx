@@ -25,10 +25,15 @@ function App() {
     <Container style={{flex: 1}}>
       <Switch>
         <Route.Public path="/" exact render={() => null} />
+
         <Route.Guest path="/login/:type?/:data?" exact component={LoginPage} />
         <Route.Public path="/logout" exact component={LogoutPage} />
+
         <Route.User path="/exam/user/:type?" exact component={ExamUserPage} />
+        <Route.User path="/exam/student/:type?" exact component={ExamUserPage} />
+
         <Route.Public path="/config" exact component={ConfigPage} />
+
         <Route.Public component={Error404} />
       </Switch>
     </Container>

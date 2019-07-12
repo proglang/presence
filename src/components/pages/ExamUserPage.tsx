@@ -68,7 +68,7 @@ class ExamUserPage extends React.Component<IExamUserPageProps & RouteComponentPr
     return data;
   }
   public render() {
-    const { type/*, data*/ } = this.props.match.params;
+    const { type } = this.props.match.params;
     const panes = [
       //! Attached false: Workaround for https://github.com/Semantic-Org/Semantic-UI-React/issues/3412
       //! key in pane needed: Workaround for React Warning
