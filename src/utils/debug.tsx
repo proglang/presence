@@ -12,8 +12,6 @@ export const reducer = (state:boolean = INITIAL_STATE, action: any = {}) => {
     switch (action.type) {
         case TOGGLE_DEBUG:
             return action.debug;
-        case "TEST":
-            return null;
         default:
             return state;
     }

@@ -21,12 +21,13 @@ export interface IForgottenPasswordData {
     email: string;
 }
 
-export interface IUserData {
+interface _IUserData {
     email: string;
     name: string;
     token: string;
 }
 
+export type IUserData = _IUserData|null
 export const LOGOUT = "LOGOUT"
 export const LOGIN = "LOGIN"
 
@@ -47,9 +48,9 @@ export const logout = (data: ILoginData) => (dispatch: any) => {
     //! Workaround as preparation for Async API call
     return new Promise((res) => res())
 }
-const INITIAL_STATE = {}
+const INITIAL_STATE:IUserData = null
 
-export const reducer = (state = INITIAL_STATE, action:any  = {}):IUserData|{} => {
+export const reducer = (state:IUserData = INITIAL_STATE, action:any  = {}):IUserData => {
     switch (action.type) {
         case LOGIN:
             return action.data;

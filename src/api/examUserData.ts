@@ -11,24 +11,25 @@ export interface IExamUserData extends IExamAddUserData {
     useDate?: number; // date
     createDate: number; // date
 }
+export type IExamUserDataList = IExamUserData[]
 
 const UPDATE_EXAM_USER_DATA = "UPDATE_EXAM_USER_DATA";
-const INITIAL_STATE: IExamUserData[] = [
+const INITIAL_STATE: IExamUserDataList = [
     { name: 'dummy', email: 'dummy', createDate: 1, useDate: Date.now() },
     { name: 'dummy1', email: 'dummy1', createDate: 2 },
     { name: 'dummy2', email: 'dummy2', createDate: 3 }
 ]
 
-const UpdateData = (data: IExamUserData[]) => ({ type: UPDATE_EXAM_USER_DATA, data });
+const UpdateData = (data: IExamUserDataList) => ({ type: UPDATE_EXAM_USER_DATA, data });
 
-export const sendData = (data: IExamUserData[]) => (dispatch: any) => {
+export const sendData = (data: IExamUserDataList) => (dispatch: any) => {
     //Todo: actual api calls!
     dispatch(UpdateData(data));
     //! Workaround as preparation for Async API call
     return new Promise((res) => res())
 }
 
-export const reducer = (state = INITIAL_STATE, action: any = {}) => {
+export const reducer = (state = INITIAL_STATE, action: any = {}):IExamUserDataList => {
     switch (action.type) {
         case UPDATE_EXAM_USER_DATA:
             return action.data;

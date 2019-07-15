@@ -7,7 +7,7 @@
 import React from 'react';
 import { Form, Message } from 'semantic-ui-react';
 import { FormattedMessage, injectIntl, InjectedIntlProps } from 'react-intl';
-import {connect, DispatchProp} from 'react-redux';
+import { connect, DispatchProp } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
 
 interface IFormBase_Errors {
@@ -20,11 +20,13 @@ interface IFormBase_State {
     loading: boolean;
 }
 interface IFormBaseProps extends InjectedIntlProps {
-    onSubmit: (val:Dispatch<AnyAction>) => Promise<any>;
+    onSubmit: (val: Dispatch<AnyAction>) => Promise<any>;
     button: string;
 }
 
 class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp, any> {
+    _IsMounted = false;
+
     state: IFormBase_State = {
         errors: {},
         loading: false
@@ -48,8 +50,12 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp, any> {
         if (errors.msg) return;
 
         this.props.onSubmit(this.props.dispatch)
-            .then(() => this.setState({ loading: false }))
+            .then(() => {
+                if (!this._IsMounted) return;
+                this.setState({ loading: false })
+            })
             .catch((err: any) => {
+                if (!this._IsMounted) return;
                 if (err.response === undefined) {
                     this.setState({ errors: { global: err.message + ": " + err.isAxiosError }, loading: false })
                 } else {
@@ -58,6 +64,12 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp, any> {
             })
 
     }
+    public componentDidMount() {
+        this._IsMounted = true;
+    }
+    public componentWillUnmount() {
+        this._IsMounted = false;
+    }
     public render() {
         const { errors, loading } = this.state;
         const { children, button } = this.props;
@@ -65,7 +77,7 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp, any> {
             <Form onSubmit={() => this.onSubmit(children)} loading={loading} error={Object.keys(errors).length !== 0}>
                 {React.Children.map(children, (node, index) => {
                     const tsnode = node as React.ReactElement<any>;
-                    return React.cloneElement(tsnode, {key:index, error: errors[tsnode.props.name] })
+                    return React.cloneElement(tsnode, { key: index, error: errors[tsnode.props.name] })
                 })}
                 <Form.Button fluid primary>{this.props.intl.formatMessage({ id: button })}</Form.Button>
                 <Message error>

@@ -8,6 +8,7 @@ import { Icon, Image, Menu, Sidebar, Container, Popup, Responsive, IconProps } f
 import { NavLink as Link, NavLinkProps, withRouter, RouteComponentProps } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import ExamSelectionDropdown from './ExamSelection';
 
 interface INavLinkItem {
     mobile?: boolean;
@@ -53,7 +54,7 @@ interface ReduxProps {
 const mapStateToProps = (state: any): ReduxProps => {
     return ({
         redux: {
-            login: !!state.auth.name,
+            login: !!state.auth,
             access: {}
         }
     })
@@ -71,6 +72,7 @@ const getLeft = [
     <NavLinkItem type="public" link={{ to: "/about", exact: false }} icon={{ name: "question circle" }} label="nav.about" />
 ]
 const getRight = [
+    <NavLinkItem type="user" link={{to:"/user", exact: true}} icon={{name: "user"}} label="nav.user" />,
     <NavLinkItem type="public" link={{ to: "/config", exact: false }} icon={{ name: "settings" }} label="nav.config" />,
     <NavLinkItem type="guest" link={{ to: "/login", exact: false }} icon={{ name: "sign in" }} label="nav.login" />,
     <NavLinkItem type="user" link={{ to: "/logout", exact: false }}  icon={{ name: "log out" }} label="nav.logout" />
@@ -102,6 +104,7 @@ export default class NavBar extends React.Component<{}> {
                             <Icon name="sidebar" />
                         </Menu.Item>
                         <Menu.Menu position="right">
+                            <ExamSelectionDropdown />
                             {getRight.map((item, index) => React.cloneElement(item, { key: index, mobile: true }))}
                         </Menu.Menu>
                     </Menu>
@@ -125,6 +128,7 @@ export default class NavBar extends React.Component<{}> {
                         </Menu.Item>
                         {getLeft.map((item, index) => React.cloneElement(item, { key: index }))}
                         <Menu.Menu position="right">
+                            <ExamSelectionDropdown />
                             {getRight.map((item, index) => React.cloneElement(item, { key: index }))}
                         </Menu.Menu>
                     </Menu>
