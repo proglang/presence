@@ -31,6 +31,8 @@ class LoginPage extends React.Component<ILoginPageProps & InjectedIntlProps & Ro
     }
     public render() {
         const { type/*, data*/ } = this.props.match.params;
+        // data contains token if used with token login
+        //Todo: implement token login
         const panes = [
             //! Attached false: Workaround for https://github.com/Semantic-Org/Semantic-UI-React/issues/3412
             //! key in pane needed: Workaround for React Warning

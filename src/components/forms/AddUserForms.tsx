@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import * as React from 'react';
-import { Button, Segment, Header, Icon, Form } from "semantic-ui-react";
+import { Button, Segment, Header, Icon } from "semantic-ui-react";
 import ReactDropzone, { DropEvent } from "react-dropzone";
 
 import FilterTable from "../util/FilterTable";
@@ -13,15 +13,10 @@ import xlsx from "../../utils/xlsx";
 import { injectIntl, InjectedIntlProps } from 'react-intl';
 import { FormBase } from './FormBase'
 import InputField from '../util/ValidationInputField';
+import { connect } from 'react-redux';
+import {sendData, IExamAddUserData} from '../../api/examUserData';
 
 //Todo: Validation
-//Todo: Move UserEntry to separate file
-interface IUserEntry {
-  name: string;
-  email: string;
-  note: string;
-}
-
 export interface IAddUserListFormProps {
 }
 
@@ -30,10 +25,9 @@ export interface IAddUserListFormState {
   file?: string
 }
 
-export class AddUserListForm extends React.Component<IAddUserListFormProps, IAddUserListFormState> {
-  constructor(props: IAddUserListFormProps) {
+class AddUserListFormC extends React.Component<IAddUserListFormProps & InjectedIntlProps & { sendData: any}, IAddUserListFormState> {
+  constructor(props: any) {
     super(props);
-
     this.state = {
       data: [],
       file: undefined
@@ -71,7 +65,16 @@ export class AddUserListForm extends React.Component<IAddUserListFormProps, IAdd
     this.extfn[ext](acc[0]).then(d => this.setState({ data: d, file: name })).catch(e => console.log(e)); // Todo: Catch errors
   }
   apply = () => {
-    console.log("sending data...") //Todo: Send Data
+    // IExamUserData
+    const mydata:IExamAddUserData[] = this.state.data.reduce(
+      (result:IExamAddUserData[], data:any[]):IExamAddUserData[] => {
+        //Todo: Validation
+        result.push({name: data[0], email: data[1], note: data[2]})
+        return result
+      }, []
+    )
+    // Todo: Remove validated data
+    this.props.sendData(mydata).then(()=>console.log(1)).catch(()=>console.log(2));
   }
   render() {
     const types = Object.keys(this.extfn).map(item => '.' + item);
@@ -102,64 +105,63 @@ export class AddUserListForm extends React.Component<IAddUserListFormProps, IAdd
   }
 }
 
+export const AddUserListForm = connect(null, {sendData})(injectIntl(AddUserListFormC))
 
 export interface IAddUserFormProps {
 }
 
 export interface IAddUserFormState {
-  data: IUserEntry;
+  data: IExamAddUserData;
 }
 
-class AddUserFormC extends React.Component<IAddUserFormProps & InjectedIntlProps, IAddUserFormState> {
-    state: IAddUserFormState = {
-        data: {
-          name: "",
-          email: "",
-          note: "",
-        }
+class AddUserFormC extends React.Component<IAddUserFormProps & InjectedIntlProps & { sendData: any}, IAddUserFormState> {
+  state: IAddUserFormState = {
+    data: {
+      name: "",
+      email: "",
     }
-    onChange = (e: React.ChangeEvent<HTMLInputElement>) => this.setState({ data: { ...this.state.data, [e.target.name]: e.target.value } });
-    public render() {
-        const nl = this.props.intl.formatMessage({ id: "exam.user.label.name" })
-        const usl = this.props.intl.formatMessage({ id: "exam.user.label.email" })
-        const nol = this.props.intl.formatMessage({ id: "exam.user.label.note" })
-        const { data } = this.state;
-        //Todo: Input Validation
-        //Todo: Submit Function
-        return (
-            <FormBase button="exam.user.label.submit" onSubmit={() => new Promise((res, rej) => res('test'))}>
-                <InputField
-                    icon="user"
-                    iconPosition="left"
-                    name="name"
-                    label={nl}
-                    placeholder={nl}
-                    value={data.name}
-                    onChange={this.onChange}
-                    validator={() => { return true }}
-                />
-                <InputField
-                    icon="user"
-                    iconPosition="left"
-                    name="email"
-                    type="email"
-                    label={usl}
-                    placeholder={usl}
-                    value={data.email}
-                    onChange={this.onChange}
-                    validator={() => { return true }}
-                />
-                <InputField
-                    icon="user"
-                    iconPosition="left"
-                    name="note"
-                    type="text"
-                    label={nol}
-                    placeholder={nol}
-                    value={data.note}
-                    onChange={this.onChange}
-                />
-            </FormBase>)
-    }
+  }
+  onChange = (e: React.ChangeEvent<HTMLInputElement>) => this.setState({ data: { ...this.state.data, [e.target.name]: e.target.value } });
+  public render() {
+    const nl = this.props.intl.formatMessage({ id: "exam.user.label.name" })
+    const usl = this.props.intl.formatMessage({ id: "exam.user.label.email" })
+    const nol = this.props.intl.formatMessage({ id: "exam.user.label.note" })
+    const { data } = this.state;
+    //Todo: Input Validation
+    return (
+      <FormBase button="exam.user.label.submit" onSubmit={() => this.props.sendData([this.state.data])}>
+        <InputField
+          icon="user"
+          iconPosition="left"
+          name="name"
+          label={nl}
+          placeholder={nl}
+          value={data.name}
+          onChange={this.onChange}
+          validator={() => { return true }}
+        />
+        <InputField
+          icon="user"
+          iconPosition="left"
+          name="email"
+          type="email"
+          label={usl}
+          placeholder={usl}
+          value={data.email}
+          onChange={this.onChange}
+          validator={() => { return true }}
+        />
+        <InputField
+          icon="user"
+          iconPosition="left"
+          name="note"
+          type="text"
+          label={nol}
+          placeholder={nol}
+          value={data.note}
+          onChange={this.onChange}
+        />
+      </FormBase>)
+  }
 }
-export const AddUserForm = injectIntl(AddUserFormC);
+export const AddUserForm = connect(null, {sendData})(injectIntl(AddUserFormC));

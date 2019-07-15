@@ -8,13 +8,14 @@ import LanguageSelect from '../util/LanguageSelect'
 export interface IFooterProps {
 }
 
-export default class Footer extends React.Component<IFooterProps, any> {
+class Footer extends React.Component<IFooterProps, any> {
     public render() {
         return (
             <footer className="footer">
-                
                 <LanguageSelect />
             </footer>
         );
     }
 }
+
+export default Footer;

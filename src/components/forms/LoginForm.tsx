@@ -5,14 +5,15 @@
 
 import React, { ChangeEvent } from 'react';
 import {  injectIntl, InjectedIntlProps } from 'react-intl';
-import { ILoginData } from '../../user/auth'
+import { ILoginData, login } from '../../api/auth'
 import {FormBase} from './FormBase'
 import InputField from '../util/ValidationInputField';
+import { connect } from 'react-redux';
 
 
 export interface ILoginFormProps {
 }
-class LoginForm extends React.Component<ILoginFormProps & InjectedIntlProps, any> {
+class LoginForm extends React.Component<ILoginFormProps & InjectedIntlProps & {login: any}, any> {
     state: { data: ILoginData } = {
         data: {
             email: '',
@@ -27,7 +28,7 @@ class LoginForm extends React.Component<ILoginFormProps & InjectedIntlProps, any
         //Todo: Input Validation
         //Todo: Submit Function
         return (
-            <FormBase button="auth.label.submit.login" onSubmit={() => new Promise((res, rej) => res('test'))}>
+            <FormBase button="auth.label.submit.login" onSubmit={()=>this.props.login(this.state.data)}>
                 <InputField
                     icon="user"
                     iconPosition="left"
@@ -52,4 +53,4 @@ class LoginForm extends React.Component<ILoginFormProps & InjectedIntlProps, any
             </FormBase>)
     }
 }
-export default injectIntl(LoginForm);
+export default connect(null, {login})(injectIntl(LoginForm));

@@ -9,12 +9,14 @@ import { Icon, Table, Input, InputOnChangeData } from "semantic-ui-react";
 export interface IFilterTableProps {
   showErrCol?: boolean;
   showOverflowData?: boolean;
+  format?: {[key:number]:{}};
+  sortable?: {[key:number]:boolean}
   header: any[];
   data: any[][];
   verifier?: { [key: number]: (val: any) => boolean };
-  filter?: true | { [key: number]: true }
+  filter?: boolean | { [key: number]: boolean }
   onClick?: (row: number, col: number) => void;
-  // onHover?: (row: number, col: number, enter: boolean) => void;
+  onHover?: (row: number, col: number, enter: boolean) => void;
 }
 
 type TableStyle = 'err' | 'valid' | 'warning'
@@ -149,6 +151,8 @@ export default class FilterTable extends React.Component<IFilterTableProps, IFil
   }
 
   handleSort = (col: number) => {
+
+    if (this.props.sortable && !this.props.sortable[col]) return;
     var { sortCol, sortDir } = this.state
     if (sortCol === col) {
       sortDir = sortDir === 'ascending' ? 'descending' : 'ascending';
@@ -164,7 +168,7 @@ export default class FilterTable extends React.Component<IFilterTableProps, IFil
     this.setState({ filter, filterUpdate: true })
   }
   public render() {
-    const { showErrCol, showOverflowData, header, onClick, filter } = this.props;
+    const { showErrCol, showOverflowData, header, onClick,onHover, filter } = this.props;
     const { data, sortCol, sortDir, filter: filterVal } = this.state;
     var colcount = header.length + (showOverflowData ? 1 : 0) + (showErrCol ? 1 : 0);
     colcount = colcount <= 0 ? 1 : colcount > 16 ? 16 : colcount
@@ -207,11 +211,16 @@ export default class FilterTable extends React.Component<IFilterTableProps, IFil
             return (
               <Table.Row key={row_id} warning={!!row.err}>
                 {row.row.map((col: any, col_id: number) => {
+                  const fg = this.props.format
+                  const f:{[key:string]:any} = fg?(fg[col_id]?fg[col_id]:{}):{};
                   return (
                     <Table.Cell
+                      {...f}
                       onClick={() => onClick && onClick(row.index, col_id)}
+                      onMouseEnter={() => onHover && onHover(row.index, col_id, true)}
+                      onMouseLeave={() => onHover && onHover(row.index, col_id, false)}
                       selectable={!!onClick}
-                      collapsing={col_id==colcount-1}
+                      collapsing={col_id===colcount-1 || !!f.collapsing}
                       key={col_id}
                       error={row.err && row.err[col_id] === 'err'}
                       warning={row.err && row.err[col_id] === 'warning'}>
