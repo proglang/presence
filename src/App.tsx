@@ -11,6 +11,7 @@ import NavBar from './components/navigation/NavBar'
 import Footer from './components/footer/Footer';
 
 import LoginPage from './components/pages/LoginPage';
+import ExamStudentPage from './components/pages/ExamStudentPage'
 import LogoutPage from './components/pages/LogoutPage';
 import ExamUserPage from './components/pages/ExamUserPage';
 import ConfigPage from './components/pages/ConfigPage';
@@ -30,7 +31,7 @@ function App() {
         <Route.Public path="/logout" exact component={LogoutPage} />
 
         <Route.User path="/exam/user/:type?" exact component={ExamUserPage} />
-        <Route.User path="/exam/student/:type?" exact component={ExamUserPage} />
+        <Route.User path="/exam/student/:type?" exact component={ExamStudentPage} />
 
         <Route.Public path="/config" exact component={ConfigPage} />
 
