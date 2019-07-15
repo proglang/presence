@@ -1,4 +1,5 @@
 import { LOGOUT } from './auth'
+import { trace } from '../utils/debug';
 
 export interface IExamListData {
     id: number;
@@ -13,7 +14,7 @@ const INITIAL_STATE: IExamList = []
 const UpdateData = (data: IExamList) => ({ type: UPDATE_EXAM_LIST, data });
 
 export const updateExamList = () => (dispatch: any) => {
-    console.log("updateExamList")
+    // trace('updateExamList');
     //Todo: actual api calls!
     const data: IExamList = [
         { id: 0, name: "0" },

@@ -46,7 +46,6 @@ const ResetData = () => ({type: RESET_EXAM_DATA})
 const UpdateData = (data: IExamData) => ({ type: UPDATE_EXAM_DATA, data });
 
 export const selectExam = (id: number) => (dispatch: any) => {
-    console.log(id)
     //Todo: actual api calls!
     let data = FAKE_STATE;
     data.id = id;

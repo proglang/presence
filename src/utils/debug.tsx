@@ -3,12 +3,11 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import * as stackTraceParser from 'stacktrace-parser';
+import * as stackTraceParser from 'stacktrace-parser'
 
 const TOGGLE_DEBUG = "TOGGLE_DEBUG";
-const INITIAL_STATE = false;
 
-export const reducer = (state:boolean = INITIAL_STATE, action: any = {}) => {
+export const reducer = (state: boolean = isDebug(), action: any = {}) => {
     switch (action.type) {
         case TOGGLE_DEBUG:
             return action.debug;
@@ -32,20 +31,29 @@ export const toggle = (dbg: boolean) => (dispatch: any) => {
 
 export const isDebug = (): boolean => !!localStorage.debug;
 
+const getStackTrace = ( index: number = 2) => {
+    var call = '';
+    try {
+        throw new Error();
+    } catch (e) {
+        try {
+            const st = stackTraceParser.parse(e.stack);
+            call = st[index].methodName + '(' + st[index].arguments.join(', ') + ')';
+        } catch (e) {
+        };
+    }
+    return call;
+}
+export const trace = (file: string, name?:string) => {
+    if (isDebug()) {
+        console.log(
+            '%c Trace %s: %s', 'background: #222; color: #ff0a55', !!name?name:getStackTrace(), file)
+    }
+}
 export const writeMsg = (...args: any[]): void => {
     if (isDebug()) {
-        var call = '';
-        try {
-            throw new Error();
-        } catch (e) {
-            try {
-                const st = stackTraceParser.parse(e.stack);
-                call = st[1].methodName + '(' + st[1].arguments.join(', ') + ')';
-            } catch (e) {
-            };
-        }
         console.log(
-            '%c Debug %s:', 'background: #222; color: #bada55', call,
+            '%c Debug %s:', 'background: #222; color: #bada55', getStackTrace(),
             args.length > 0 ? '\n' : '', ...args);
     }
 }

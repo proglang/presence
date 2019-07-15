@@ -17,9 +17,11 @@ import ExamUserPage from './components/pages/ExamUserPage';
 import ConfigPage from './components/pages/ConfigPage';
 import { Error404 } from "./components/pages/ErrorPage";
 import { Container } from 'semantic-ui-react';
+import { trace } from './utils/debug';
 
 //Todo: Show UserName
 function App() {
+  trace("App.tsx", "App()")
   //Todo: Create css classes
   return (<div id="App" style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
     <NavBar />
