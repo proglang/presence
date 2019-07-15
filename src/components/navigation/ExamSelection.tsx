@@ -67,18 +67,16 @@ class ExamSelectionDropdownC extends React.Component<IExamSelectionDropdownProps
         const availableExams = this.props.redux.exams.map((value: IExamListData) => ({ key: value.id, value: value.id, text: value.name }))
         //Todo: Localization
         return (
-            <Menu.Item>
-                <Dropdown
-                    placeholder='__Select exam'
-                    search
-                    value={this.props.redux.selected}
-                    selection
-                    loading={this.state.loading}
-                    options={availableExams}
-                    onChange={this.onChange}
-                    noResultsMessage="123456"
-                />
-            </Menu.Item>
+            <Dropdown
+                placeholder='__Select exam'
+                search
+                value={this.props.redux.selected}
+                selection
+                loading={this.state.loading}
+                options={availableExams}
+                onChange={this.onChange}
+                noResultsMessage="123456"
+            />
         );
     }
 }
