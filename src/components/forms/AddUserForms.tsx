@@ -74,7 +74,12 @@ class AddUserListFormC extends React.Component<IAddUserListFormProps & InjectedI
       }, []
     )
     // Todo: Remove validated data
-    this.props.sendData(mydata).then(()=>console.log(1)).catch(()=>console.log(2));
+    this.props.sendData(mydata).then(this.applySuccess).catch(()=>console.log(2)); // Todo: Catch errors
+  }
+  applySuccess = () => {
+    var data = this.state.data;
+    console.log(data);
+    this.setState({data});
   }
   render() {
     const types = Object.keys(this.extfn).map(item => '.' + item);
@@ -97,7 +102,7 @@ class AddUserListFormC extends React.Component<IAddUserListFormProps & InjectedI
         {!!file && <Segment as="section" className="tempdata">
           <Button primary onClick={this.apply}>__LOCA__ Send</Button>
           <Button secondary onClick={() => this.setState({ data: [], file: undefined })}>__LOCA__ CLEAR</Button>
-          <FilterTable header={["__LOCA__ NAME", "__LOCA__ EMAIL", "__LOCA__ NOTE"]} data={data} filter={true} verifier={{ 2: () => true }} showErrCol showOverflowData={false} />
+          <FilterTable header={["common.label.name", "common.lable.mail", "common.label.note"]} data={data} filter={true} verifier={{ 2: () => true }} showErrCol showOverflowData={false} />
         </Segment>
         }
       </Segment>

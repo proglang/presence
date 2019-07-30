@@ -55,14 +55,14 @@ class ExamUserPage extends React.Component<IExamUserPageProps & RouteComponentPr
           [
             //Todo: Loca + Formatting
             <h3 key='1'>{value.name}</h3>,
-            <p key='2'>EMail: {value.email}</p>,
-            <p key='5'>Note: {value.note}</p>,
-            <p key='6'>Token: {value.token}</p>,
+            <p key='2'><FormattedMessage id="common.label.email.placeholder" defaultMessage="EMail: {mail}" values={{mail:value.email}} /></p>,
+            <p key='3'><FormattedMessage id="common.label.note.placeholder" defaultMessage="Note: {note}" values={{mail:value.note}} /></p>,
+            <p key='4'><FormattedMessage id="common.label.token.placeholder" defaultMessage="Token: {token}" values={{mail:value.token}} /></p>,
             value.useDate && <p key="7"><FormattedDate value={value.useDate} /> <FormattedTime value={value.useDate} /></p>,
             value.createDate && <p key="8"><FormattedDate value={value.createDate} /> <FormattedTime value={value.createDate} /></p>
           ]
         } />,
-        <Popup key="1" trigger={<Button basic icon='edit' onClick={() => this.setState({ popup: [value.email] })} />} content={(<FormattedMessage id="EDIT" />)} />
+        <Popup key="1" trigger={<Button basic icon='edit' onClick={() => this.setState({ popup: [value.email] })} />} content={(<FormattedMessage id="common.button.edit" />)} />
       ]
     ])
     return data;
@@ -72,15 +72,16 @@ class ExamUserPage extends React.Component<IExamUserPageProps & RouteComponentPr
     const panes = [
       //! Attached false: Workaround for https://github.com/Semantic-Org/Semantic-UI-React/issues/3412
       //! key in pane needed: Workaround for React Warning
-      { key: 'list', menuItem: this.props.intl.formatMessage({ id: 'user.list.label' }), pane: null },
-      { key: 'add1', menuItem: this.props.intl.formatMessage({ id: 'user.list.add.label' }), pane: <Tab.Pane key="3" attached={false}><ExamUserForms.AddUserListForm /></Tab.Pane> },
-      { key: 'add2', menuItem: this.props.intl.formatMessage({ id: 'user.list.add2.label' }), pane: <Tab.Pane key="4" attached={false}><ExamUserForms.AddUserForm /></Tab.Pane> },
+      { key: 'list', menuItem: this.props.intl.formatMessage({ id: 'common.label.list' }), pane: null },
+      { key: 'add1', menuItem: this.props.intl.formatMessage({ id: 'common.label.addMulti' }), pane: <Tab.Pane key="3" attached={false}><ExamUserForms.AddUserListForm /></Tab.Pane> },
+      { key: 'add2', menuItem: this.props.intl.formatMessage({ id: 'common.label.addSingle' }), pane: <Tab.Pane key="4" attached={false}><ExamUserForms.AddUserForm /></Tab.Pane> },
     ]
     var index = panes.findIndex((el) => el.key === type)
     index = index >= 0 ? index : 0
     return (
       <Container as="main">
         <Tab
+          //Todo: Add Check if user can be added
           onTabChange={this.onTabChange}
           activeIndex={index}
           renderActiveOnly={false}
@@ -89,9 +90,12 @@ class ExamUserPage extends React.Component<IExamUserPageProps & RouteComponentPr
         />
         <FilterTable
           format={{ 0: { collapsing: true }, 3: { collapsing: true }, 4: { collapsing: true } }}
-          //Todo: Loca
           sortable={{ 1: true, 2: true }}
-          header={[<Popup key="1" trigger={<Button basic icon='edit' onClick={() => this.setState({ popup: Object.keys(this.state.selected) })} />} content={(<FormattedMessage id="EDIT" />)} />, "Name", "Email", "Verified", ""]}
+          header={
+            [<Popup 
+              key="1" 
+              trigger={<Button basic icon='edit' onClick={() => this.setState({ popup: Object.keys(this.state.selected) })} />} 
+              content={(<FormattedMessage id="common.button.edit" />)} />, "common.label.name", "common.label.mail", "common.label.verified", ""]}
           data={this.getTable()}
           filter={{ 1: true, 2: true }}
         />

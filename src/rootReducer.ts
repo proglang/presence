@@ -10,11 +10,12 @@ import {reducer as examUserReducer, IExamUserDataList} from './api/examUserData'
 import {reducer as authReducer, IUserData} from './api/auth';
 import {reducer as examListReducer, IExamList} from './api/examList'
 import {reducer as examDataReducer, IExamData} from './api/examData'
-
+import {reducer as examStudentReducer, IExamStudentDataList} from './api/examStudentData'
 export interface IReduxRootProps {
     intl: any
     dbg: boolean
     eu: IExamUserDataList
+    es: IExamStudentDataList
     auth:IUserData
     el: IExamList
     ed: IExamData
@@ -23,6 +24,7 @@ const rootReducer = combineReducers<IReduxRootProps>({
     intl: intlReducer,
     dbg: dbg_reducer,
     eu: examUserReducer,
+    es: examStudentReducer,
     auth: authReducer,
     el: examListReducer,
     ed: examDataReducer
