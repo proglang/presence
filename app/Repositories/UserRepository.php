@@ -10,14 +10,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
 
-class UserRepository extends BaseDatabaseRepository// implements IResponseRepository
+class UserRepository extends BaseDatabaseRepository // implements IResponseRepository
 {
     protected $user = null;
     public function __construct(?User $user)
     {
         $this->user = $user;
     }
-    static public function fromID(int $id):UserRepository {
+    static public function fromID(int $id): UserRepository
+    {
         $res = new UserRepository(User::find($id));
         $res->assertValid();
         return $res;
@@ -27,7 +28,7 @@ class UserRepository extends BaseDatabaseRepository// implements IResponseReposi
         $this->assertValid();
         return $this->user;
     }
-    protected static function _createUser(string $email):User
+    protected static function _createUser(string $email): User
     {
         return new User([
             'email' => $email,
@@ -91,18 +92,21 @@ class UserRepository extends BaseDatabaseRepository// implements IResponseReposi
         if ($save) self::save($this->user);
         return $this;
     }
-    public function checkToken(string $token): bool {
-        return $this->getToken()==$token;
+    public function checkToken(string $token): bool
+    {
+        return $this->getToken() == $token;
     }
-    public function isVerified():bool {
+    public function isVerified(): bool
+    {
         return $this->user->verified;
     }
-    public function verify(string $token, bool $save = true):bool {
+    public function verify(string $token, bool $save = true): bool
+    {
         if ($this->isVerified()) return false;
         if ($this->checkToken($token)) {
             $this->user->verified = true;
             $this->user->temporary = false;
-            if ($save ) self::save($this->user);
+            if ($save) self::save($this->user);
             return true;
         }
         return false;
@@ -129,15 +133,17 @@ class UserRepository extends BaseDatabaseRepository// implements IResponseReposi
             $user->setPassword($password, false)->setName($name, false);
             self::save($user->user);
         } catch (QueryException $e) {
-            throw new CreateException("user","Cannot Register User", 422, $e->getMessage());
+            throw new CreateException("user", "Cannot Register User", 422, $e->getMessage());
         }
         return $user;
     }
-    public function canCreateExam():bool {
+    public function canCreateExam(): bool
+    {
         $this->assertValid();
         return $this->user->verified;
     }
-    public function createExam(string $name, string $date):ExamRepository {
+    public function createExam(string $name, string $date): ExamRepository
+    {
         if (!$this->canCreateExam()) {
             throw ErrorException("Cannot create new exam");
         }
@@ -153,21 +159,28 @@ class UserRepository extends BaseDatabaseRepository// implements IResponseReposi
             return new ExamRepository($exam);
         }, $this->user->exams->all());
     }
-    public function getUserResource() {
+    public function getUserResource()
+    {
         return new UserResource($this->user);
     }
 }
 
 class AuthenticatedUserRepository extends UserRepository
 {
-    public function __construct()
+    public function __construct(int $id = 0)
     {
-        parent::__construct(Auth::user());
+        if ($id == 0) {
+            parent::__construct(Auth::user());
+        } else {
+            parent::__construct(User::find($id));
+        }
     }
-    public static function checkTokenS(string $token) {
+    public static function checkTokenS(string $token)
+    {
         return (new AuthenticatedUserRepository())->checkToken($token);
     }
-    public static function getUserResourceS() {
+    public static function getUserResourceS()
+    {
         return (new AuthenticatedUserRepository())->getUserResource();
     }
 }
