@@ -52,12 +52,12 @@ class Authenticate extends BaseMiddleware
      */
     public function handle($request, Closure $next, $optional = null)
     {
-        if (true) { //Todo: Remove this
+        /*if (false) {
             Auth::onceUsingId(1);
             $token = Auth::fromUser(Auth::user());
             $request->headers->set('Authorization', "Bearer $token");
             return $next($request);
-        }
+        }*/
         $this->auth->setRequest($request);
         try {
             if (!$this->auth->parseToken()->authenticate()) {
@@ -65,12 +65,9 @@ class Authenticate extends BaseMiddleware
             }
             $payload = $this->auth->getPayload();
             $token = $payload->get('token');
-            if (!AuthenticatedUserRepository::checkToken($token)) {
+            if (!AuthenticatedUserRepository::checkTokenS($token)) {
                 return $this->handleException(self::disabled_token);
             }
-            //if (!$this->user->getCurrent()->checkToken($token)) {
-            //    return $this->handleException(self::disabled_token);
-            //}
         } catch (TokenExpiredException $e) {
             return $this->handleException(self::expired_token);
         } catch (TokenInvalidException $e) {

@@ -14,9 +14,9 @@ interface IRenderException
 }
 trait ExceptionHelper
 {
-    static protected function toResponse(Exception $error, $errorclass, $msg, $machineMsg, $data = null, $args = null): Response
+    static protected function toResponse(Exception $error, $errorclass, $msg, $machineMsg, $data = null, $args = null, int $code = null): Response
     {
-        $code = $error->getCode();
+        $code = $code==null?$error->getCode():$code;
         $ret = self::createResponse($code == 0 ? 500 : $code);
         if ($msg) {
             $ret->addJsonArray("error.msg", $msg);

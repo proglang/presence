@@ -24,6 +24,7 @@ class Handler extends ExceptionHandler
         HttpException::class,
         ModelNotFoundException::class,
         ValidationException::class,
+        IRenderException::class
     ];
 
     /**
@@ -69,7 +70,8 @@ class Handler extends ExceptionHandler
                 "Validation Exception",
                 $err,
                 $msg,
-                $err_args
+                $err_args,
+                422
             );
         }
 

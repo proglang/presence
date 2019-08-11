@@ -6,6 +6,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Model implements JWTSubject, AuthenticatableContract
 {
@@ -13,10 +14,11 @@ class User extends Model implements JWTSubject, AuthenticatableContract
 
     protected $table = 'users';
 
-    public static function boot() {
+    public static function boot()
+    {
         parent::boot();
-        static::created(function($user) {
-            if (env('REGISTER_USE_VERIFICATION', false)!=true) {
+        static::created(function ($user) {
+            if (env('REGISTER_USE_VERIFICATION', false) != true) {
                 return;
             }
             UserToken::create([
@@ -51,9 +53,17 @@ class User extends Model implements JWTSubject, AuthenticatableContract
         'verified',
         'temporary'
     ];
-
-    public function setEmailAttribute($value) {
-        $this->attributes['email'] = strtolower ($value);
+    public function setPasswordAttribute($pass)
+    {
+        if ($pass!=null) {
+            $this->attributes['password'] = Hash::make($pass);
+        }else {
+            $this->attributes['password'] = $pass;
+        }
+    }
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower($value);
     }
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
@@ -72,14 +82,20 @@ class User extends Model implements JWTSubject, AuthenticatableContract
      */
     public function getJWTCustomClaims()
     {
-        return ["token"=>$this->token];
+        return ["token" => $this->token];
     }
 
-    public function exam()
+    public function exam($id = null)
     {
-        return $this->belongsToMany(Exam::class, 'exam_user', 'user_id', 'exam_id');
+        //->whereRaw("rights % 2 = 1")
+        $ret = $this->belongsToMany(Exam::class, 'exam_user', 'user_id', 'exam_id');
+        if ($id != null) {
+            return $ret->whereRaw('rights & ? = ?', [$id, $id]);
+        }
+        return $ret;
     }
-    public function rights() {
+    public function rights()
+    {
         return $this->hasMany(ExamUser::class, 'user_id', 'id');
     }
 }

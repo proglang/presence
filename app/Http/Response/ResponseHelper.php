@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Auth;
 
 trait ResponseHelper {
     protected static function createResponse($statusCode = 200, $headers = [], $auth=false):Response {
+        if ($headers==null) {
+            $headers = [];
+        }
         $res = new Response();
         $res->setStatusCode($statusCode);
         $res->withHeaders($headers);

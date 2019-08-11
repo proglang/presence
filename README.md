@@ -18,6 +18,7 @@
 ## Routes
 ***Notes:***
 * All routes can return an authentication header
+* All routes can return an Error Resource
 
 ### Non Authenticated
 #### POST /user/login
@@ -25,7 +26,7 @@
 * email: string ->
 * password: string ->
 ***returns:***
-UserResource|Error
+UserResource
 
 #### POST /user/register
 ***POST Parameters:***
@@ -33,36 +34,32 @@ UserResource|Error
 * name: string ->
 * password: string ->
 ***returns:***
-UserResource|Error
+UserResource
 
 
 #### POST /user/verify/{ID:int}
+***GET Parameters:***
+* ID: int -> user ID
 ***POST Parameters:***
 * name: string ->
 * password: string ->
 ***returns:***
-UserResource|Error
+UserResource
 
 #### GET  /user/verify/{ID:int}/{TOKEN:string}
-***POST Parameters:***
-* name: string ->
-* password: string ->
 ***GET Parameters:***
 * ID: int -> user ID
 * TOKEN: string -> verification Token
 ***returns:***
-UserResource|Error
+UserResource
 
 ### Authenticated
 #### GET /user
 ***returns:***
-UserResource|Error
+UserResource
+
 #### GET /user/logout
-***returns:***
-none|Error
 #### GET /user/refresh
-***returns:***
-none|Error
 
 #### POST /exam
 #### GET  /exam

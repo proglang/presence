@@ -49,7 +49,7 @@ trait ValidationFn
     {
         $count = strlen($value);
         foreach ($parameters as  $name) {
-            $ret = preg_match_all($this->getRegex($name), $value, $m);
+            $ret = preg_match_all($this->getRegex($name), $value);
             $count = $count - ($ret ? $ret : 0);
         }
         return $count==0;

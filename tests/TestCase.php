@@ -1,7 +1,14 @@
 <?php
+namespace tests;
 
-abstract class TestCase extends Laravel\Lumen\Testing\TestCase
+abstract class TestCase extends \Laravel\Lumen\Testing\TestCase
 {
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->artisan('migrate:fresh --force');
+    }
     /**
      * Creates the application.
      *
@@ -9,6 +16,6 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
      */
     public function createApplication()
     {
-        return require __DIR__.'/../bootstrap/app.php';
+        return require __DIR__ . '/../bootstrap/app.php';
     }
 }

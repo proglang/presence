@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Auth;
 $router->group(['prefix' => ''], function ($router) {
     //! /auth
     $router->group(['prefix' => 'user'], function ($router) {
-        $router->get('login', 'AuthController@login');
-        $router->get('register', 'AuthController@register');
+        $router->post('login', 'AuthController@login');
+        $router->post('register', 'AuthController@register');
 
         $router->group(['prefix' => 'verify/{user_id:[0-9]}'], function ($router) {
             $router->get('{token}', 'AuthController@verifyUser');

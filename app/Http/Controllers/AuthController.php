@@ -28,7 +28,7 @@ class AuthController extends Controller
         if (!$this->guard()->attempt($credentials)) {
             throw new UserException("unauthorized", "Invalid login data!", 401);
         }
-        return self::createResponse(200, [], true)->addResource(AuthenticatedUserRepository::getUserResourceS());
+        return self::createResponse(200, null, true)->addResource(AuthenticatedUserRepository::getUserResourceS());
     }
     /**
      * User Registration
@@ -45,7 +45,7 @@ class AuthController extends Controller
         if (!$this->guard()->onceUsingId($user->getID())) {
             throw new UserException("unknown", "?", 400);
         }
-        return self::createResponse(201, [], true)->addResource($user->getUserResource());
+        return self::createResponse(201, null, true)->addResource($user->getUserResource());
     }
     /**
      * User Registration if created by Exam owner
@@ -79,7 +79,7 @@ class AuthController extends Controller
         if (!$this->guard()->onceUsingId($user->getID())) {
             throw new UserException("unknown", "?", 400, $token);
         }
-        return self::createResponse(200, [], true)->addResource($user->getUserResource());
+        return self::createResponse(200, null, true)->addResource($user->getUserResource());
     }
     /**
      * Log the user out (Invalidate the token)
@@ -100,7 +100,17 @@ class AuthController extends Controller
     public function refresh()
     {
         $this->guard()->refresh($this->guard()->getToken());
-        return self::createResponse(204, [], true);
+        return self::createResponse(204, null, true);
+    }
+
+    /**
+     * Get the current user
+     *
+     * @return App\Http\Response\Response
+     */
+    public function get()
+    {
+        return self::createResponse(200)->addResource(AuthenticatedUserRepository::getUserResourceS());
     }
 
     /**

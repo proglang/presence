@@ -13,15 +13,15 @@ use Illuminate\Database\QueryException;
 class UserRepository extends BaseDatabaseRepository // implements IResponseRepository
 {
     protected $user = null;
-    public function __construct(?User $user)
+    public function __construct(User $user)
     {
         $this->user = $user;
     }
     static public function fromID(int $id): UserRepository
     {
-        $res = new UserRepository(User::find($id));
-        $res->assertValid();
-        return $res;
+        $exam = User::find($id);
+        if ($exam == null) throw new NotFoundException("exam", "Exam not Found", 404, $id);
+        return new UserRepository($exam);
     }
     public function get(): User
     {
@@ -75,7 +75,7 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
         if ($password == null) {
             $this->user->password = null;
         } else {
-            $this->user->password = Hash::make($password);
+            $this->user->password = $password;
         }
         if ($save) self::save($this->user);
         return $this;
@@ -157,7 +157,7 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
     {
         return array_map(function (Exam $exam) {
             return new ExamRepository($exam);
-        }, $this->user->exams->all());
+        }, $this->user->exam(1)->get()->all());
     }
     public function getUserResource()
     {

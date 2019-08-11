@@ -1,5 +1,5 @@
 <?php
-namespace APP\Repositories;
+namespace App\Repositories;
 use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\DBException;
 

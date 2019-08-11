@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Exam extends Model
 {
+    protected $table = 'exams';
 
     //protected $table = 'exam';
     /**
@@ -32,7 +33,14 @@ class Exam extends Model
     // this is a recommended way to declare event handlers
     public static function boot() {
         parent::boot();
-
+        static::created(function($exam) {
+            ExamUser::create([
+                'exam_id'=>$exam->id,
+                'user_id'=>$exam->creator_id,
+                'rights'=>0xffffffff,
+                'note'=>'creator'
+            ]);
+        });
         static::deleting(function($exam) { // before delete() method call this
             $exam->user->where('temporary', 1)->each(function($val) {
                 if ($val->exam->count()==0) {
@@ -45,5 +53,8 @@ class Exam extends Model
     public function user()
     {
         return $this->belongsToMany(User::class, 'exam_user','exam_id', 'user_id');
+    }
+    public function rights(int $user_id) {
+        return $this->hasMany(UserExam::class)->where('user_id', $user_id)->first()->rights;
     }
 }

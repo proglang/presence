@@ -1,11 +1,14 @@
 <?php
 
-namespace APP\Repositories;
+namespace App\Repositories;
 
 use App\Models\Exam;
 use Illuminate\Database\QueryException;
+use App\Http\Resources\ExamResource;
+use App\Exceptions\CreateException;
+use App\Exceptions\NotFoundException;
 
-class ExamRepository extends BaseDatabaseRepository implements IResponseRepository
+class ExamRepository extends BaseDatabaseRepository // implements IResponseRepository
 {
     protected $exam = null;
 
@@ -13,16 +16,24 @@ class ExamRepository extends BaseDatabaseRepository implements IResponseReposito
     {
         $this->exam = $exam;
     }
-    public static function create(UserRepository $user, $name, $date) :ExamRepository {
+    public static function fromID(int $id)
+    {
+        $exam = Exam::find($id);
+        if ($exam == null) throw new NotFoundException("exam", "Exam not Found", 404, $id);
+        return new ExamRepository($exam);
+    }
+    public static function create(UserRepository $user, $name, $date): ExamRepository
+    {
         try {
-        $exam = Exam::create([
-            "creator_id"=>$user->getID(),
-            "name"=>$name,
-            "date"=>$date,
-            "locked"=>false
-        ]);
-        }catch (QueryException $e) {
-            throw new CreateException("exam","Cannot Create Exam", 422, $e->getSql());
+            $exam = Exam::create([
+                "creator_id" => $user->getID(),
+                "name" => $name,
+                "date" => $date,
+                "locked" => false
+            ]);
+        } catch (QueryException $e) {
+            print_r($e->getMessage());
+            throw new CreateException("exam", "Cannot Create Exam", 422, $e->getSql());
         }
         // creator automatically has all rights so no point in using access checking class
         return new ExamRepository($exam);
@@ -46,22 +57,45 @@ class ExamRepository extends BaseDatabaseRepository implements IResponseReposito
         $this->exam = Exam::find($id);
         return $this->exam != null;
     }
-
-}
-
-class UserExamRepository extends ExamRepository {
-    protected $user = null;
-    public function __construct(Exam $exam)
+    public function getExamResource(): ExamResource
     {
-        parent::__construct($exam);
+        return new ExamResource($this->exam);
     }
-    public function setUser(UserRepository $user) {
-        $this->user = $user;
-    }
-
-    public function isValid(): bool
+    public function getCreator()
     {
-        return parent::IsValid() && $this->user->isValid();
+        return $this->exam->creator_id;
+    }
+    public function isCreator(int $id)
+    {
+        return $this->getCreator() == $id;
+    }
+    public function delete()
+    {
+        return $this->exam->delete();
     }
 
+    public function getName(): string
+    {
+        $this->assertValid();
+        return $this->exam->name;
+    }
+    public function setName(string $name, bool $save = true): ExamRepository
+    {
+        $this->assertValid();
+        $this->exam->name = $name;
+        if ($save) self::save($this->exam);
+        return $this;
+    }
+    public function getDate(): string
+    {
+        $this->assertValid();
+        return $this->exam->date;
+    }
+    public function setDate(string $date, bool $save = true): ExamRepository
+    {
+        $this->assertValid();
+        $this->exam->date = $date;
+        if ($save) self::save($this->exam);
+        return $this;
+    }
 }
