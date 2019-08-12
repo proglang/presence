@@ -18,10 +18,22 @@ class ExamUserRouteTest extends TestCase
     //! user/*
     const rights = [
         "delete",
+        
         "exam_adduser",
         "exam_viewuser",
         "exam_updateuser",
         "exam_deleteuser",
+        
+        "exam_addroom",
+        "exam_viewroom",
+        "exam_updateroom",
+        "exam_deleteroom",
+        
+        "exam_addstudent",
+        "exam_viewstudent",
+        "exam_updatestudent",
+        "exam_deletestudent",
+
         "update",
         "view",
 
@@ -173,7 +185,7 @@ class ExamUserRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.update.self"]
+                "error" => ["useraccess.update.user.self"]
             ]
         );
         $user2 = factory(User::class)->create();

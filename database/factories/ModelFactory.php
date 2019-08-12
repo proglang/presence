@@ -42,3 +42,15 @@ $factory->define(App\Models\Exam::class, function (Faker\Generator $faker) {
         'locked'=>false
     ];
 });
+
+$factory->define(App\Models\ExamRoom::class, function (Faker\Generator $faker) {
+
+    //$number = $faker->numberBetween(1, 99);
+    gc_collect_cycles();
+
+    return [
+        'name'=>str_replace('.', '', $faker->unique()->name),
+        'note'=>str_replace('.', '', $faker->unique()->name),
+        'size'=>$faker->numberBetween(),
+    ];
+});

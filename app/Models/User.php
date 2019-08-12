@@ -99,8 +99,4 @@ class User extends Model implements JWTSubject, AuthenticatableContract
         }
         return $ret;
     }
-    public function rights()
-    {
-        return $this->hasMany(ExamUser::class, 'user_id', 'id');
-    }
 }

@@ -86,13 +86,13 @@ class ExamUserController extends Controller
     {
         $eur = new AuthExamUserRightsRepository($exam_id);
         if (!$eur->canUpdateExamUser()) {
-            throw new UserAccessException('update', 'Cannot update users of this exam', 403, $exam_id);
+            throw new UserAccessException('update.user', 'Cannot update users of this exam', 403, $exam_id);
         }
         if ($eur->getUser()->getID()==$user_id) {
-            throw new UserAccessException('update.self', 'You cannot update yourself!', 403, $exam_id);
+            throw new UserAccessException('update.user.self', 'You cannot update yourself!', 403, $exam_id);
         }
         if ($eur->getExam()->getCreator()==$user_id) {
-            throw new UserAccessException('update.creator', 'Exam Creator cannot be updated!', 403, $exam_id);
+            throw new UserAccessException('update.user.creator', 'Exam Creator cannot be updated!', 403, $exam_id);
         }
 
         $this->validateExamUserUpdate($request);

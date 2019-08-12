@@ -19,10 +19,22 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
         'view' => 0,
         'delete' => 1,
         'update'=>2,
-        'exam_viewuser'=>3,
-        'exam_adduser'=>4,
-        'exam_deleteuser'=>5,
-        'exam_updateuser'=>6
+        
+        'exam_viewuser'=>5,
+        'exam_adduser'=>6,
+        'exam_deleteuser'=>7,
+        'exam_updateuser'=>8,
+        
+        'exam_viewroom'=>11,
+        'exam_addroom'=>12,
+        'exam_deleteroom'=>13,
+        'exam_updateroom'=>14,
+
+        'exam_viewstudent'=>17,
+        'exam_addstudent'=>18,
+        'exam_deletestudent'=>19,
+        'exam_updatestudent'=>20,
+
     ];
     const Level = [
         'admin'=>[],
@@ -72,7 +84,7 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
         if ($user instanceof UserRepository) {
             $this->user = $user;
         } else {
-            $this->user->setID($user);
+            $this->user= UserRepository::fromID($user);
         }
     }
     public function setExam($exam)
@@ -80,7 +92,7 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
         if ($exam instanceof ExamRepository) {
             $this->exam = $exam;
         } else {
-            $this->exam->setID($exam);
+            $this->exam= ExamRepository::fromID($exam);
         }
     }
     public function isValid(): bool
@@ -144,13 +156,7 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
         }
         return $this->setRights($rights, $user);
     }
-    public function canDeleteExam(): bool
-    {
-        return $this->getRight('delete');
-    }
-    public function setCanDeleteExam(bool $can) {
-        return $this->setRight('delete', $can);
-    }
+    //! Basic exam rights
     public function canViewExam(): bool
     {
         return $this->getRight('view');
@@ -165,7 +171,15 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
     public function setCanUpdateExam(bool $can) {
         return $this->setRight('update', $can);
     }
+    public function canDeleteExam(): bool
+    {
+        return $this->getRight('delete');
+    }
+    public function setCanDeleteExam(bool $can) {
+        return $this->setRight('delete', $can);
+    }
 
+    //! Exam User Rights
     public function canViewExamUser(): bool
     {
         return $this->getRight('exam_viewuser');
@@ -173,24 +187,6 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
     public function setCanViewExamUser(bool $can) {
         return $this->setRight('exam_viewuser', $can);
     }
-
-
-    public function canAddExamUser(): bool
-    {
-        return $this->getRight('exam_adduser');
-    }
-    public function setCanAddExamUser(bool $can) {
-        return $this->setRight('exam_adduser', $can);
-    }
-
-    public function canDeleteExamUser(): bool
-    {
-        return $this->getRight('exam_deleteuser');
-    }
-    public function setCanDeleteExamUser(bool $can) {
-        return $this->setRight('exam_deleteuser', $can);
-    }
-    
     public function canUpdateExamUser(): bool
     {
         return $this->getRight('exam_updateuser');
@@ -198,7 +194,82 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
     public function setCanUpdateExamUser(bool $can) {
         return $this->setRight('exam_updateuser', $can);
     }
+    public function canAddExamUser(): bool
+    {
+        return $this->getRight('exam_adduser');
+    }
+    public function setCanAddExamUser(bool $can) {
+        return $this->setRight('exam_adduser', $can);
+    }
+    public function canDeleteExamUser(): bool
+    {
+        return $this->getRight('exam_deleteuser');
+    }
+    public function setCanDeleteExamUser(bool $can) {
+        return $this->setRight('exam_deleteuser', $can);
+    }
 
+    //! Exam Room Rights
+    public function canViewExamRoom(): bool
+    {
+        return $this->getRight('exam_viewroom');
+    }
+    public function setCanViewExamRoom(bool $can) {
+        return $this->setRight('exam_viewroom', $can);
+    }
+    public function canUpdateExamRoom(): bool
+    {
+        return $this->getRight('exam_updateroom');
+    }
+    public function setCanUpdateExamRoom(bool $can) {
+        return $this->setRight('exam_updateroom', $can);
+    }
+    public function canAddExamRoom(): bool
+    {
+        return $this->getRight('exam_addroom');
+    }
+    public function setCanAddExamRoom(bool $can) {
+        return $this->setRight('exam_addroom', $can);
+    }
+    public function canDeleteExamRoom(): bool
+    {
+        return $this->getRight('exam_deleteroom');
+    }
+    public function setCanDeleteExamRoom(bool $can) {
+        return $this->setRight('exam_deleteroom', $can);
+    }
+
+    //! Exam Student Rights
+    public function canViewExamStudent(): bool
+    {
+        return $this->getRight('exam_viewstudent');
+    }
+    public function setCanViewExamStudent(bool $can) {
+        return $this->setRight('exam_viewstudent', $can);
+    }
+    public function canUpdateExamStudent(): bool
+    {
+        return $this->getRight('exam_updatestudent');
+    }
+    public function setCanUpdateExamStudent(bool $can) {
+        return $this->setRight('exam_updatestudent', $can);
+    }
+    public function canAddExamStudent(): bool
+    {
+        return $this->getRight('exam_addstudent');
+    }
+    public function setCanAddExamStudent(bool $can) {
+        return $this->setRight('exam_addstudent', $can);
+    }
+    public function canDeleteExamStudent(): bool
+    {
+        return $this->getRight('exam_deletestudent');
+    }
+    public function setCanDeleteExamStudent(bool $can) {
+        return $this->setRight('exam_deletestudent', $can);
+    }
+
+    //! Helper
     public function list() {
         $res = [];
         foreach (array_keys(self::RIGHTS) as $right) {

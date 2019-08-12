@@ -50,11 +50,6 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
         $this->assertValid();
         return $this->user->id;
     }
-    public function setID(int $id): bool
-    {
-        $this->user = User::find($id);
-        return $this->user != null;
-    }
 
     public function getName(): string
     {

@@ -59,7 +59,8 @@ class Exam extends Model
     {
         return $this->belongsToMany(User::class, 'exam_user','exam_id', 'user_id');
     }
-    public function rights(int $user_id) {
-        return $this->hasMany(UserExam::class)->where('user_id', $user_id)->first()->rights;
+    public function rooms()
+    {
+        return $this->hasMany(ExamRoom::class, 'exam_id', 'id');
     }
 }

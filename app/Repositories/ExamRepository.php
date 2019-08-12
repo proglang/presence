@@ -12,6 +12,7 @@ use Illuminate\Database\QueryException;
 use App\Http\Resources\ExamResource;
 use App\Exceptions\CreateException;
 use App\Exceptions\NotFoundException;
+use App\Http\Resources\ExamRoomResource;
 
 class ExamRepository extends BaseDatabaseRepository
 {
@@ -37,7 +38,6 @@ class ExamRepository extends BaseDatabaseRepository
                 "locked" => false
             ]);
         } catch (QueryException $e) {
-            print_r($e->getMessage());
             throw new CreateException("exam", "Cannot Create Exam", 422, $e->getSql());
         }
         // creator automatically has all rights so no point in using access checking class
@@ -47,6 +47,13 @@ class ExamRepository extends BaseDatabaseRepository
         $res = [];
         foreach ($this->exam->user as $value) {
             $res[] = ExamUserRepository::fromID($this->exam->id, $value->id);
+        }
+        return $res;
+    }
+    public function getRooms() {
+        $res = [];
+        foreach ($this->exam->rooms as $value) {
+            $res[] = ExamRoomRepository::fromID($value->id);
         }
         return $res;
     }
@@ -63,11 +70,6 @@ class ExamRepository extends BaseDatabaseRepository
     {
         $this->assertValid();
         return $this->exam->id;
-    }
-    public function setID(int $id): bool
-    {
-        $this->exam = Exam::find($id);
-        return $this->exam != null;
     }
     public function getExamResource(): ExamResource
     {
