@@ -52,7 +52,7 @@ class Authenticate extends BaseMiddleware
      */
     public function handle($request, Closure $next, $optional = null)
     {
-        /*if (false) {
+        /*if (true) {
             Auth::onceUsingId(1);
             $token = Auth::fromUser(Auth::user());
             $request->headers->set('Authorization', "Bearer $token");

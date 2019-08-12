@@ -3,127 +3,67 @@
 namespace App\Repositories;
 
 use App\Models\ExamUser;
-use ErrorException;
+use App\Models\User;
 use App\Exceptions\NotFoundException;
+use App\Http\Resources\ExamUserResource;
 
-class ExamUserRightsRepository extends BaseDatabaseRepository
+class ExamUserRepository extends BaseDatabaseRepository
 {
-
-    const RIGHTS = [
-        'view' => 0,
-        'delete' => 1,
-        'update'=>2,
-    ];
-
-    protected $user = null;
-    protected $exam = null;
-    public function __construct(ExamRepository $exam, UserRepository $user)
+    use RepositoryTrait;
+    public function isValid(): bool {
+        return $this->eu != null;
+    }
+    public function get() {
+        $this->assertValid();
+        return $this->eu;
+    }
+    protected $eu = null;
+    public function __construct(ExamUser $eu)
     {
-        $this->user = $user;
-        $this->exam = $exam;
+        $this->eu = $eu;
     }
-    public function getExam() {
-        return $this->exam;
-    }
-    public function getUser() {
-        return $this->user;
-    }
-    public static function fromID($exam, $user) {
-        if (!($user instanceof UserRepository)) {
-            $user = UserRepository::fromID($user);
+    public static function fromID($exam, $user):ExamUserRepository {
+        $user = self::toUserRepository($user);
+        $exam = self::toExamRepository($exam);
+        $ret = ExamUser::where([['exam_id', $exam->getID()], ['user_id', $user->getID()]])->first();
+        if ($ret==null) {
+            throw new NotFoundException('examuser', 'Exam User not found!', 404, ['exam'=>$exam->getID(), 'user'=>$user->getID()]);
         }
-        if (!($exam instanceof ExamRepository)) {
-            $exam = ExamRepository::fromID($exam);
-        }
-        return new ExamUserRightsRepository($exam, $user);
+        return new ExamUserRepository($ret);
     }
-    public function init($exam, $user)
-    {
-        $this->setUser($user);
-        $this->setExam($exam);
+    public static function addUser($exam, $user):ExamUserRepository {
+        $user = self::toUserRepository($user);
+        $exam = self::toExamRepository($exam);
+        ExamUserRightsRepository::create($exam, $user);
+        return self::fromID($exam, $user);
     }
-    public function setUser($user)
-    {
-        if ($user instanceof UserRepository) {
-            $this->user = $user;
-        } else {
-            $this->user->setID($user);
-        }
-    }
-    public function setExam($exam)
-    {
-        if ($exam instanceof ExamRepository) {
-            $this->exam = $exam;
-        } else {
-            $this->exam->setID($exam);
-        }
-    }
-    public function isValid(): bool
-    {
-        return $this->user->isValid() && $this->exam->isValid();
-    }
-
-    protected function getRight(string $name)
-    {
-        if ($this->exam->isCreator($this->user->getID())) {
-            return true;
-        }
-        $res = ExamUser::where([['user_id', $this->user->getID()], ['exam_id', $this->exam->getID()]]);
-        try {
-            $res = $res->first()->rights;
-        } catch (ErrorException $e) {
-            // same error as in Exam
-            throw new NotFoundException("exam", "Exam not found", 404, $this->exam->getID());
-        }
-        // print_r("\n$name: $res ".(1 << self::RIGHTS[$name]));
-        return ($res & (1 << self::RIGHTS[$name]))!=0;
-    }
-    protected function setRights(string $name, bool $new): bool
-    {
-        $current = $this->getRight($name);
-        if ($current==$new) {
-            return true;
-        }
-        $val =  (1 << self::RIGHTS[$name]);
-        if (!$new)   $val = -$val;
-        
-        $db =  ExamUser::where([['user_id', $this->user->getID()], ['exam_id', $this->exam->getID()]])->first();
-        
-        $db->rights = $db->rights+$val;
-        self::save($db);
+    public function delete() {
+        $this->assertValid();
+        $this->eu->delete();
         return true;
     }
+    public function getNote():string
+    {
+        $this->assertValid();
+        return $this->eu->note;
+    }
+    public function setNote(string $note, bool $save = true): ExamUserRepository
+    {
+        $this->assertValid();
+        $this->eu->note = $note;
+        if ($save) self::save($this->eu);
+        return $this;
+    }
+    public function toResource() {
+        return new ExamUserResource($this->eu);
+    }
 
-    public function canDeleteExam(): bool
-    {
-        return $this->getRight('delete');
+    public function getRights():ExamUserRightsRepository {
+        $this->assertValid();
+        return ExamUserRightsRepository::fromID($this->eu->exam_id, $this->eu->user_id);
     }
-    public function setCanDeleteExam(bool $can) {
-        return $this->setRight('delete', $can);
-    }
-    public function canViewExam(): bool
-    {
-        return $this->getRight('view');
-    }
-    public function setCanViewExam(bool $can) {
-        return $this->setRight('view', $can);
-    }
-    public function canUpdateExam(): bool
-    {
-        return $this->getRight('update');
-    }
-    public function setCanUpdateExam(bool $can) {
-        return $this->setRight('update', $can);
-    }
-}
-
-class AuthExamUserRightsRepository extends ExamUserRightsRepository {
-    public function __construct($exam)
-    {
-        if (!($exam instanceof ExamRepository)) {
-            $exam = ExamRepository::fromID($exam);
-        }
-        $this->exam = $exam;
-        $this->user = new AuthenticatedUserRepository();
+    public function refresh() {
+        $this->eu = self::fromID($this->eu->exam_id, $this->eu->user_id)->eu;
+        return $this;
     }
 }

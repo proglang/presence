@@ -8,7 +8,7 @@ use App\Http\Resources\ExamResource;
 use App\Exceptions\CreateException;
 use App\Exceptions\NotFoundException;
 
-class ExamRepository extends BaseDatabaseRepository // implements IResponseRepository
+class ExamRepository extends BaseDatabaseRepository
 {
     protected $exam = null;
 
@@ -37,6 +37,13 @@ class ExamRepository extends BaseDatabaseRepository // implements IResponseRepos
         }
         // creator automatically has all rights so no point in using access checking class
         return new ExamRepository($exam);
+    }
+    public function getUser() {
+        $res = [];
+        foreach ($this->exam->user as $value) {
+            $res[] = ExamUserRepository::fromID($this->exam->id, $value->id);
+        }
+        return $res;
     }
     public function get(): Exam
     {
