@@ -54,3 +54,13 @@ $factory->define(App\Models\ExamRoom::class, function (Faker\Generator $faker) {
         'size'=>$faker->numberBetween(),
     ];
 });
+$factory->define(App\Models\ExamStudent::class, function (Faker\Generator $faker) {
+
+    //$number = $faker->numberBetween(1, 99);
+    gc_collect_cycles();
+
+    return [
+        'name'=>str_replace('.', '', $faker->unique()->name),
+        'ident'=>$faker->unique()->numberBetween(),
+    ];
+});

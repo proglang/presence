@@ -12,7 +12,6 @@ use Illuminate\Database\QueryException;
 use App\Http\Resources\ExamResource;
 use App\Exceptions\CreateException;
 use App\Exceptions\NotFoundException;
-use App\Http\Resources\ExamRoomResource;
 
 class ExamRepository extends BaseDatabaseRepository
 {
@@ -54,6 +53,13 @@ class ExamRepository extends BaseDatabaseRepository
         $res = [];
         foreach ($this->exam->rooms as $value) {
             $res[] = ExamRoomRepository::fromID($value->id);
+        }
+        return $res;
+    }
+    public function getStudents() {
+        $res = [];
+        foreach ($this->exam->students as $value) {
+            $res[] = ExamStudentRepository::fromID($value->id);
         }
         return $res;
     }

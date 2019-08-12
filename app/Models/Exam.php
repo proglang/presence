@@ -63,4 +63,8 @@ class Exam extends Model
     {
         return $this->hasMany(ExamRoom::class, 'exam_id', 'id');
     }
+    public function students()
+    {
+        return $this->hasMany(ExamStudent::class, 'exam_id', 'id');
+    }
 }
