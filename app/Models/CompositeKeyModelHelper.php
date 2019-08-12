@@ -1,5 +1,10 @@
 <?php
-//From: https://stackoverflow.com/questions/36332005/laravel-model-with-two-primary-keys-update
+// Copyright (c) 2019 Stefan Schweizer
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
+//! From: https://stackoverflow.com/questions/36332005/laravel-model-with-two-primary-keys-update
 
 namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;

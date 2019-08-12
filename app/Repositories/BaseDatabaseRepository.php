@@ -1,4 +1,9 @@
 <?php
+// Copyright (c) 2019 Stefan Schweizer
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 namespace App\Repositories;
 use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\DBException;

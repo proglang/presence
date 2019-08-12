@@ -1,4 +1,9 @@
 <?php
+// Copyright (c) 2019 Stefan Schweizer
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 
 /*
  * Custom JWT authentication middleware since the original package does
