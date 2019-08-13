@@ -1,16 +1,16 @@
 # exam_api
 ## Resources
 ### UserResource
-
 ***namespace:*** user
+
 ***member:***
 * id: int -> user ID
 * name: string -> user Name
 * email: string -> user EMail
 
 ### ExamLogResource
-
 ***namespace:*** examlog
+
 **member**
 * id: int
 * text: string
@@ -19,19 +19,22 @@
 * student: int
 
 ### ExamLogHistoryResource
-
 ***namespace:*** examlog
-***base: *** ExamLogResource
+
+***base:*** ExamLogResource
+
 **member**
-* history.data: []
-* * id: int
-* * text: string
-* * user: ['id':int, 'name': string]
-* * date:
+  * history.data: []
+  * id: int
+  * text: string
+  * user: ['id':int, 'name': string]
+  * date:
 
 ### Error
 ***namespace:*** -
+
 ***member:***
+
 * error: string[] -> error identifier list
 * error.msg: string[] -> human readable error messages
 * error.args: {[key]=value} -> arguments
@@ -46,6 +49,7 @@
 ***POST Parameters:***
 * email: string ->
 * password: string ->
+
 ***returns:***
 UserResource
 
@@ -54,6 +58,7 @@ UserResource
 * email: string ->
 * name: string ->
 * password: string ->
+
 ***returns:***
 UserResource
 
@@ -61,9 +66,11 @@ UserResource
 #### POST /user/verify/{ID:int}
 ***GET Parameters:***
 * ID: int -> user ID
+
 ***POST Parameters:***
 * name: string ->
 * password: string ->
+
 ***returns:***
 UserResource
 
@@ -71,6 +78,7 @@ UserResource
 ***GET Parameters:***
 * ID: int -> user ID
 * TOKEN: string -> verification Token
+
 ***returns:***
 UserResource
 
@@ -116,5 +124,7 @@ UserResource
 
 ## commands
 Install: composer install
+
 Run Tests: vendor/bin/phpunit
+
 Create Database: php artisan migrate:fresh --force
