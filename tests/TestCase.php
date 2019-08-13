@@ -14,6 +14,9 @@ abstract class TestCase extends \Laravel\Lumen\Testing\TestCase
         parent::setUp();
         $this->artisan('migrate:fresh --force');
     }
+    public function tearDown(): void {
+        parent::tearDown();
+    }
     /**
      * Creates the application.
      *

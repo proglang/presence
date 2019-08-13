@@ -8,9 +8,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 
 class Exam extends Model
 {
+    use Encryptable;
     protected $table = 'exams';
 
     //protected $table = 'exam';
@@ -26,6 +28,12 @@ class Exam extends Model
         'locked'
     ];
 
+    public function getNameAttribute($value) {
+        return self::Decrypt($value);
+    }
+    public function setNameAttribute($value) {
+        $this->attributes['name'] = self::Encrypt($value);
+    }
     /**
      * The attributes that should be hidden for arrays.
      *

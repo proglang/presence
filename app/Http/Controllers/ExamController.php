@@ -39,7 +39,7 @@ class ExamController extends Controller
 
         $data = $request->only('name', 'date');
         $exam = ExamRepository::create($this->user, $data['name'], $data['date']);
-        return self::createResponse(200)->addResource($exam->getExamResource());
+        return self::createResponse(201)->addResource($exam->getExamResource());
     }
 
     /**

@@ -22,7 +22,8 @@ class CreateUserCollection extends Migration
         Schema::create(self::$table, function (Blueprint $collection) {
             $collection->increments('id');
             $collection->string('name')->default('');
-            $collection->string('email')->unique();
+            $collection->string('email');
+            $collection->string('email_hash')->unique();
             $collection->string('token');
 
             $collection->string('password')->nullable()->default(null);

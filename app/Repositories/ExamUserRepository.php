@@ -50,7 +50,7 @@ class ExamUserRepository extends BaseDatabaseRepository
     public function getNote():string
     {
         $this->assertValid();
-        return $this->eu->note;
+        return $this->eu->note ?? '';
     }
     public function setNote(string $note, bool $save = true): ExamUserRepository
     {

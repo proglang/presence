@@ -20,6 +20,8 @@ class CreateNotesCollection extends Migration
     public function up()
     {
         Schema::create(self::$table, function (Blueprint $collection) {
+            $collection->increments('id');
+
             $collection->unsignedInteger('note_ref');
             $collection->foreign('note_ref')->references('id')->on('note_ref')->onDelete('cascade');
 

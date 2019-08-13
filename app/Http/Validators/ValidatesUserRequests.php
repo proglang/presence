@@ -35,7 +35,7 @@ trait ValidatesUserRequests
     {
         $this->validate($request, [
             'name' => 'required|max:50|alpha_num',
-            'email'    => 'required|email|max:255|unique:users,email',
+            'email'    => 'required|unique:users,email_hash,sha256|email|max:255',
             'password' => 'password',
         ]);
     }

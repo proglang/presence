@@ -102,7 +102,7 @@ class ExamRoomRouteTest extends TestCase
         $room = factory(ExamRoom::class)->make();
 
         $res = $this->actingAs($admin)->json('POST', self::_getURL($exam->id), ['name' => $room->name, 'note' => $room->note, 'size' => $room->size]);
-        $er = ExamRoom::where([['name', $room->name], ['note', $room->note], ['size', $room->size]])->first();
+        $er = ExamRoom::latest()->first();
         $this->assertEquals(201, $this->response->status());
         $res->seeJson(
             [
@@ -132,7 +132,7 @@ class ExamRoomRouteTest extends TestCase
         $room = factory(ExamRoom::class)->make();
 
         $res = $this->actingAs($user)->json('POST', self::_getURL($exam->id), ['name' => $room->name, 'note' => $room->note, 'size' => $room->size]);
-        $er = ExamRoom::where([['name', $room->name], ['note', $room->note], ['size', $room->size]])->first();
+        $er = ExamRoom::latest('id')->first();
         $this->assertEquals(201, $this->response->status());
         $res->seeJson(
             [

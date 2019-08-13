@@ -9,9 +9,7 @@ namespace tests\api;
 
 use \App\Models\User;
 use App\Models\Exam;
-use App\Models\ExamUser;
 use App\Repositories\ExamUserRepository;
-use App\Exceptions\NotFoundException;
 
 class ExamUserRouteTest extends TestCase
 {

@@ -16,23 +16,9 @@ use Illuminate\Support\Facades\Hash;
 class User extends Model implements JWTSubject, AuthenticatableContract
 {
     use Authenticatable;
+    use Encryptable;
 
     protected $table = 'users';
-
-    public static function boot()
-    {
-        parent::boot();
-        static::created(function ($user) {
-            if (env('REGISTER_USE_VERIFICATION', false) != true) {
-                return;
-            }
-            UserToken::create([
-                'user_id' => $user->id,
-                'token' => str_replace("/", "_", base64_encode(random_bytes(40))),
-            ]);
-            // Todo: Send Create Event
-        });
-    }
     /**
      * The attributes that are mass assignable.
      *
@@ -44,7 +30,8 @@ class User extends Model implements JWTSubject, AuthenticatableContract
         'token',
         'password',
         'verified',
-        'temporary'
+        'temporary',
+        'email_hash'
     ];
 
     /**
@@ -56,8 +43,24 @@ class User extends Model implements JWTSubject, AuthenticatableContract
         'token',
         'password',
         'verified',
-        'temporary'
+        'temporary',
+        'email_hash'
     ];
+
+    public function getEmailAttribute($value) {
+        return self::Decrypt($value);
+    }
+    public function setEmailAttribute($value) {
+        $this->attributes['email'] = self::Encrypt($value);
+        $this->attributes['email_hash'] = hash("sha256", strtolower($value));
+    }
+    public function getNameAttribute($value) {
+        return self::Decrypt($value);
+    }
+    public function setNameAttribute($value) {
+        $this->attributes['name'] = self::Encrypt($value);
+    }
+
     public function setPasswordAttribute($pass)
     {
         if ($pass!=null) {
@@ -65,10 +68,6 @@ class User extends Model implements JWTSubject, AuthenticatableContract
         }else {
             $this->attributes['password'] = $pass;
         }
-    }
-    public function setEmailAttribute($value)
-    {
-        $this->attributes['email'] = strtolower($value);
     }
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

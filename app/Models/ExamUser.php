@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 class ExamUser extends Model
 {
     use CompositeKeyModelHelper;
-
+    use Encryptable;
     protected $table = 'exam_user';
     public $incrementing = false;
     public $timestamps = false;
@@ -28,6 +28,13 @@ class ExamUser extends Model
         'exam_id',
         'note'
     ];
+
+    public function getNoteAttribute($value) {
+        return self::Decrypt($value);
+    }
+    public function setNoteAttribute($value) {
+        $this->attributes['note'] = self::Encrypt($value);
+    }
 
     /**
      * The attributes that should be hidden for arrays.

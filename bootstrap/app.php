@@ -87,7 +87,7 @@ $app->routeMiddleware([
 // $app->register(App\Providers\EventServiceProvider::class);
 
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
-$app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
+//$app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
 $app->register(Illuminate\Validation\ValidationServiceProvider::class);
 
 /*

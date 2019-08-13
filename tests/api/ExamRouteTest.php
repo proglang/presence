@@ -26,8 +26,8 @@ class ExamRouteTest extends TestCase
         $exam = factory(Exam::class)->make();
         $res = $this->actingAs($user)->json('POST', '/exam', ['name' => $exam->name, 'date' => $exam->date]);
 
-        $exam = Exam::where([['name', $exam->name], ['date', $exam->date]])->first();
-        //$this->assertEquals(201, $this->response->status());
+        $exam = Exam::latest('id')->first();
+        $this->assertEquals(201, $this->response->status());
         $res->seeJson([
             'exam' => ['name' => $exam->name, 'id' => $exam->id, 'date' => $exam->date],
         ]);

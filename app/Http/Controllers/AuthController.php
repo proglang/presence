@@ -25,12 +25,15 @@ class AuthController extends Controller
      *
      * @return App\Http\Response\Response 
      */
+    protected function getCredentials(Request $request)
+    {
+        return ['email_hash' => hash("sha256", strtolower($request->email)), 'password' => ($request->password)];
+    }
     public function login(Request $request)
     {
         $this->validateLogin($request);
 
-        $credentials = $request->only('email', 'password');
-        if (!$this->guard()->attempt($credentials)) {
+        if (!$this->guard()->attempt($this->getCredentials($request))) {
             throw new UserException("unauthorized", "Invalid login data!", 401);
         }
         return self::createResponse(200, null, true)->addResource(AuthenticatedUserRepository::getUserResourceS());

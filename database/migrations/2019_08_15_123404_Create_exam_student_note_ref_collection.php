@@ -24,9 +24,9 @@ class CreateExamStudentNoteRefCollection extends Migration
             $collection->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
             $collection->unsignedInteger('student_id');
             $collection->foreign('student_id')->references('id')->on('exam_student')->onDelete('cascade');
-            
+
             $collection->unsignedInteger('note_ref');
-            $collection->foreign('note_ref')->references('id')->on('notes_ref')->onDelete('cascade');
+            $collection->foreign('note_ref')->references('id')->on('note_ref')->onDelete('cascade');
         });
     }
 

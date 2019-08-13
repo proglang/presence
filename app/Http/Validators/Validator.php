@@ -59,6 +59,13 @@ trait ValidationFn
         }
         return $count==0;
     }
+    public function validateUnique($attribute, $value, $parameters) {
+        $encryption = $parameters[2] ?? null;
+        if ($encryption!=null) {
+            $value = hash($encryption, $value);
+        }
+        return parent::validateUnique($attribute, $value, $parameters);
+    }
 }
 trait ValidationRepl
 {

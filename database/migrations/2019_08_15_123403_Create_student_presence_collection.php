@@ -20,6 +20,7 @@ class CreateStudentPresenceCollection extends Migration
     public function up()
     {
         Schema::create(self::$table, function (Blueprint $collection) {
+            $collection->increments('id');
             
             $collection->unsignedInteger('student_id');
             $collection->foreign('student_id')->references('id')->on('exam_student')->onDelete('cascade');

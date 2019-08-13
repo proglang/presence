@@ -4,11 +4,29 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-//! From: https://stackoverflow.com/questions/36332005/laravel-model-with-two-primary-keys-update
 
 namespace App\Models;
-use Illuminate\Database\Eloquent\Builder;
 
+use Illuminate\Support\Facades\Crypt;
+
+
+trait Encryptable
+{
+    public static function Encrypt($value)
+    {
+        return Crypt::encrypt($value);
+    }
+
+    public static function Decrypt($value)
+    {
+        if ($value=='') return null;
+        return Crypt::decrypt($value);
+    }
+}
+
+//! From: https://stackoverflow.com/questions/36332005/laravel-model-with-two-primary-keys-update
+
+use Illuminate\Database\Eloquent\Builder;
 trait CompositeKeyModelHelper
 {
     /**

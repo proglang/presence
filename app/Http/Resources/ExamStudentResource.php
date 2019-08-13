@@ -26,11 +26,13 @@ class ExamStudentResource extends Resource
      */
     public function toArray($request)
     {
-
+        $this->refresh(); // force reload of relations
+        $ret = $this->presence->first();
         return [
             'id' => $this->id,
             'name'  => $this->name,
             'ident' => $this->ident,
+            'present' => $ret==null?false:$ret->present,
         ];
     }
 }

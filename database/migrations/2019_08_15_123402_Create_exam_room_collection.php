@@ -26,6 +26,8 @@ class CreateExamRoomCollection extends Migration
             $collection->string('name')->default('');
             $collection->unsignedInteger('size')->default(0);
             $collection->string('note')->default('');
+
+            $collection->timestampsTz();
         });
     }
 

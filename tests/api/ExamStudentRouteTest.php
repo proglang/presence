@@ -11,6 +11,7 @@ use \App\Models\User;
 use App\Models\Exam;
 use App\Repositories\ExamUserRepository;
 use App\Models\ExamStudent;
+use App\Models\StudentPresence;
 
 class ExamStudentRouteTest extends TestCase
 {
@@ -23,13 +24,19 @@ class ExamStudentRouteTest extends TestCase
         }
         return $url;
     }
-    static protected function _getResult(ExamStudent $student, ?int $id = null)
+    static protected function _getResult(ExamStudent $student, ?int $id = null, ?bool $present = null)
     {
-        return [
+        // $student = $student->fresh();
+        $student->refresh();
+        $present = $student->presence->first();
+        $present = $present == null ? false : $present->present;
+        $ret = [
             'id' => $id == null ? $student->id : $id,
             'name' => $student->name,
             'ident' => $student->ident,
+            'present' => $present,
         ];
+        return $ret;
     }
     public function test__GET()
     {
@@ -101,7 +108,7 @@ class ExamStudentRouteTest extends TestCase
         $student = factory(ExamStudent::class)->make();
 
         $res = $this->actingAs($admin)->json('POST', self::_getURL($exam->id), self::_getResult($student));
-        $er = ExamStudent::where([['name', $student->name], ['ident', $student->ident], ['exam_id', $exam->id]])->first();
+        $er = ExamStudent::latest('id')->first();
         $this->assertEquals(201, $this->response->status());
         $res->seeJson(
             [
@@ -131,11 +138,11 @@ class ExamStudentRouteTest extends TestCase
         $student = factory(ExamStudent::class)->make();
 
         $res = $this->actingAs($user)->json('POST', self::_getURL($exam->id), self::_getResult($student));
-        $er = ExamStudent::where([['name', $student->name], ['ident', $student->ident], ['exam_id', $exam->id]])->first();
         $this->assertEquals(201, $this->response->status());
+        $er = ExamStudent::latest('id')->where('exam_id', $exam->id)->first();
         $res->seeJson(
             [
-                    "examstudent" => self::_getResult($er)
+                "examstudent" => self::_getResult($er)
             ]
         );
     }
@@ -154,7 +161,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(200, $this->response->status());
         $res->seeJson(
             [
-                    "examstudent" => self::_getResult($student)
+                "examstudent" => self::_getResult($student)
             ]
         );
 
@@ -180,7 +187,25 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(200, $this->response->status());
         $res->seeJson(
             [
-                    "examstudent" => self::_getResult($student)
+                "examstudent" => self::_getResult($student)
+            ]
+        );
+
+        StudentPresence::create(['student_id' => $student->id, 'present' => true]);
+        $res = $this->actingAs($user)->json('GET', self::_getURL($exam->id, $student->id));
+        $this->assertEquals(200, $this->response->status());
+        $res->seeJson(
+            [
+                "examstudent" => self::_getResult($student, null, true)
+            ]
+        );
+
+        StudentPresence::create(['student_id' => $student->id, 'present' => false]);
+        $res = $this->actingAs($user)->json('GET', self::_getURL($exam->id, $student->id));
+        $this->assertEquals(200, $this->response->status());
+        $res->seeJson(
+            [
+                "examstudent" => self::_getResult($student, null, false)
             ]
         );
     }
