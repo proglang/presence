@@ -8,6 +8,27 @@
 * name: string -> user Name
 * email: string -> user EMail
 
+### ExamLogResource
+
+***namespace:*** examlog
+**member**
+* id: int
+* text: string
+* date:
+* history:
+* student: int
+
+### ExamLogHistoryResource
+
+***namespace:*** examlog
+***base: *** ExamLogResource
+**member**
+* history.data: []
+* * id: int
+* * text: string
+* * user: ['id':int, 'name': string]
+* * date:
+
 ### Error
 ***namespace:*** -
 ***member:***

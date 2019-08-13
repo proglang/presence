@@ -30,6 +30,7 @@ class ExamUserRouteTest extends TestCase
         "exam_addstudent",
         "exam_viewstudent",
         "exam_updatestudent",
+        "exam_updatestudent_presence",
         "exam_deletestudent",
 
         'exam_viewlog',

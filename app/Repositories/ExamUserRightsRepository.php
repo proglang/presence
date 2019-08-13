@@ -118,7 +118,6 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
             // same error as in Exam
             throw new NotFoundException("exam", "Exam not found", 404, $this->exam->getID());
         }
-        // print_r("\n$name: $res ".(1 << self::RIGHTS[$name]));
         return ($res & (1 << self::RIGHTS[$name]))!=0;
     }
     protected function setRight(string $name, bool $new, ?ExamUserRightsRepository $user = null): bool
