@@ -21,6 +21,7 @@ class StudentPresence extends Model
      */
     protected $fillable = [
         'student_id',
+        'user_id',
         'present'
     ];
 

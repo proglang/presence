@@ -64,3 +64,13 @@ $factory->define(App\Models\ExamStudent::class, function (Faker\Generator $faker
         'ident'=>$faker->unique()->numberBetween(),
     ];
 });
+
+$factory->define(App\Models\Note::class, function (Faker\Generator $faker) {
+
+    //$number = $faker->numberBetween(1, 99);
+    gc_collect_cycles();
+
+    return [
+        'text'=>str_replace('.', '', $faker->unique()->name),
+    ];
+});

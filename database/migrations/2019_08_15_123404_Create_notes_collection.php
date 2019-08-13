@@ -22,13 +22,13 @@ class CreateNotesCollection extends Migration
         Schema::create(self::$table, function (Blueprint $collection) {
             $collection->increments('id');
 
-            $collection->unsignedInteger('note_ref');
-            $collection->foreign('note_ref')->references('id')->on('note_ref')->onDelete('cascade');
+            $collection->unsignedInteger('note_id');
+            $collection->foreign('note_id')->references('id')->on('exam_note_ref')->onDelete('cascade');
 
             $collection->unsignedInteger('user_id');
             $collection->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            $collection->string('note');
+            $collection->string('text');
             $collection->timestampsTz();
         });
     }

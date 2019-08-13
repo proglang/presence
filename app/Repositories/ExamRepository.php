@@ -63,6 +63,25 @@ class ExamRepository extends BaseDatabaseRepository
         }
         return $res;
     }
+    public function getNotes(int $type = null) {
+        $res = [];
+        if ($type==2) {
+            foreach ($this->exam->allNotes as $value) {
+                $res[] = ExamLogRepository::fromID($value->id);
+            }
+            return $res;
+        }
+        if ($type==1) {
+            foreach ($this->exam->deletedNotes as $value) {
+                $res[] = ExamLogRepository::fromID($value->id);
+            }
+            return $res;
+        }
+        foreach ($this->exam->notes as $value) {
+            $res[] = ExamLogRepository::fromID($value->id);
+        }
+        return $res;
+    }
     public function get(): Exam
     {
         $this->assertValid();

@@ -82,9 +82,18 @@ UserResource
 #### POST /exam/{ID:int}/student
 #### GET  /exam/{ID:int}/student
 #### PUT  /exam/{ID:int}/student/{ID:int}
+#### PUT  /exam/{ID:int}/student/{ID:int}/present
 #### GET  /exam/{ID:int}/student/{ID:int}
 #### DELETE /exam/{ID:int}/student/{ID:int}
 
 #### POST /exam/{ID:int}/log
 #### POST /exam/{ID:int}/log/{studentID:int}
 #### GET  /exam/{ID:int}/log
+#### PUT  /exam/{ID:int}/log/{ID:int}
+#### GET  /exam/{ID:int}/log/{ID:int}
+#### DELETE /exam/{ID:int}/log/{ID:int}
+
+## commands
+Install: composer install
+Run Tests: vendor/bin/phpunit
+Create Database: php artisan migrate:fresh --force

@@ -10,6 +10,7 @@ namespace App\Repositories;
 use App\Models\ExamStudent;
 use App\Exceptions\NotFoundException;
 use App\Http\Resources\ExamStudentResource;
+use App\Models\StudentPresence;
 
 class ExamStudentRepository extends BaseDatabaseRepository
 {
@@ -69,6 +70,16 @@ class ExamStudentRepository extends BaseDatabaseRepository
         $this->assertValid();
         $this->er->ident = $ident;
         if ($save) self::save($this->er);
+        return $this;
+    }
+    public function isPresent() {
+        $s = StudentPresence::where('student_id', $this->er->id)->latest()->first();
+        if ($s==null) return false;
+        return $s->present;
+    }
+    public function setPresent($user, bool $val) {
+        $user = self::toUserRepository($user);
+        StudentPresence::create(['student_id'=>$this->er->id, 'present'=>$val, $user->getID(), 'user_id'=>$user->getID()]);
         return $this;
     }
 

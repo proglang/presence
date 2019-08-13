@@ -75,6 +75,7 @@ $router->group(['prefix' => ''], function ($router) {
                     $router->post('/', 'ExamStudentController@add');
                     $router->get('/', 'ExamStudentController@list');
                     $router->group(['prefix' => '{student_id:[0-9]+}'], function ($router) {
+                        $router->put('/present', 'ExamStudentController@setPresence');
                         $router->put('/', 'ExamStudentController@update');
                         $router->get('/', 'ExamStudentController@get');
                         $router->delete('/', 'ExamStudentController@delete');
@@ -85,6 +86,11 @@ $router->group(['prefix' => ''], function ($router) {
                     $router->post('/{student_id:[0-9]+}', 'ExamLogController@add');
                     $router->post('/', 'ExamLogController@add');
                     $router->get('/', 'ExamLogController@list');
+                    $router->group(['prefix' => '{note_id:[0-9]+}'], function ($router) {
+                        $router->put('/', 'ExamLogController@update');
+                        $router->get('/', 'ExamLogController@get');
+                        $router->delete('/', 'ExamLogController@delete');
+                    });
                 });
             });
         });

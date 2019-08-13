@@ -21,6 +21,7 @@ class UserRouteTest extends TestCase
         $res->seeJson([
             'user' => ['email' => $user->email, 'name' => $user->name, 'id' => $user->id],
         ]);
+        print_r($this->response->content());
     }
 
     public function test_register_POST()

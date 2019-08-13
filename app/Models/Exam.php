@@ -8,7 +8,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Crypt;
 
 class Exam extends Model
 {
@@ -74,5 +73,14 @@ class Exam extends Model
     public function students()
     {
         return $this->hasMany(ExamStudent::class, 'exam_id', 'id');
+    }
+    public function notes() {
+        return $this->hasMany(ExamNoteRef::class, 'exam_id', 'id');
+    }
+    public function deletedNotes() {
+        return $this->hasMany(ExamNoteRef::class, 'exam_id', 'id')->onlyTrashed();
+    }
+    public function allNotes() {
+        return $this->hasMany(ExamNoteRef::class, 'exam_id', 'id')->withTrashed();
     }
 }

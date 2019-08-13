@@ -20,11 +20,16 @@ class CreateExamNoteRefCollection extends Migration
     public function up()
     {
         Schema::create(self::$table, function (Blueprint $collection) {
+            $collection->increments('id');
+
             $collection->unsignedInteger('exam_id');
             $collection->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
-    
-            $collection->unsignedInteger('note_ref');
-            $collection->foreign('note_ref')->references('id')->on('note_ref')->onDelete('cascade');
+
+            $collection->unsignedInteger('student_id')->nullable()->default(null);
+            $collection->foreign('student_id')->references('id')->on('exam_student')->onDelete('cascade');
+
+            $collection->softDeletes();
+            $collection->timestampsTz();
         });
     }
 

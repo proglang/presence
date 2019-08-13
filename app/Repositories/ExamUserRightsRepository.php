@@ -34,6 +34,12 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
         'exam_addstudent'=>18,
         'exam_deletestudent'=>19,
         'exam_updatestudent'=>20,
+        'exam_updatestudent_presence'=>21,
+
+        'exam_viewlog'=>23,
+        'exam_addlog'=>24,
+        'exam_deletelog'=>25,
+        'exam_updatelog'=>26,
 
     ];
     const Level = [
@@ -254,6 +260,13 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
     public function setCanUpdateExamStudent(bool $can) {
         return $this->setRight('exam_updatestudent', $can);
     }
+    public function canUpdateExamStudentPresence(): bool
+    {
+        return $this->getRight('exam_updatestudent_presence');
+    }
+    public function setCanUpdateExamStudentPresence(bool $can) {
+        return $this->setRight('exam_updatestudent_presence', $can);
+    }
     public function canAddExamStudent(): bool
     {
         return $this->getRight('exam_addstudent');
@@ -267,6 +280,36 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
     }
     public function setCanDeleteExamStudent(bool $can) {
         return $this->setRight('exam_deletestudent', $can);
+    }
+    
+    //! Exam Log Rights
+    public function canViewExamLog(): bool
+    {
+        return $this->getRight('exam_viewlog');
+    }
+    public function setCanViewExamLog(bool $can) {
+        return $this->setRight('exam_viewlog', $can);
+    }
+    public function canUpdateExamLog(): bool
+    {
+        return $this->getRight('exam_updatelog');
+    }
+    public function setCanUpdateExamLog(bool $can) {
+        return $this->setRight('exam_updatelog', $can);
+    }
+    public function canAddExamLog(): bool
+    {
+        return $this->getRight('exam_addlog');
+    }
+    public function setCanAddExamLog(bool $can) {
+        return $this->setRight('exam_addlog', $can);
+    }
+    public function canDeleteExamLog(): bool
+    {
+        return $this->getRight('exam_deletelog');
+    }
+    public function setCanDeleteExamLog(bool $can) {
+        return $this->setRight('exam_deletelog', $can);
     }
 
     //! Helper

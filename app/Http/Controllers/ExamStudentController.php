@@ -96,6 +96,29 @@ class ExamStudentController extends Controller
         $res->addResource($er->toResource());
         return $res;
     }
+    /**
+     * Update data of the selected exam
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param int $exam_id
+     *
+     * @return App\Http\Response\Response
+     */
+    public function setPresence(Request $request, int $exam_id, int $student_id)
+    {
+        $eur = new AuthExamUserRightsRepository($exam_id);
+        if (!$eur->canUpdateExamStudentPresence()) {
+            throw new UserAccessException('update.student.presence', 'Cannot update student presence of this exam', 403, $exam_id);
+        }
+
+        //$this->validateExamStudentUpdate($request);
+
+        $res = self::createResponse(200);
+        $er = ExamStudentRepository::fromID($student_id);
+        $er->setPresent($eur->getUser(), $request->val==1);
+        $res->addResource($er->toResource());
+        return $res;
+    }
 
     /**
      * Get the data of the selected exam
