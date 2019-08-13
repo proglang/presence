@@ -23,7 +23,7 @@ class CreateUserCollection extends Migration
             $collection->increments('id');
             $collection->string('name')->default('');
             $collection->string('email')->unique();
-            $collection->string('token')->unique();
+            $collection->string('token');
 
             $collection->string('password')->nullable()->default(null);
             $collection->boolean('verified')->default(false);

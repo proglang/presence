@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateExamStudentCollection extends Migration
+class CreateNoteRefCollection extends Migration
 {
-    static $table = 'exam_student';
+    static $table = 'note_ref';
     /**
      * Run the migrations.
      *
@@ -21,12 +21,8 @@ class CreateExamStudentCollection extends Migration
     {
         Schema::create(self::$table, function (Blueprint $collection) {
             $collection->increments('id');
-            $collection->unsignedInteger('exam_id');
-            $collection->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
-            $collection->string('name')->default('');
-            $collection->unsignedInteger('ident');
-
-            $collection->unique(['exam_id', 'ident']);
+            $collection->softDeletes();
+            $collection->timestampsTz();
         });
     }
 
