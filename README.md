@@ -1,12 +1,5 @@
 # exam_api
 ## Resources
-### UserResource
-***namespace:*** user
-
-***member:***
-* id: int -> user ID
-* name: string -> user Name
-* email: string -> user EMail
 
 ### ExamLogResource
 ***namespace:*** examlog
@@ -24,11 +17,55 @@
 ***base:*** ExamLogResource
 
 **member**
-  * history.data: []
+* history.data: []
   * id: int
   * text: string
   * user: ['id':int, 'name': string]
   * date:
+
+### ExamResource
+***namespace:*** exam
+
+***member:***
+* id: int -> user ID
+* name: string -> exam Name
+* date:
+
+### ExamRoomResource
+***namespace:*** examroom
+
+***member:***
+* id: int -> user ID
+* name: string -> room Name
+* note: string
+* size: int
+
+### ExamStudentResource
+***namespace:*** examstudent
+
+***member:***
+* id: int -> user ID
+* name: string -> room Name
+* ident: string
+* present: bool
+
+### ExamUserResource
+***namespace:*** examuser
+
+***member:***
+* id: int -> user ID
+* name: string -> room Name
+* note: string
+* rights: {[key:string]=value:bool}
+
+### UserResource
+***namespace:*** user
+
+***member:***
+* id: int -> user ID
+* name: string -> user Name
+* email: string -> user EMail
+
 
 ### Error
 ***namespace:*** -
@@ -50,8 +87,7 @@
 * email: string ->
 * password: string ->
 
-***returns:***
-UserResource
+***returns:*** UserResource
 
 #### POST /user/register
 ***POST Parameters:***
@@ -59,8 +95,7 @@ UserResource
 * name: string ->
 * password: string ->
 
-***returns:***
-UserResource
+***returns:*** UserResource
 
 
 #### POST /user/verify/{ID:int}
@@ -71,30 +106,56 @@ UserResource
 * name: string ->
 * password: string ->
 
-***returns:***
-UserResource
+***returns:*** UserResource
 
 #### GET  /user/verify/{ID:int}/{TOKEN:string}
 ***GET Parameters:***
 * ID: int -> user ID
 * TOKEN: string -> verification Token
 
-***returns:***
-UserResource
+***returns:*** UserResource
 
 ### Authenticated
 #### GET /user
-***returns:***
-UserResource
+***returns:*** UserResource
 
 #### GET /user/logout
+***returns:*** -
+
 #### GET /user/refresh
+***returns:*** -
 
 #### POST /exam
+***POST Parameters:***
+* name: string ->
+* date: string ->
+
+***returns:*** ExamResource
+
 #### GET  /exam
+***returns:*** ExamResource[]
+
 #### PUT  /exam/{ID:int}
+***GET Parameters:***
+* ID: int -> exam ID
+
+***POST Parameters:***
+* name: string ->
+* date: string ->
+
+***returns:*** ExamResource
+
 #### GET  /exam/{ID:int}
+***GET Parameters:***
+* ID: int -> exam ID
+
+***returns:*** ExamResource
+
 #### DELETE /exam/{ID:int}
+***GET Parameters:***
+* ID: int -> exam ID
+
+***returns:*** -
 
 #### POST /exam/{ID:int}/user
 #### GET  /exam/{ID:int}/user
