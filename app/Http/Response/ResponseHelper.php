@@ -8,16 +8,19 @@ namespace App\Http\Response;
 
 use Illuminate\Support\Facades\Auth;
 
-trait ResponseHelper {
-    protected static function createResponse($statusCode = 200, $headers = [], $auth=false):Response {
-        if ($headers==null) {
+trait ResponseHelper
+{
+    protected static function createResponse($statusCode = 200, $headers = [], $auth = false): Response
+    {
+        if ($headers == null) {
             $headers = [];
         }
         $res = new Response();
         $res->setStatusCode($statusCode);
         $res->withHeaders($headers);
         if ($auth) {
-            $res->withHeaders(["Authorization"=>"Bearer ".Auth::fromUser(Auth::user())]);
+            $res->addJson('auth', "Bearer " . Auth::fromUser(Auth::user()));
+            $res->withHeaders(["Authorization" => "Bearer " . Auth::fromUser(Auth::user())]);
         }
         return $res;
     }

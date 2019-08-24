@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use App\Http\Response\ResponseHelper;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -81,7 +82,8 @@ class Handler extends ExceptionHandler
         }
 
         $ret = self::createResponse(500);
-
+        if ($exception instanceof NotFoundHttpException)
+            $ret->setStatusCode(404);
         if (env("APP_DEBUG", false)) {
             $ret->addJson("errordata", [
                 "data" => null,

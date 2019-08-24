@@ -130,7 +130,7 @@ class ExamRepository extends BaseDatabaseRepository
         $this->assertValid();
         return $this->exam->date;
     }
-    public function setDate(string $date, bool $save = true): ExamRepository
+    public function setDate(int $date, bool $save = true): ExamRepository
     {
         $this->assertValid();
         $this->exam->date = $date;

@@ -29,6 +29,7 @@ class AuthController extends Controller
     {
         return ['email_hash' => hash("sha256", strtolower($request->email)), 'password' => ($request->password)];
     }
+
     public function login(Request $request)
     {
         $this->validateLogin($request);
@@ -36,6 +37,12 @@ class AuthController extends Controller
         if (!$this->guard()->attempt($this->getCredentials($request))) {
             throw new UserException("unauthorized", "Invalid login data!", 401);
         }
+        return self::createResponse(200, null, true)->addResource(AuthenticatedUserRepository::getUserResourceS());
+    }
+
+    // Todo: Validation and Tests
+    public function jwtlogin()
+    {
         return self::createResponse(200, null, true)->addResource(AuthenticatedUserRepository::getUserResourceS());
     }
     /**

@@ -41,6 +41,7 @@ class ExamUserController extends Controller
             throw new UserAccessException('adduser', 'Cannot add user to exam', 403, $exam_id);
         }
         $this->validateExamUser($request);
+        // Todo: Find User By Email...
         $data = $request->only('id', 'note', 'level', 'rights');
         $eu = ExamUserRepository::addUser($exam_id, $data['id']);
         $eu->setNote($data['note'] ?? '');

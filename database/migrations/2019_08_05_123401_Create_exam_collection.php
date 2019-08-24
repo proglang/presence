@@ -23,7 +23,7 @@ class CreateExamCollection extends Migration
         Schema::create(self::$table, function (Blueprint $collection) {
             $collection->increments('id');
             $collection->string('name');
-            $collection->dateTime('date')->default(Carbon::createFromTimestamp(0));
+            $collection->unsignedBigInteger('date')->default(0);
             $collection->unsignedInteger('creator_id');
             $collection->boolean('locked');
 

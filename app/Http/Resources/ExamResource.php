@@ -7,6 +7,8 @@
 
 namespace App\Http\Resources;
 
+use App\Repositories\AuthenticatedUserRepository;
+use App\Repositories\AuthExamUserRightsRepository;
 use Illuminate\Http\Resources\Json\Resource;
 
 class ExamResource extends Resource
@@ -26,10 +28,13 @@ class ExamResource extends Resource
      */
     public function toArray($request)
     {
+        $eu = (new AuthExamUserRightsRepository($this->id));
+
         return [
             'id' => $this->id,
             'name'  => $this->name,
-            'date' => $this->date
+            'date' => $this->date,
+            'rights' => $eu->list()
         ];
     }
 }

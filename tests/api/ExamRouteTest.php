@@ -84,8 +84,6 @@ class ExamRouteTest extends TestCase
         $res->seeJson([
             'exam' => ['name' => $exam->name, 'id' => $exam->id, 'date' => $exam->date],
         ]);
-
-
     }
     public function test_ID_PUT()
     {

@@ -142,7 +142,7 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
         $this->assertValid();
         return $this->user->verified;
     }
-    public function createExam(string $name, string $date): ExamRepository
+    public function createExam(string $name, int $date): ExamRepository
     {
         if (!$this->canCreateExam()) {
             throw ErrorException("Cannot create new exam");

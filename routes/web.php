@@ -4,8 +4,6 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-use Illuminate\Support\Facades\Auth;
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -16,7 +14,6 @@ use Illuminate\Support\Facades\Auth;
 | and give it the Closure to call when that URI is requested.
 |
 */
-
 $router->group(['prefix' => ''], function ($router) {
     //! /auth
     $router->group(['prefix' => 'user'], function ($router) {
@@ -29,6 +26,7 @@ $router->group(['prefix' => ''], function ($router) {
         });
 
         $router->group(['middleware' => 'auth'], function ($router) {
+            $router->post('login/jwt', 'AuthController@jwtlogin');
             $router->get('logout', 'AuthController@logout');
             $router->get('refresh', 'AuthController@refresh');
             $router->get('/', 'AuthController@get');
@@ -94,5 +92,8 @@ $router->group(['prefix' => ''], function ($router) {
                 });
             });
         });
+    });
+    $router->get('/', function () use ($router) {
+        return $router->app->version();
     });
 });

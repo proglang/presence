@@ -21,7 +21,7 @@ trait ValidatesExamRequests
     {
         $this->validate($request, [
             'name'    => 'required|string',
-            'date' => 'required|date|after:now',
+            'date' => 'required|int',
         ]);
     }
 }
