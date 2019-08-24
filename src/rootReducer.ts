@@ -3,31 +3,29 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { combineReducers} from 'redux';
-import { intlReducer } from 'react-intl-redux'
-import {reducer as dbg_reducer} from './utils/debug'; 
-import {reducer as examUserReducer, IExamUserDataList} from './api/examUserData';
-import {reducer as authReducer, IUserData} from './api/auth';
-import {reducer as examListReducer, IExamList} from './api/examList'
-import {reducer as examDataReducer, IExamData} from './api/examData'
-import {reducer as examStudentReducer, IExamStudentDataList} from './api/examStudentData'
+import { combineReducers } from 'redux';
+import { intlReducer, IntlState } from 'react-intl-redux'
+import { reducer as dbg_reducer } from './util/debug';
+
+import { reducer as userReducer } from './reducer/user';
+import { IUserData } from './api/api.user';
+
+import { reducer as examReducer } from './reducer/exam';
+import { IExamList } from './api/api.exam';
+/*import {reducer as examListReducer} from './api/examListReducer';
+import { IExamList, IUserData } from './api/data';*/
+
 export interface IReduxRootProps {
-    intl: any
+    intl: IntlState
     dbg: boolean
-    eu: IExamUserDataList
-    es: IExamStudentDataList
-    auth:IUserData
-    el: IExamList
-    ed: IExamData
+    exams: IExamList
+    user: IUserData | null
 }
 const rootReducer = combineReducers<IReduxRootProps>({
     intl: intlReducer,
     dbg: dbg_reducer,
-    eu: examUserReducer,
-    es: examStudentReducer,
-    auth: authReducer,
-    el: examListReducer,
-    ed: examDataReducer
+    exams: examReducer,
+    user: userReducer
 })
 
-export default  rootReducer;
+export default rootReducer;

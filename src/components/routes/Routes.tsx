@@ -14,7 +14,7 @@ interface ReduxProps {
 }
 const mapStateToProps = (state: any): ReduxProps => {
   return ({
-    login: !!state.auth,
+    login: !!state.user,
     access: {}
   })
 }

@@ -8,14 +8,14 @@ import * as React from 'react';
 import { Dropdown } from 'semantic-ui-react';
 import * as Flag from './Flag'
 
-import { injectIntl, InjectedIntlProps } from 'react-intl';
+import {  injectIntl,  WrappedComponentProps } from 'react-intl';
 import * as loca from "../../loca/loca";
 import { connect, DispatchProp } from 'react-redux';
 
-export interface ILanguageSelectProps extends InjectedIntlProps, DispatchProp {
+export interface ILanguageSelectProps  {
 }
 
-class LanguageSelect extends React.Component<ILanguageSelectProps, any> {
+class LanguageSelect extends React.Component<ILanguageSelectProps & DispatchProp & WrappedComponentProps, any> {
     update = (lang: string) => loca.update(lang)(this.props.dispatch);
     onChange = (e: React.SyntheticEvent<HTMLElement, Event>, data: any) => {
         this.update(data.value)

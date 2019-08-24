@@ -6,18 +6,11 @@
 import { updateIntl } from 'react-intl-redux'
 
 // Localization
-import { addLocaleData } from 'react-intl';
-
-import locale_en from 'react-intl/locale-data/en';
-import locale_de from 'react-intl/locale-data/de';
-
 
 import messages_de from "./data/de.json";
 import messages_en from "./data/en.json";
 
 // Localization
-addLocaleData([...locale_en, ...locale_de]);
-
 const defaultLang = "en";
 const messages: {[key:string]: {[key:string]:string}} = {
     en: messages_en,

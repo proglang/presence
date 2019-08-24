@@ -1,11 +1,7 @@
-// Copyright (c) 2019 Stefan Schweizer
-// 
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { logout } from '../../api/auth'
+import * as user from '../../api/api.user';
 
 
 export interface ILogoutPageProps {
@@ -35,4 +31,4 @@ class LogoutPageC extends React.Component<ILogoutPageProps & {logout: any}, ILog
     );
   }
 }
-export default connect(null, {logout})(LogoutPageC)
+export default connect(null, {logout: user.logout})(LogoutPageC)

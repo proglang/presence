@@ -6,9 +6,10 @@
 
 import React from 'react';
 import { Form, Message } from 'semantic-ui-react';
-import { FormattedMessage, injectIntl, InjectedIntlProps } from 'react-intl';
+import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect, DispatchProp } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
+import { writeMsg } from '../../util/debug';
 
 interface IFormBase_Errors {
     msg?: string[];
@@ -19,12 +20,12 @@ interface IFormBase_State {
     errors: IFormBase_Errors;
     loading: boolean;
 }
-interface IFormBaseProps extends InjectedIntlProps {
+interface IFormBaseProps {
     onSubmit: (val: Dispatch<AnyAction>) => Promise<any>;
     button: string;
 }
 
-class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp, any> {
+class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp & WrappedComponentProps, any> {
     _IsMounted = false;
 
     state: IFormBase_State = {
@@ -50,12 +51,17 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp, any> {
         if (errors.msg) return;
 
         this.props.onSubmit(this.props.dispatch)
-            .then(() => {
+            .then((res:any) => {
                 if (!this._IsMounted) return;
                 this.setState({ loading: false })
+                if (typeof(res)!=='object') return;
+                const {code, data} = res;
+                this.setState({ errors: {msg: data} })
+                writeMsg(code, data);
             })
             .catch((err: any) => {
                 if (!this._IsMounted) return;
+                this.setState({ loading: false })
                 if (err.response === undefined) {
                     this.setState({ errors: { global: err.message + ": " + err.isAxiosError }, loading: false })
                 } else {
