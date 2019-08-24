@@ -19,8 +19,8 @@ export default class LoginPage extends React.Component<ILoginPageProps, ILoginPa
 
   public render() {
     return (
-        [<LoginForm/>,
-        <RegisterForm/>]
+        [<LoginForm key="1"/>,
+        <RegisterForm key="2"/>]
     );
   }
 }

@@ -19,17 +19,24 @@ export interface IExamPageProps {
 }
 
 export interface IExamPageState {
+  loading: boolean;
 }
 
 class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & WrappedComponentProps & RouteComponentProps<{}>, IExamPageState> {
   constructor(props: IExamPageProps & ReduxProps & ReduxFn & WrappedComponentProps & RouteComponentProps<{}>) {
     super(props);
     this.state = {
+      loading: false
     }
   }
   componentDidMount = () => {
     //| Send Request to Server
-    this.props.load()
+    if (Object.keys(this.props.exams).length === 0)
+      this.refreshTable();
+  }
+  refreshTable = () => {
+    this.setState({ loading: true });
+    this.props.load().then(() => this.setState({ loading: false })).catch(() => this.setState({ loading: false }))
   }
   getTable = () => {
     return Object.values(this.props.exams).map((value: any) => [value.name, value.date,
@@ -90,7 +97,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
         <Table
           format={{ 1: { collapsing: true } }}
           sortable={{ 'name': true, 'date': true }}
-          header={[{ "k": "name", "t": "common.name" }, { "k": "date", "t": "common.date" }, { "k": this.addButtons, "t": "test" }]}
+          header={[{ "k": "name", "t": "common.name" }, { "k": "date", "t": "common.date" }, { "k": this.addButtons, "t": <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
           data={Object.values(this.props.exams).reduce((acc: any, cur) => { acc[cur.id] = { ...cur, date: getDateTimeString(this.props.intl, cur.date) }; return acc; }, {})}
           filter={{ 'name': true, 'date': true }}
           onSelect={(data: exam.IExamData) => { this.props.select(data.id) }}

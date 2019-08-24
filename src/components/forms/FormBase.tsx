@@ -51,12 +51,12 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp & Wrapped
         if (errors.msg) return;
 
         this.props.onSubmit(this.props.dispatch)
-            .then((res:any) => {
+            .then((res: any) => {
                 if (!this._IsMounted) return;
                 this.setState({ loading: false })
-                if (typeof(res)!=='object') return;
-                const {code, data} = res;
-                this.setState({ errors: {msg: data} })
+                if (typeof (res) !== 'object') return;
+                const { code, data } = res;
+                this.setState({ errors: { msg: data } })
                 writeMsg(code, data);
             })
             .catch((err: any) => {
@@ -83,7 +83,8 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp & Wrapped
             <Form onSubmit={() => this.onSubmit(children)} loading={loading} error={Object.keys(errors).length !== 0}>
                 {React.Children.map(children, (node, index) => {
                     const tsnode = node as React.ReactElement<any>;
-                    return React.cloneElement(tsnode, { key: index, error: errors[tsnode.props.name] })
+                    const { validator, ...childProps } = tsnode.props;
+                    return React.createElement(tsnode.type, { key: index, error: errors[tsnode.props.name], ...childProps })
                 })}
                 <Form.Button fluid primary>{this.props.intl.formatMessage({ id: button })}</Form.Button>
                 <Message error>

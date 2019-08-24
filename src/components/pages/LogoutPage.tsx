@@ -16,7 +16,7 @@ class LogoutPageC extends React.Component<ILogoutPageProps & {logout: any}, ILog
     this.state = {
     }
   }
-  componentWillMount = () => {
+  componentDidMount = () => {
     //| Send Request to Server
     this.props.logout()
     // Todo: Error Handling

@@ -41,7 +41,7 @@ class App extends React.Component<IAppProps & { login: any, login2: any }, IAppS
     }
   }
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     //| Send Request to Server
     if (getToken() === null) return;
     this.setState({ loading: true })

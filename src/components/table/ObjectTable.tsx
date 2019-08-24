@@ -8,7 +8,7 @@ export interface IObjectTableProps<T> {
     sortable?: boolean | { [key: number]: boolean, [key: string]: boolean };
     defaultSortCol?: number | string;
 
-    header: { k: string | number | ((val: T) => any), t: string }[]
+    header: { k: string | number | ((val: T) => any), t:any }[]
     data: { [key: number]: T, [key: string]: T };
 
     verifier?: { [key: number]: (val: T) => boolean };
