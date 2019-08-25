@@ -55,19 +55,19 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        $html = env("APP_DEBUG", false) ? parent::render($request, $exception)->original : null;
+        $html = config('app.debug') == true ? parent::render($request, $exception)->original : null;
         if ($exception instanceof IRenderException) {
             return $exception->render()->addJson("errorHTML", $html);
         }
         if ($exception instanceof ValidationException) {
             foreach ($exception->validator->failed() as $key => $value) {
-                foreach($value as $vkey=>$args) {
+                foreach ($value as $vkey => $args) {
                     $err[] = "$key.$vkey";
-                    $err_args["$key.$vkey"]=$args;
+                    $err_args["$key.$vkey"] = $args;
                 }
             }
             $msg = [];
-            foreach ($exception->validator->errors()->messages() as $key=>$value) {
+            foreach ($exception->validator->errors()->messages() as $key => $value) {
                 $msg[] = $value;
             }
             return self::toResponse(
@@ -84,7 +84,7 @@ class Handler extends ExceptionHandler
         $ret = self::createResponse(500);
         if ($exception instanceof NotFoundHttpException)
             $ret->setStatusCode(404);
-        if (env("APP_DEBUG", false)) {
+        if (config('app.debug') == true) {
             $ret->addJson("errordata", [
                 "data" => null,
                 "message" => $exception->getMessage(),

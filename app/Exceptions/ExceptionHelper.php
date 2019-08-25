@@ -29,7 +29,7 @@ trait ExceptionHelper
         if ($error->getMessage()) {
             $ret->addJsonArray("error.msg", $error->getMessage());
         }
-        if (env("APP_DEBUG", false)) {
+        if (config('app.debug') == true) {
             $ret->addJson("error.debug", [
                 "data" => $data,
                 "message" => $error->getMessage(),

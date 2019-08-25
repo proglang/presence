@@ -27,6 +27,7 @@ use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
 use App\Repositories\AuthenticatedUserRepository;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 class Authenticate extends BaseMiddleware
 {
@@ -57,12 +58,6 @@ class Authenticate extends BaseMiddleware
      */
     public function handle($request, Closure $next, $optional = null)
     {
-        /*if (true) {
-            Auth::onceUsingId(1);
-            $token = Auth::fromUser(Auth::user());
-            $request->headers->set('Authorization', "Bearer $token");
-            return $next($request);
-        }*/
         $this->auth->setRequest($request);
         try {
             if (!$this->auth->parseToken()->authenticate()) {
