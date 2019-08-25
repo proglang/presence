@@ -16,6 +16,7 @@ use App\Exceptions\UserAccessException;
 use App\Repositories\ExamUserRepository;
 use App\Http\Validators\ValidatesExamUserRequests;
 use App\Repositories\ExamUserRightsRepository;
+use App\Repositories\UserRepository;
 
 class ExamUserController extends Controller
 {
@@ -41,9 +42,9 @@ class ExamUserController extends Controller
             throw new UserAccessException('adduser', 'Cannot add user to exam', 403, $exam_id);
         }
         $this->validateExamUser($request);
-        // Todo: Find User By Email...
-        $data = $request->only('id', 'note', 'level', 'rights');
-        $eu = ExamUserRepository::addUser($exam_id, $data['id']);
+        $rep = UserRepository::fromMail($request->email, true);
+        $data = $request->only('note', 'level', 'rights');
+        $eu = ExamUserRepository::addUser($exam_id, $rep->getID());
         $eu->setNote($data['note'] ?? '');
         $rights = $eu->getRights();
         $rights->setLevel($data['level']  ?? null);

@@ -21,7 +21,7 @@ trait ValidatesExamStudentRequests
     {
         $this->validate($request, [
             'name' => 'required|string',
-            'ident' => 'required|integer',
+            'ident' => 'required|string',
         ]);
     }
     /**

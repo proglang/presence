@@ -27,7 +27,8 @@ class AuthController extends Controller
      */
     protected function getCredentials(Request $request)
     {
-        return ['email_hash' => hash("sha256", strtolower($request->email)), 'password' => ($request->password)];
+        
+        return ['email_hash' => UserRepository::getMailHash($request->email), 'password' => ($request->password)];
     }
 
     public function login(Request $request)

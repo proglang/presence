@@ -28,6 +28,27 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
         if ($exam == null) throw new NotFoundException("exam", "Exam not Found", 404, $id);
         return new UserRepository($exam);
     }
+    static public function fromMail(string $email, bool $create): UserRepository
+    {
+        $user = User::where('email_hash', self::getMailHash($email))->first();
+        if ($user == null && $create) {
+            try {
+                $user = self::_createUser($email);
+                $user->temporary = true;
+                $user = new UserRepository($user);
+                self::save($user->user);
+                return $user;
+            } catch (QueryException $e) {
+                throw new CreateException("user", "Cannot Register User", 422, $e->getMessage());
+            }
+        } else {
+            return new UserRepository($user);
+        }
+    }
+    static public function getMailHash(string $email): string
+    {
+        return hash("sha256", strtolower($email));
+    }
     public function get(): User
     {
         $this->assertValid();

@@ -8,8 +8,8 @@
 namespace App\Repositories;
 
 use App\Models\ExamUser;
-use App\Models\User;
 use App\Exceptions\NotFoundException;
+use App\Exceptions\ValidationException;
 use App\Http\Resources\ExamUserResource;
 
 class ExamUserRepository extends BaseDatabaseRepository
@@ -39,6 +39,10 @@ class ExamUserRepository extends BaseDatabaseRepository
     public static function addUser($exam, $user):ExamUserRepository {
         $user = self::toUserRepository($user);
         $exam = self::toExamRepository($exam);
+        $ret = ExamUser::where([['exam_id', $exam->getID()], ['user_id', $user->getID()]])->first();
+        if ($ret!=null) {
+            throw new ValidationException('user.exists', 'User already added!', 422, ['exam'=>$exam->getID(), 'user'=>$user->getID()]);
+        }
         ExamUserRightsRepository::create($exam, $user);
         return self::fromID($exam, $user);
     }

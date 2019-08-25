@@ -32,6 +32,7 @@ class ExamUserResource extends Resource
         return [
             'id' => $this->user_id,
             'name'  => $this->user->name,
+            'email'  => $this->user->email,
             'note' => $this->note ?? '',
             'rights' => $eu->list()
         ];

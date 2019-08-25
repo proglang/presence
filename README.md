@@ -189,3 +189,4 @@ Install: composer install
 Run Tests: vendor/bin/phpunit
 
 Create Database: php artisan migrate:fresh --force
+Update Classes: composer dump-autoload

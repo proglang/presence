@@ -73,7 +73,7 @@ $router->group(['prefix' => ''], function ($router) {
                     $router->post('/', 'ExamStudentController@add');
                     $router->get('/', 'ExamStudentController@list');
                     $router->group(['prefix' => '{student_id:[0-9]+}'], function ($router) {
-                        $router->put('/present', 'ExamStudentController@setPresence');
+                        $router->put('/presence', 'ExamStudentController@setPresence');
                         $router->put('/', 'ExamStudentController@update');
                         $router->get('/', 'ExamStudentController@get');
                         $router->delete('/', 'ExamStudentController@delete');

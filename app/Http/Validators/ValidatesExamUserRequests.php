@@ -20,7 +20,7 @@ trait ValidatesExamUserRequests
     protected function validateExamUser(Request $request)
     {
         $this->validate($request, [
-            'id'    => 'required|integer',
+            'email'    => 'required|email',
             'note' => 'string',
             'level' => 'string',
             'rights' => 'array',
