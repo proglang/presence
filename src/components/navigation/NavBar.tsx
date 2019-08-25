@@ -8,7 +8,7 @@ import { Icon, Image, Menu, Sidebar, Container, Popup, Responsive, IconProps } f
 import { NavLink as Link, NavLinkProps, withRouter, RouteComponentProps } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { rights, right } from '../../api/api.exam';
+import { TRights, TRight } from '../../api/api.exam.user';
 import { IReduxRootProps } from '../../rootReducer';
 // import ExamSelectionDropdown from './ExamSelection';
 
@@ -19,7 +19,7 @@ interface INavLinkItem {
     icon?: IconProps;
     label?: string;
     type: "guest"|"public"|"user";
-    right?: right;
+    right?: TRight;
 }
 class _NavLinkItem extends React.Component<INavLinkItem & ReduxProps &RouteComponentProps<{}>> {
     public render() {
@@ -55,7 +55,7 @@ class _NavLinkItem extends React.Component<INavLinkItem & ReduxProps &RouteCompo
 interface ReduxProps {
     redux: {
         login: boolean;
-        access?: rights
+        access?: TRights
     }
 }
 const mapStateToProps = (state: IReduxRootProps): ReduxProps => {

@@ -21,7 +21,9 @@ import { Container } from 'semantic-ui-react';
 import { trace } from './util/debug';
 import { getToken } from './util/login';
 import { connect } from 'react-redux';
-import { user } from './api/api';
+import * as  user from './api/api.user';
+import ExamUserPage from './components/pages/ExamUserPage';
+import ExamStudentPage from './components/pages/ExamStudentPage';
 
 
 export interface IAppProps {
@@ -63,27 +65,21 @@ class App extends React.Component<IAppProps & { login: any, login2: any }, IAppS
         id="App"
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
-          <NavBar />
-          <Container style={{ flex: 1 }}>
-            <Switch>
-              <Route.Public path="/" exact render={() => null} />
-              <Route.Guest path="/login/:type?/:data?" exact component={LoginPage} />
-              <Route.Public path="/logout" exact component={LogoutPage} />
-              <Route.User path="/exam/list" exact component={ExamPage} />
+        <NavBar />
+        <Container style={{ flex: 1 }}>
+          <Switch>
+            <Route.Public path="/" exact render={() => null} />
+            <Route.Guest path="/login/:type?/:data?" exact component={LoginPage} />
+            <Route.Public path="/logout" exact component={LogoutPage} />
+            <Route.User path="/exam/list" exact component={ExamPage} />
+            <Route.User req="exam_viewuser" path="/exam/user" exact component={ExamUserPage} />
+            <Route.User req="exam_viewstudent" path="/exam/student" exact component={ExamStudentPage} />
 
-              <Route.Public component={Error404} />
-            </Switch>
-          </Container>
-          <Footer />
+            <Route.Public component={Error404} />
+          </Switch>
+        </Container>
+        <Footer />
       </div>);
   }
 }
-
-
-/*
-        <Route.User path="/exam/user/:type?" exact component={ExamUserPage} />
-        <Route.User path="/exam/student/:type?" exact component={ExamStudentPage} />
-
-        <Route.Public path="/config" exact component={ConfigPage} />
-*/
 export default connect(null, { login: user.token_login, login2: user.login })(App)

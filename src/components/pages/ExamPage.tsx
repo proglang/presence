@@ -1,17 +1,18 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-import * as exam from '../../api/api.exam';
 import { IReduxRootProps } from '../../rootReducer';
-import { Container, Popup, Button } from 'semantic-ui-react';
+import { Container, Popup, Button} from 'semantic-ui-react';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import ObjectTable from '../table/ObjectTable';
 import { withRouter, RouteComponentProps } from 'react-router';
 import EditExam from '../forms/EditExam';
 import { getDateTimeString } from '../../util/time';
 import CreateExam from '../forms/CreateExam';
+import DeleteExamModal from '../modal/DeleteExamModal';
+import * as exam from '../../api/api.exam';
 
-class Table extends ObjectTable<exam.IExamData> { }
+class Table extends ObjectTable<exam.IData> { }
 
 
 
@@ -26,7 +27,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
   constructor(props: IExamPageProps & ReduxProps & ReduxFn & WrappedComponentProps & RouteComponentProps<{}>) {
     super(props);
     this.state = {
-      loading: false
+      loading: false,
     }
   }
   componentDidMount = () => {
@@ -35,14 +36,11 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
       this.refreshTable();
   }
   refreshTable = () => {
+    if (this.state.loading) return;
     this.setState({ loading: true });
     this.props.load().then(() => this.setState({ loading: false })).catch(() => this.setState({ loading: false }))
   }
-  getTable = () => {
-    return Object.values(this.props.exams).map((value: any) => [value.name, value.date,
-    <Popup key="1" trigger={<Button basic icon='edit' onClick={this.props.select} />} content={(<FormattedMessage id="common.button.select" />)} />]);
-  }
-  addButtons = (data: exam.IExamData) => {
+  addButtons = (data: exam.IData):[any, boolean] => {
     const goto = (id: number, path: string | null = null) => {
       this.props.select(id);
       if (path)
@@ -88,7 +86,15 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
       />
       ret.push(btn);
     }
-    return ret;
+    if (data.rights.delete) {
+      const btn = <Popup
+        key="7"
+        trigger={<DeleteExamModal key="7" id={data.id}/>}
+        content={(<FormattedMessage id="nav.exam.log" />)}
+      />
+      ret.push(btn);
+    }
+    return [ret, false];
     //return Object.entries(data.rights).map((value) => <p>{value[0]}{value[1] ? 1 : 0}</p>)
   }
   public render() {
@@ -97,22 +103,25 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
         <Table
           format={{ 1: { collapsing: true } }}
           sortable={{ 'name': true, 'date': true }}
-          header={[{ "k": "name", "t": "common.name" }, { "k": "date", "t": "common.date" }, { "k": this.addButtons, "t": <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
+          header={[
+            { "k": "name", "t": "common.name" }, { "k": "date", "t": "common.date" },
+            { "k": 'btn', 'fn': this.addButtons, "t": <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
           data={Object.values(this.props.exams).reduce((acc: any, cur) => { acc[cur.id] = { ...cur, date: getDateTimeString(this.props.intl, cur.date) }; return acc; }, {})}
           filter={{ 'name': true, 'date': true }}
-          onSelect={(data: exam.IExamData) => { this.props.select(data.id) }}
+          onSelect={(data: exam.IData) => { this.props.select(data.id) }}
           selectKey={'id'}
           selected={this.props.selected ? [this.props.selected] : undefined}
         />
         {this.props.selected && <EditExam exam={this.props.exams[this.props.selected]} />}
         {<CreateExam />}
+
       </Container>
     );
   }
 }
 
 interface ReduxProps {
-  exams: { [key: number]: exam.IExamData };
+  exams: { [key: number]: exam.IData };
   selected?: number
 }
 interface ReduxFn {

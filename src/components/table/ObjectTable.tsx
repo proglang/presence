@@ -3,12 +3,15 @@ import * as React from 'react';
 import { Icon, Table, Input, InputOnChangeData } from "semantic-ui-react";
 
 
+export type ISortFn1<T> = (key: string | number, val1: T, val2: T) => boolean;
+export type ISortFn2<T> = (val1: T, val2: T) => boolean;
+
 export interface IObjectTableProps<T> {
     format?: { [key: number]: {}, [key: string]: {} };
-    sortable?: boolean | { [key: number]: boolean, [key: string]: boolean };
+    sortable?: boolean | ISortFn1<T> | { [key: number]: boolean | ISortFn2<T>, [key: string]: boolean | ISortFn2<T> };
     defaultSortCol?: number | string;
 
-    header: { k: string | number | ((val: T) => any), t:any }[]
+    header: { k: string | number, fn?: ((val: T) => [any, boolean]), t: any }[]
     data: { [key: number]: T, [key: string]: T };
 
     verifier?: { [key: number]: (val: T) => boolean };
@@ -18,6 +21,9 @@ export interface IObjectTableProps<T> {
     selectKey?: number | string;
     multiSelect?: number;
     selected?: (string | number)[];
+
+    rowPropFn?: ((val: T) => any)
+    colPropFn?: ((val: T, key: string | number) => any)
 }
 
 
@@ -65,8 +71,11 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
     }
     handleSort = (col: string | number | null) => {
         if (col === null) return;
-        if (!this.props.sortable) return;
-        if (!this.props.sortable && !this.props.sortable[col]) return;
+        const { sortable } = this.props;
+        if (!sortable) return;
+        if (typeof (sortable) === 'object') {
+            if (!sortable[col]) return;
+        }
         var { sortCol, sortDir } = this.state
         if (sortCol === col) {
             sortDir = (sortDir === 'ascending') ? 'descending' : 'ascending';
@@ -109,10 +118,22 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
         const filtered = Object.values(data).filter((value: T) =>
             Object.keys(filterState).every((key: string) =>
                 String(Object(value)[key]).includes(String(filterState[key]))));
+
         if (sortable && sortCol) {
-            filtered.sort((a, b) => (Object(a)[sortCol] <= Object(b)[sortCol]) ? -1 : 1)
-            if (sortDir === 'descending')
-                filtered.reverse()
+
+            let sortfn = typeof (sortable) === 'function' ? ((a: T, b: T) => sortable(sortCol, a, b)) : null;
+            sortfn = sortable === true ? ((a, b) => Object(a)[sortCol] <= Object(b)[sortCol]) : sortfn;
+            if (sortfn === null) {
+                const val: boolean | undefined | ISortFn2<T> = Object(sortable)[sortCol];
+                sortfn = typeof (val) === 'function' ? val : null;
+                sortfn = val === true ? ((a, b) => Object(a)[sortCol] <= Object(b)[sortCol]) : null
+            }
+            if (sortfn !== null) {
+                const fn = sortfn;
+                filtered.sort((a: T, b: T) => fn(a, b) ? -1 : 1)
+                if (sortDir === 'descending')
+                    filtered.reverse()
+            }
         }
         const filter = this.props.filter
         const selectKey = this.props.selectKey
@@ -158,23 +179,43 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {filtered.map((row, row_id) =>
-                        <Table.Row
+                    {filtered.map((row, row_id) => {
+                        const r = (<Table.Row
                             key={row_id}
                             active={selectKey && this.state.selected.find((val) => val === Object(row)[selectKey]) ? true : false}
-                            onClick={selectKey && (() => this.onSelect(row))}
                         >
-                            {header.map((data, index) =>
-                                <Table.Cell
-                                    collapsing={!(typeof (data.k) === "string" || typeof (data.k) === "number")}
+                            {header.map((data, index) => {
+                                const [val, sel] = !data.fn ? [Object(row)[data.k], true] : data.fn(row)
+                                const c = (<Table.Cell
+                                    collapsing={!!data.fn}
                                     key={index}
+                                    onClick={(selectKey && sel !== false) ? (() => this.onSelect(row)) : null}
                                 >
-                                    {
-                                        (typeof (data.k) === "string" || typeof (data.k) === "number") ? Object(row)[data.k] : data.k(row)
-                                    }
+                                    {val}
                                 </Table.Cell>)
+
+                                if (this.props.colPropFn) {
+                                    const tsnode = c as React.ReactElement<any>;
+                                    if (tsnode === null) return null;
+                                    const { validator, ...childProps } = tsnode.props;
+                                    const nprop = this.props.colPropFn(row, data.k)
+                                    if (typeof (nprop) === 'object')
+                                        return React.createElement(tsnode.type, { ...nprop, ...childProps })
+                                }
+                                return c;
+                            })
                             }
-                        </Table.Row>
+                        </Table.Row>)
+                        if (this.props.rowPropFn) {
+                            const tsnode = r as React.ReactElement<any>;
+                            if (tsnode === null) return null;
+                            const { validator, ...childProps } = tsnode.props;
+                            const nprop = this.props.rowPropFn(row)
+                            if (typeof (nprop) === 'object')
+                                return React.createElement(tsnode.type, { ...nprop, ...childProps })
+                        }
+                        return r;
+                    }
                     )}
                 </Table.Body>
             </Table>

@@ -38,6 +38,7 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp & Wrapped
         React.Children.forEach(children, (child) => {
             // Todo: Check Node Type -> Validation depending on type
             const tsnode = child as React.ReactElement;
+            if (tsnode===null) return;
             const { validator, value, name } = tsnode.props
             var msg: string | true;
             if (!!validator && (msg = validator(value, tsnode.props)) !== true) {
@@ -83,6 +84,7 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp & Wrapped
             <Form onSubmit={() => this.onSubmit(children)} loading={loading} error={Object.keys(errors).length !== 0}>
                 {React.Children.map(children, (node, index) => {
                     const tsnode = node as React.ReactElement<any>;
+                    if (tsnode===null) return;
                     const { validator, ...childProps } = tsnode.props;
                     return React.createElement(tsnode.type, { key: index, error: errors[tsnode.props.name], ...childProps })
                 })}

@@ -7,28 +7,20 @@ import axios, { AxiosResponse } from 'axios';
 import { handleSuccess, IResponse } from './api';
 
 import * as eReducer from '../reducer/exam';
+import * as user from './api.exam.user'
 
-export type right = 'view' | 'delete' | 'update' |
-    'exam_viewuser' | 'exam_adduser' | 'exam_deleteuser' | 'exam_updateuser' |
-    'exam_viewroom' | 'exam_addroom' | 'exam_deleteroom' | 'exam_updateroom' |
-    'exam_viewstudent' | 'exam_addstudent' | 'exam_deletestudent' | 'exam_updatestudent' | 'exam_updatestudent_presence' |
-    'exam_viewlog' | 'exam_addlog' | 'exam_deletelog' | 'exam_updatelog';
-
-export type rights = {
-    [key in right]?: boolean
-}
 export interface IUpdateExamData {
     name: string;
     date: number;
 }
-export interface IExamData {
+export interface IData {
     id: number;
     name: string;
     date: number;
-    rights: rights;
+    rights: user.TRights;
 }
 
-export type IExamList = { [key: number]: IExamData, selected?: number }
+export type IList = { [key: number]: IData, selected?: number }
 
 export const list = () => (dispatch: any) => axios.get('exam')
     .then((res: AxiosResponse<IResponse>) => {
@@ -52,6 +44,15 @@ export const update = (id: number, data: IUpdateExamData) => (dispatch: any) => 
         return true;
     })
     .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
+
+export const del = (id: number) => (dispatch: any) => axios.delete(`exam/${id}`)
+    .then((res: AxiosResponse<IResponse>) => {
+        dispatch(eReducer._DELETE(id))
+        return true;
+    })
+    .catch((res: { response: AxiosResponse<IResponse> }) =>
+        console.log(res)/*({ data: res.response.data.error, code: res.response.status })*/)
+
 export const create = (data: IUpdateExamData) => (dispatch: any) => axios.post(`exam`, data)
     .then((res: AxiosResponse<IResponse>) => {
         handleSuccess(res);

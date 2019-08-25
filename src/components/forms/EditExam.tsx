@@ -15,7 +15,7 @@ import * as validate from '../../validator/validator';
 
 
 export interface IEditExamFormProps {
-    exam: exam.IExamData;
+    exam: exam.IData;
 }
 
 export interface IEditExamFormState {

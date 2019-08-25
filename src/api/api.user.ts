@@ -7,6 +7,7 @@ import axios, { AxiosResponse } from 'axios';
 import * as uReducer from '../reducer/user';
 import { handleSuccess, IResponse } from './api';
 import { deleteToken, getToken, setToken } from '../util/login';
+import { list } from './api.exam'
 
 export interface IRegisterData {
     email: string;
@@ -29,6 +30,7 @@ const setUser = (res: IUserData | undefined, dispatch: any) => {
         dispatch(uReducer._RESET());
         return;
     }
+    list()(dispatch);
     dispatch(uReducer._UPDATE(res));
 }
 
