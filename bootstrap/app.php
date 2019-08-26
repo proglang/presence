@@ -6,11 +6,16 @@
 
 
 
-require_once __DIR__.'/../vendor/autoload.php';
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+
+
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
 ))->bootstrap();
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +31,13 @@ require_once __DIR__.'/../vendor/autoload.php';
 $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
+
+//Todo: cache settings
+//$cached_config_file = __DIR__ . '/../storage/app/cached_config.php';
+//if (file_exists($cached_config_file)) {
+//config(require $cached_config_file);
+// config(['app.key'=>'AAAAAAAAAABBBBBBBBBBCCCCCCCCCCDD'] );
+//}
 
 $app->withFacades();
 
@@ -63,9 +75,9 @@ $app->singleton(
 |
 */
 
- $app->middleware([
-     App\Http\Middleware\CorsMiddleware::class
- ]);
+$app->middleware([
+    App\Http\Middleware\CorsMiddleware::class
+]);
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
@@ -101,10 +113,10 @@ $app->register(Illuminate\Validation\ValidationServiceProvider::class);
 |
 */
 
+
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
+    require __DIR__ . '/../routes/web.php';
 });
-
 return $app;

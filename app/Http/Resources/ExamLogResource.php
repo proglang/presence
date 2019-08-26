@@ -31,6 +31,7 @@ class ExamLogResource extends Resource
             'id' => $this->id,
             'text' => $this->current()->text,
             'date' => $this->current()->updated_at,
+            'user' => User::find($this->current()->user_id)->first()->name,
             'history' => $this->historyCount(),
             'student' => $this->student()
         ];
@@ -50,10 +51,10 @@ class ExamLogHistoryResource extends ExamLogResource
         $ret = [];
         foreach ($this->history as $note) {
             $ret[] = [
-                'id'=>$note->id,
-                'text'=>$note->text,
-                'user'=>['id'=>$note->user_id, 'name'=>User::find($note->user_id)->first()->name],
-                'date'=>$note->updated_at
+                'id' => $note->id,
+                'text' => $note->text,
+                'user' => ['id' => $note->user_id, 'name' => User::find($note->user_id)->first()->name],
+                'date' => $note->updated_at
             ];
         }
         $data = parent::toArray($request);
