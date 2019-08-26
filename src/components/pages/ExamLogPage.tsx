@@ -110,7 +110,7 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
         />
         <ExamLogForm add={true} />
         {this.props.selected && <ExamLogForm add={false} />}
-        <Button onClick={this.export} />
+        <Button onClick={this.export} content={'export'} />
       </Container>
     );
   }
