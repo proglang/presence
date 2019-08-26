@@ -114,7 +114,7 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
         <Table
           format={{ 1: { collapsing: true } }}
           sortable={{
-            name: true, email: true
+            text: true, user: true, date: true
           }}
           header={[
             { k: "text", t: "common.text" },
@@ -123,7 +123,7 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
             { k: "student", t: "common.student", fn: this.addStudent },
             { k: 'btn', fn: this.addButtons, t: <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
           data={this.props.log}
-          filter={{ 'name': true, 'email': true, 'note': true }}
+          filter={{ 'text': true, 'user': true, 'date': true }}
           onSelect={(data: examlog.IData) => { this.props.select(data.id) }}
           selectKey={'id'}
           selected={this.props.selected ? [this.props.selected] : undefined}

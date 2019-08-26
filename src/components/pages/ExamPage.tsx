@@ -98,6 +98,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
     //return Object.entries(data.rights).map((value) => <p>{value[0]}{value[1] ? 1 : 0}</p>)
   }
   public render() {
+    //Todo: Selection not visible if only 1 exam exists and page is opened the first time
     return (
       <Container as="main">
         <Table
