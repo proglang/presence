@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDropzone, { DropEvent } from 'react-dropzone'
 import { Segment, Icon, Header, Button } from 'semantic-ui-react';
 import Importer, { TImportHeadType } from '../../util/importer/importer';
+import { FormattedMessage } from 'react-intl';
 
 export type TData = TImportHeadType
 
@@ -38,7 +39,7 @@ export default class Dropzone<T> extends React.Component<IDropzoneProps<T>, IDro
                                 <Icon name='file excel' />
                                 <input {...getInputProps()} />
                             </Header>
-                            <Button primary onClick={getRootProps().onClick}>__LOCA__ ADD DOCUMENT</Button>
+                            <Button primary onClick={getRootProps().onClick}><FormattedMessage id="label.document.add"/></Button>
                         </div>
                     </Segment>
                 )}

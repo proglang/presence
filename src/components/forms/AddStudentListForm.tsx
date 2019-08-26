@@ -41,7 +41,6 @@ class AddStudentListForm extends React.Component<IAddStudentListFormProps & Redu
         const { create, examid } = this.props
         if (!examid) return;
         this.state.data.forEach((data) => {
-            console.log(data)
             create(examid, data);
         })
     }
