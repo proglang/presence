@@ -25,27 +25,32 @@ class ExamStudent extends Model
     protected $fillable = [
         'name',
         'ident',
-        'exam_id'
+        'exam_id',
+        'ident_hash'
     ];
-    public function getNameAttribute($value) {
-        return self::Decrypt($value);
-    }
-    public function setNameAttribute($value) {
-        $this->attributes['name'] = self::Encrypt($value);
-    }
-    public function getIdentAttribute($value) {
-        return self::Decrypt($value);
-    }
-    public function setIdentAttribute($value) {
-        $this->attributes['ident'] = self::Encrypt($value);
-    }
-
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [];
+    protected $hidden = [
+        'ident_hash'
+    ];
+
+    public function getNameAttribute($value) {
+        return strval(self::Decrypt($value));
+    }
+    public function setNameAttribute($value) {
+        $this->attributes['name'] = self::Encrypt($value);
+    }
+    public function getIdentAttribute($value) {
+        return strval(self::Decrypt($value));
+    }
+    public function setIdentAttribute($value) {
+        $this->attributes['ident'] = self::Encrypt($value);
+        $this->attributes['ident_hash'] = hash("sha256", strtolower($value));
+    }
+
 
     public function exam() {
         return $this->hasOne(Exam::class, 'id', 'exam_id');

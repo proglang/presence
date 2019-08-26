@@ -25,8 +25,9 @@ class CreateExamStudentCollection extends Migration
             $collection->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
             $collection->string('name')->default('');
             $collection->string('ident');
+            $collection->string('ident_hash');
 
-            $collection->unique(['exam_id', 'ident']);
+            $collection->unique(['exam_id', 'ident_hash']);
         });
     }
 

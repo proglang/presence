@@ -28,13 +28,13 @@ class ExamRoom extends Model
     ];
 
     public function getNameAttribute($value) {
-        return self::Decrypt($value);
+        return strval(self::Decrypt($value));
     }
     public function setNameAttribute($value) {
         $this->attributes['name'] = self::Encrypt($value);
     }
     public function getNoteAttribute($value) {
-        return self::Decrypt($value);
+        return strval(self::Decrypt($value));
     }
     public function setNoteAttribute($value) {
         $this->attributes['note'] = self::Encrypt($value);

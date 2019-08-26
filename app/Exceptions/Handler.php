@@ -94,7 +94,7 @@ class Handler extends ExceptionHandler
                 "trace" => $exception->getTraceAsString()
             ]);
         }
-        $ret->addJson("error", "server.internal");
+        $ret->addJsonArray("error", "server.internal");
         $ret->addJson("errorHTML", $html);
         return $ret;
     }

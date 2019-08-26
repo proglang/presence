@@ -40,7 +40,7 @@ class ExamStudentController extends Controller
         if (!$eur->canAddExamStudent()) {
             throw new UserAccessException('addstudent', 'Cannot add student to exam', 403, $exam_id);
         }
-        $this->validateExamStudent($request);
+        $this->validateExamStudent($request, $exam_id);
         $data = $request->only('name', 'ident');
         $er = ExamStudentRepository::add($exam_id, $data['ident']);
         $er->setName($data['name'] ?? '');
@@ -86,7 +86,7 @@ class ExamStudentController extends Controller
             throw new UserAccessException('update.student', 'Cannot update students of this exam', 403, $exam_id);
         }
 
-        $this->validateExamStudentUpdate($request);
+        $this->validateExamStudentUpdate($request, $exam_id, $student_id);
         $data = $request->only('name', 'ident');
 
         $res = self::createResponse(200);

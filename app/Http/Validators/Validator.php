@@ -61,7 +61,7 @@ trait ValidationFn
     }
     public function validateUnique($attribute, $value, $parameters) {
         $encryption = $parameters[2] ?? null;
-        if ($encryption!=null) {
+        if ($encryption!=null && $encryption!="NULL") {
             $value = hash($encryption, $value);
         }
         return parent::validateUnique($attribute, $value, $parameters);
