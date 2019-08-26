@@ -9,6 +9,7 @@ import ObjectTable from '../table/ObjectTable';
 import { Popup, Button, Container, Checkbox } from 'semantic-ui-react';
 import ExamStudentForm from '../forms/ExamStudentForm';
 import DeleteExamStudentModal from '../modal/DeleteExamStudentModal';
+import AddStudentListForm from '../forms/AddStudentListForm';
 class Table extends ObjectTable<examstudent.IData> { }
 
 export interface IExamStudentPageProps {
@@ -70,12 +71,12 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
             ret.push(btn);
         }
         if (exam.rights.exam_deletestudent) {
-          const btn = <Popup
-            key="7"
-            trigger={<DeleteExamStudentModal key="7" exam={exam.id} id={data.id} />}
-            content={(<FormattedMessage id="common.button.delete" />)}
-          />
-          ret.push(btn);
+            const btn = <Popup
+                key="7"
+                trigger={<DeleteExamStudentModal key="7" exam={exam.id} id={data.id} />}
+                content={(<FormattedMessage id="common.button.delete" />)}
+            />
+            ret.push(btn);
         }
         return [ret, false];
     }
@@ -122,6 +123,7 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
                     selectKey={'id'}
                     selected={this.props.selected ? [this.props.selected] : undefined}
                 />
+                <AddStudentListForm />
                 <ExamStudentForm add={true} />
                 {this.props.selected && <ExamStudentForm add={false} />}
             </Container>

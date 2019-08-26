@@ -3,17 +3,14 @@ import XLSX from 'xlsx';
 
 export type TImportHeadType = { index: number, key: string | number, fn?: ((val: string) => any) }
 
-interface IImporterProps<T> {
-    data: T[]
+interface IImporterProps {
     head: TImportHeadType[]
     startRow: number
 }
-class Importer<T> implements IImporterProps<T> {
-    data: T[] = []
+class Importer<T> implements IImporterProps {
     head: TImportHeadType[] = []
     startRow: number = 0;
-    constructor(data: T[], head: TImportHeadType[], startRow: number = 0) {
-        this.data = data;
+    constructor(head: TImportHeadType[], startRow: number = 0) {
         this.head = head;
         this.startRow = startRow
     }
