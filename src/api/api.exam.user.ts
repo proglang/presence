@@ -42,7 +42,92 @@ export const rightIcons: { [key in TRight]: SemanticICONS } = {
     'exam_deletelog': 'tasks',
     'exam_addlog': 'tasks',
 }
-export const getIcon = (r: TRight|string):SemanticICONS => {
+
+export type TRank = 'null' | 'updater' | 'admin'
+export const rank: { [key in TRank]: { [key in TRight]: boolean } } = {
+    null: {
+        view: false,
+        update: false,
+        delete: false,
+
+        exam_viewuser: false,
+        exam_updateuser: false,
+        exam_deleteuser: false,
+        exam_adduser: false,
+
+        exam_viewroom: false,
+        exam_updateroom: false,
+        exam_deleteroom: false,
+        exam_addroom: false,
+
+        exam_viewstudent: false,
+        exam_updatestudent: false,
+        exam_deletestudent: false,
+        exam_addstudent: false,
+        exam_updatestudent_presence: false,
+
+        exam_viewlog: false,
+        exam_updatelog: false,
+        exam_deletelog: false,
+        exam_addlog: false,
+
+    },
+    updater: {
+        view: true,
+        update: true,
+        delete: false,
+
+        exam_viewuser: false,
+        exam_updateuser: false,
+        exam_deleteuser: false,
+        exam_adduser: false,
+
+        exam_viewroom: true,
+        exam_updateroom: false,
+        exam_deleteroom: false,
+        exam_addroom: false,
+
+        exam_viewstudent: true,
+        exam_updatestudent: true,
+        exam_deletestudent: false,
+        exam_addstudent: false,
+        exam_updatestudent_presence: true,
+
+        exam_viewlog: true,
+        exam_updatelog: true,
+        exam_deletelog: true,
+        exam_addlog: true,
+
+    },
+    admin: {
+        view: true,
+        update: true,
+        delete: true,
+
+        exam_viewuser: true,
+        exam_updateuser: true,
+        exam_deleteuser: true,
+        exam_adduser: true,
+
+        exam_viewroom: true,
+        exam_updateroom: true,
+        exam_deleteroom: true,
+        exam_addroom: true,
+
+        exam_viewstudent: true,
+        exam_updatestudent: true,
+        exam_deletestudent: true,
+        exam_addstudent: true,
+        exam_updatestudent_presence: true,
+
+        exam_viewlog: true,
+        exam_updatelog: true,
+        exam_deletelog: true,
+        exam_addlog: true,
+    }
+}
+
+export const getIcon = (r: TRight | string): SemanticICONS => {
     return Object(rightIcons)[r]
 }
 export const getRightColor = (r: TRight | string): SemanticCOLORS | undefined => {
@@ -107,7 +192,7 @@ export const del = (exam_id: number, user_id: number) => (dispatch: any) => axio
         return true;
     })
     .catch((res: { response: AxiosResponse<IResponse> }) =>
-        console.log(res)/*({ data: res.response.data.error, code: res.response.status })*/)
+        ({ data: res.response.data.error, code: res.response.status }))
 
 export const create = (exam_id: number, data: ICreateData) => (dispatch: any) => axios.post(`exam/${exam_id}/user`, data)
     .then((res: AxiosResponse<IResponse>) => {

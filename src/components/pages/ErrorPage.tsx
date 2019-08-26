@@ -25,13 +25,13 @@ class ErrorInternal extends React.Component<IErrorProps & RouteComponentProps<{}
                 <Message icon info>
                     <Icon name="bug" />
                     <Message.Content>
-                        <Message.Header><FormattedMessage id="error.additionalInfo"/></Message.Header>
+                        <Message.Header><FormattedMessage id="error.additionalInfo" /></Message.Header>
                         <Message.List>
-                            <Message.Item><FormattedMessage id="error.code" defaultMessage="Code: {code}" values={{code}} /></Message.Item>
-                            <Message.Item><FormattedMessage id="error.page" defaultMessage="Page: {page}" values={{page:location.pathname}} /></Message.Item>
+                            <Message.Item><FormattedMessage id="error.code" defaultMessage="Code: {code}" values={{ code }} /></Message.Item>
+                            <Message.Item><FormattedMessage id="error.page" defaultMessage="Page: {page}" values={{ page: location.pathname }} /></Message.Item>
                         </Message.List>
-                        {data !== undefined && <Accordion panels={[{ key: 'details', title: <FormattedMessage id="error.additionalData"/>, content: JSON.stringify(data) }]} />}
-                        {canReport && <Button onClick={() => console.log(js)}><FormattedMessage id="error.send"/></Button>}
+                        {data !== undefined && <Accordion panels={[{ key: 'details', title: <FormattedMessage id="error.additionalData" />, content: JSON.stringify(data) }]} />}
+                        {canReport && <Button onClick={() => console.log(js)}><FormattedMessage id="error.send" /></Button>}
                     </Message.Content>
                 </Message>
             </Container>
@@ -47,10 +47,10 @@ class Error404Internal extends React.Component<ICodeErrorProps & RouteComponentP
                 <Message icon error>
                     <Icon name="exclamation triangle" />
                     <Message.Content>
-                        <Message.Header><FormattedMessage id="error.404.header"/></Message.Header>
+                        <Message.Header><FormattedMessage id="error.404.header" /></Message.Header>
                         <i>{this.props.location.pathname}</i><br />
-                        <FormattedMessage id="error.404.message"/>
-                        </Message.Content>
+                        <FormattedMessage id="error.404.message" />
+                    </Message.Content>
                 </Message>
             </Error>
         );

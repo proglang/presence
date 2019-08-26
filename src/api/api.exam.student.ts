@@ -64,7 +64,7 @@ export const del = (exam_id: number, student_id: number) => (dispatch: any) => a
         return true;
     })
     .catch((res: { response: AxiosResponse<IResponse> }) =>
-        console.log(res)/*({ data: res.response.data.error, code: res.response.status })*/)
+        ({ data: res.response.data.error, code: res.response.status }))
 
 export const create = (exam_id: number, data: ICreateData) => (dispatch: any) => axios.post(`exam/${exam_id}/student`, data)
     .then((res: AxiosResponse<IResponse>) => {

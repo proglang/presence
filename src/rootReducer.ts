@@ -20,6 +20,9 @@ import { IList as IExamUserList } from './api/api.exam.user';
 import { reducer as esReducer } from './reducer/exam.student';
 import { IList as IExamStudentList } from './api/api.exam.student';
 
+import { reducer as elReducer } from './reducer/exam.log';
+import { IList as IExamLogList } from './api/api.exam.log';
+
 export interface IReduxRootProps {
     intl: IntlState
     dbg: boolean
@@ -27,6 +30,7 @@ export interface IReduxRootProps {
     examuser: IExamUserList
     user: IUserData | null
     examstudent: IExamStudentList
+    examlog: IExamLogList
 }
 const rootReducer = combineReducers<IReduxRootProps>({
     intl: intlReducer,
@@ -35,6 +39,7 @@ const rootReducer = combineReducers<IReduxRootProps>({
     examuser: euReducer,
     user: userReducer,
     examstudent: esReducer,
+    examlog: elReducer,
 })
 
 export default rootReducer;

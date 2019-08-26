@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 
 import * as _exam from './api.exam'
 import * as _examuser from './api.exam.user'
+import * as _examlog from './api.exam.log'
 import * as _examstudent from './api.exam.student'
 import * as _user from './api.user'
 import { setToken } from '../util/login';
@@ -20,12 +21,13 @@ export interface IResponse {
     examusers?: _examuser.IData[];
     examstudent?: _examstudent.IData;
     examstudents?: _examstudent.IData[];
+    examlog?: _examlog.IData;
+    examlogs?: _examlog.IData[];
     error?: any;
     auth?: string;
 }
 
 export const handleSuccess = (res: AxiosResponse<IResponse>): void => {
-    console.log(res);
     if (res.headers['authorization']) {
         setToken(res.headers['authorization']);
     } else if (res.data.auth) {

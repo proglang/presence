@@ -3,7 +3,7 @@ import { IReduxRootProps } from '../../rootReducer';
 import { connect } from 'react-redux';
 import { injectIntl, WrappedComponentProps, FormattedMessage } from 'react-intl';
 import * as examstudent from '../../api/api.exam.student';
-import { Card, List, Icon, Message } from 'semantic-ui-react';
+import { Card, Message } from 'semantic-ui-react';
 
 export interface IExamStudentInfoProps {
     id: number;
