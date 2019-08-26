@@ -4,17 +4,18 @@
 // https://opensource.org/licenses/MIT
 
 import React, { ChangeEvent } from 'react';
-import {  injectIntl, InjectedIntlProps } from 'react-intl';
-import { ILoginData, login } from '../../api/auth'
-import {FormBase} from './FormBase'
-import InputField from '../util/ValidationInputField';
+import { WrappedComponentProps, injectIntl } from 'react-intl';
+import { FormBase } from './FormBase'
 import { connect } from 'react-redux';
+import * as user from '../../api/api.user';
+import { Form } from 'semantic-ui-react';
+import * as validate from '../../validator/validator';
 
 
 export interface ILoginFormProps {
 }
-class LoginForm extends React.Component<ILoginFormProps & InjectedIntlProps & {login: any}, any> {
-    state: { data: ILoginData } = {
+class LoginForm extends React.Component<ILoginFormProps &  WrappedComponentProps & { login: any }, any> {
+    state: { data: user.ILoginData } = {
         data: {
             email: '',
             password: ''
@@ -28,8 +29,8 @@ class LoginForm extends React.Component<ILoginFormProps & InjectedIntlProps & {l
         //Todo: Input Validation
         //Todo: Submit Function
         return (
-            <FormBase button="auth.label.submit.login" onSubmit={()=>this.props.login(this.state.data)}>
-                <InputField
+            <FormBase button="auth.label.submit.login" onSubmit={() => this.props.login(this.state.data)}>
+                <Form.Input
                     icon="user"
                     iconPosition="left"
                     name="email"
@@ -38,19 +39,20 @@ class LoginForm extends React.Component<ILoginFormProps & InjectedIntlProps & {l
                     placeholder={usl}
                     value={data.email}
                     onChange={this.onChange}
-                    validator={() => { return true }}
+                    validator={() => validate.email(data.email)}
                 />
-                <InputField
+                <Form.Input
                     icon="lock"
                     iconPosition="left"
                     name="password"
+                    type="password"
                     label={pwl}
                     placeholder={pwl}
-                    type="password"
                     value={data.password}
                     onChange={this.onChange}
+                    validator={() => validate.password(data.password)}
                 />
             </FormBase>)
     }
 }
-export default connect(null, {login})(injectIntl(LoginForm));
+export default connect(null, { login: user.login })(injectIntl(LoginForm));

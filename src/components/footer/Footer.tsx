@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import * as React from 'react';
-import LanguageSelect from '../util/LanguageSelect'
+import LanguageSelect from '../select/LanguageSelect'
 export interface IFooterProps {
 }
 

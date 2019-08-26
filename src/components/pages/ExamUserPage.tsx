@@ -1,115 +1,135 @@
-// Copyright (c) 2019 Stefan Schweizer
-// 
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
-
 import * as React from 'react';
-import * as ExamUserForms from '../forms/AddUserForms'
-import { Container, Tab, TabProps, Button, Popup, Icon, Checkbox } from 'semantic-ui-react';
-import { injectIntl, InjectedIntlProps, FormattedMessage, FormattedDate, FormattedTime } from 'react-intl';
-import { RouteComponentProps } from 'react-router-dom'
-import FilterTable from "../util/FilterTable";
-import EditUserForm from "../forms/EditUserForm";
-
+import { injectIntl, WrappedComponentProps, FormattedMessage } from 'react-intl';
+import { IReduxRootProps } from '../../rootReducer';
 import { connect } from 'react-redux';
-import { IExamUserData } from '../../api/examUserData';
+import * as examuser from '../../api/api.exam.user';
+import { Popup, Button, Container, Icon, SemanticICONS } from 'semantic-ui-react';
+import ObjectTable from '../table/ObjectTable';
+import ExamUserForm from '../forms/ExamUserForm'
+import DeleteExamUserModal from '../modal/DeleteExamUserModal';
+
+class Table extends ObjectTable<examuser.IData> { }
 
 export interface IExamUserPageProps {
 }
+
 export interface IExamUserPageState {
-  popup: string[]
-  selected: { [key: string]: boolean }
+  loading: boolean;
 }
 
-class ExamUserPage extends React.Component<IExamUserPageProps & RouteComponentProps<any> & InjectedIntlProps & ReduxProps, IExamUserPageState> {
-  constructor(props: IExamUserPageProps & RouteComponentProps<any> & InjectedIntlProps & ReduxProps) {
+class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxProps & WrappedComponentProps, IExamUserPageState> {
+  constructor(props: IExamUserPageProps & ReduxFn & ReduxProps & WrappedComponentProps) {
     super(props);
 
     this.state = {
-      popup: [],
-      selected: {}
+      loading: false,
     }
   }
-  onTabChange = (event: any, data: TabProps) => {
-    if (!data.panes || typeof (data.activeIndex) !== 'number') return;
-    const path = this.props.match.path
-    const basepath = path.substr(0, path.indexOf('/:'))
-    if (data.activeIndex === 0)
-      return this.props.history.push(basepath)
-    const pane: any = data.panes[data.activeIndex]
-    this.props.history.push(basepath + "/" + pane.key);
+  componentDidMount = () => {
+    //| Send Request to Server
+    if (Object.keys(this.props.user).length === 0)
+      this.refreshTable();
   }
-  getTable = () => {
-    const data = this.props.eu.map((value: IExamUserData): any[] => [
-      <Checkbox
-        checked={!!this.state.selected[value.email]}
-        onChange={() => this.setState({ selected: { ...this.state.selected, [value.email]: !this.state.selected[value.email] } })}
-      />,
-      value.name,
-      value.email,
-      // Todo: Center Icon
-      !value.useDate ? <Icon color='red' name='cancel' /> : <Icon color='green' name='checkmark' />,
-      [
-        //Todo: Loca
-        <Popup key="0" trigger={<Button basic icon='info circle' />} content={
-          [
-            //Todo: Loca + Formatting
-            <h3 key='1'>{value.name}</h3>,
-            <p key='2'>EMail: {value.email}</p>,
-            <p key='5'>Note: {value.note}</p>,
-            <p key='6'>Token: {value.token}</p>,
-            value.useDate && <p key="7"><FormattedDate value={value.useDate} /> <FormattedTime value={value.useDate} /></p>,
-            value.createDate && <p key="8"><FormattedDate value={value.createDate} /> <FormattedTime value={value.createDate} /></p>
-          ]
-        } />,
-        <Popup key="1" trigger={<Button basic icon='edit' onClick={() => this.setState({ popup: [value.email] })} />} content={(<FormattedMessage id="EDIT" />)} />
-      ]
-    ])
-    return data;
+  refreshTable = () => {
+    if (!this.props.exam) {
+      return;
+    }
+    if (this.state.loading) return;
+    this.setState({ loading: true });
+    this.props.load(this.props.exam.id).then(() => this.setState({ loading: false })).catch(() => this.setState({ loading: false }))
+  }
+
+  addButtons = (data: examuser.IData): [any, boolean] => {
+    const goto = (id: number) => {
+      this.props.select(id);
+    }
+    // you cannot edit yourself!
+    if (data.id === this.props.self) return [[], false];
+    const { exam } = this.props
+    if (!exam) return [[], false]
+    let ret = [];
+    if (exam.rights.exam_updateuser) {
+      const btn = <Popup
+        key="1"
+        trigger={<Button basic icon='edit' onClick={() => goto(data.id)} />}
+        content={(<FormattedMessage id="common.button.edit" />)}
+      />
+      ret.push(btn);
+    }
+    if (exam.rights.exam_deleteuser) {
+      const btn = <Popup
+        key="7"
+        trigger={<DeleteExamUserModal key="7" exam={exam.id} id={data.id} />}
+        content={(<FormattedMessage id="common.button.delete" />)}
+      />
+      ret.push(btn);
+    }
+    return [ret, false];
+  }
+  addRights = (data: examuser.IData): [any, boolean] => {
+    const urights: any = data.rights;
+    const ret = Object.entries(examuser.rightIcons).map((cur: [string, SemanticICONS], index: number) => {
+      if (!urights[cur[0]]) return null;
+      return <Popup
+        position="top center"
+        key={index}
+        trigger={<Icon color={examuser.getRightColor(cur[0])} style={{ margin: 0, fontSize: "1.4em" }} size='small' name={cur[1]} />}
+        content={(<FormattedMessage id={"user.right." + cur[0]} />)}
+      />
+    }
+    )
+    ret.splice(11, 0, <br key="lb" />);
+    return [ret, true];
   }
   public render() {
-    const { type } = this.props.match.params;
-    const panes = [
-      //! Attached false: Workaround for https://github.com/Semantic-Org/Semantic-UI-React/issues/3412
-      //! key in pane needed: Workaround for React Warning
-      { key: 'list', menuItem: this.props.intl.formatMessage({ id: 'user.list.label' }), pane: null },
-      { key: 'add1', menuItem: this.props.intl.formatMessage({ id: 'user.list.add.label' }), pane: <Tab.Pane key="3" attached={false}><ExamUserForms.AddUserListForm /></Tab.Pane> },
-      { key: 'add2', menuItem: this.props.intl.formatMessage({ id: 'user.list.add2.label' }), pane: <Tab.Pane key="4" attached={false}><ExamUserForms.AddUserForm /></Tab.Pane> },
-    ]
-    var index = panes.findIndex((el) => el.key === type)
-    index = index >= 0 ? index : 0
     return (
       <Container as="main">
-        <Tab
-          onTabChange={this.onTabChange}
-          activeIndex={index}
-          renderActiveOnly={false}
-          menu={{ attached: false, secondary: true, pointing: true }}
-          panes={panes}
+        <Table
+          format={{ 1: { collapsing: true } }}
+          sortable={{
+            name: true, email: true, rights: (a: examuser.IData, b: examuser.IData) => {
+              return Object.values(a.rights).filter((val) => val === true).length < Object.values(b.rights).filter((val) => val === true).length;
+            }
+          }}
+          header={[
+            { k: "name", t: "common.name" }, { k: "email", t: "common.email" }, { k: "note", t: "common.note" },
+            { k: 'rights', fn: this.addRights, t: "common.rights" },
+            { k: 'btn', fn: this.addButtons, t: <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
+          data={this.props.user}
+          filter={{ 'name': true, 'email': true, 'note': true }}
+          onSelect={(data: examuser.IData) => { this.props.select(data.id) }}
+          selectKey={'id'}
+          selected={this.props.selected ? [this.props.selected] : undefined}
         />
-        <FilterTable
-          format={{ 0: { collapsing: true }, 3: { collapsing: true }, 4: { collapsing: true } }}
-          //Todo: Loca
-          sortable={{ 1: true, 2: true }}
-          header={[<Popup key="1" trigger={<Button basic icon='edit' onClick={() => this.setState({ popup: Object.keys(this.state.selected) })} />} content={(<FormattedMessage id="EDIT" />)} />, "Name", "Email", "Verified", ""]}
-          data={this.getTable()}
-          filter={{ 1: true, 2: true }}
-        />
-        <EditUserForm
-          onClose={() => this.setState({ popup: [] })}
-          data={this.state.popup}
-        />
+        <ExamUserForm add={true} />
+        {this.props.selected && <ExamUserForm add={false} />}
       </Container>
     );
   }
 }
 
-interface ReduxProps {
-  eu: IExamUserData[]
+interface ReduxFn {
+  load: any;
+  select: any;
+  reset: any;
 }
-const mapStateToProps = (state: { eu: IExamUserData[] }): ReduxProps => {
+interface ReduxProps {
+  user: { [key: number]: examuser.IData };
+  selected?: number
+  exam?: { id: number, rights: examuser.TRights }
+  self: number | null
+}
+const mapStateToProps = (state: IReduxRootProps): ReduxProps => {
+  const { examuser, exams: examlist, user: self } = state;
+  const { selected: userid, ...user } = examuser;
+  const { selected: examid, ...exams } = examlist;
+
+
   return ({
-    eu: state.eu
+    user,
+    selected: userid,
+    exam: examid ? { id: examid, rights: exams[examid].rights } : undefined,
+    self: self ? self.id : null
   })
 }
-export default connect(mapStateToProps)(injectIntl(ExamUserPage))
+export default connect(mapStateToProps, { load: examuser.list, reset: examuser.reset, select: examuser.select })(injectIntl(ExamUserPage))
