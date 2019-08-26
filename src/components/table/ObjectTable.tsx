@@ -200,7 +200,7 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                                     const { validator, ...childProps } = tsnode.props;
                                     const nprop = this.props.colPropFn(row, data.k)
                                     if (typeof (nprop) === 'object')
-                                        return React.createElement(tsnode.type, { ...nprop, ...childProps })
+                                        return React.createElement(tsnode.type, { ...childProps, ...nprop })
                                 }
                                 return c;
                             })
@@ -212,7 +212,7 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                             const { validator, ...childProps } = tsnode.props;
                             const nprop = this.props.rowPropFn(row)
                             if (typeof (nprop) === 'object')
-                                return React.createElement(tsnode.type, { ...nprop, ...childProps })
+                                return React.createElement(tsnode.type, { ...childProps, ...nprop })
                         }
                         return r;
                     }

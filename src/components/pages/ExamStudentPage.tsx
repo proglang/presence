@@ -10,6 +10,7 @@ import { Popup, Button, Container, Checkbox } from 'semantic-ui-react';
 import ExamStudentForm from '../forms/ExamStudentForm';
 import DeleteExamStudentModal from '../modal/DeleteExamStudentModal';
 import AddStudentListForm from '../forms/AddStudentListForm';
+import Exporter from '../../util/exporter/exporter';
 class Table extends ObjectTable<examstudent.IData> { }
 
 export interface IExamStudentPageProps {
@@ -47,6 +48,7 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
         if (!exam) {
             return;
         }
+        if (!exam.rights.exam_updatestudent_presence) return;
         if (this.state.updatePresence[student_id]) return;
 
         this.setState({ updatePresence: { ...this.state.updatePresence, [student_id]: true } });
@@ -99,6 +101,20 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
         />
         return [ret, false];
     }
+
+  export = () => {
+    const present = (log: examstudent.IData) => log.present?"y":"n";
+    const ex = new Exporter(Object.values(this.props.student), [
+      { k: 'id', t: 'id' },
+      { k: 'ident', t: 'ident' },
+      { k: 'name', t: 'name' },
+      { k: present, t: 'present' },
+    ])
+    //ex.toCSV('log');
+    // ex.toXLS('log');
+    // ex.toJSON('log');
+    ex.toXLSX('student')
+  }
     public render() {
         const { updatePresence } = this.state
         return (
@@ -110,7 +126,7 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
                     }}
                     colPropFn={
                         (d: examstudent.IData, col: any) =>
-                            col !== 'present' ? null : { style: { backgroundColor: updatePresence[d.id] ? 'yellow' : d.present ? 'green' : 'red' } }
+                            col !== 'present' ? null : { style: { backgroundColor: updatePresence[d.id] ? 'yellow' : d.present ? 'green' : 'red' },onClick: ()=>this.setPresence(d.id, !d.present) }
                     }
                     header={[
                         { k: "present", t: "common.present", fn: this.addPresence },
@@ -120,12 +136,14 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
                     data={this.props.student}
                     filter={{ 'name': true, 'ident': true }}
                     onSelect={(data: examstudent.IData) => { this.props.select(data.id) }}
+                    
                     selectKey={'id'}
                     selected={this.props.selected ? [this.props.selected] : undefined}
                 />
                 <AddStudentListForm />
                 <ExamStudentForm add={true} />
                 {this.props.selected && <ExamStudentForm add={false} />}
+                <Button onClick={this.export} content={'export'} />
             </Container>
         );
     }

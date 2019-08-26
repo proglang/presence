@@ -73,6 +73,26 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
     const s = this.props.student[log.student]
     return [`${s.name} (${s.ident})`, true]
   }
+  export2 = () => {
+    const _s = this.props.student
+    const student = (log: examlog.IData) => !log.student ? "" : `${_s[log.student].name} (${_s[log.student].ident})`;
+    const date = (log: examlog.IData) => getDateTimeString(this.props.intl, Date.parse(log.date));
+    const ex = new Exporter(Object.values(this.props.log), [
+      { k: 'id', t: 'id' },
+      { k: 'text', t: 'text' },
+      { k: student, t: 'student' },
+      { k: date, t: 'date' }
+    ])
+
+    const present = (log: examstudent.IData) => log.present?"y":"n";
+    const ex2 = new Exporter(Object.values(this.props.student), [
+      { k: 'id', t: 'id' },
+      { k: 'ident', t: 'ident' },
+      { k: 'name', t: 'name' },
+      { k: present, t: 'present' },
+    ])
+    Exporter.toXLSX('logfile', ex.toSheet('log'), ex2.toSheet('student'))
+  }
   export = () => {
     const _s = this.props.student
     const student = (log: examlog.IData) => !log.student ? "" : `${_s[log.student].name} (${_s[log.student].ident})`;
@@ -111,6 +131,8 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
         <ExamLogForm add={true} />
         {this.props.selected && <ExamLogForm add={false} />}
         <Button onClick={this.export} content={'export'} />
+
+        {<Button onClick={this.export2} content="ts"/>}
       </Container>
     );
   }

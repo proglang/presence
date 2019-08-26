@@ -114,7 +114,6 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
         />
         {this.props.selected && <EditExam exam={this.props.exams[this.props.selected]} />}
         {<CreateExam />}
-
       </Container>
     );
   }
