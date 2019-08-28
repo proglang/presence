@@ -30,7 +30,7 @@ class ExamLogResource extends Resource
         return [
             'id' => $this->id,
             'text' => $this->current()->text,
-            'date' => $this->current()->updated_at,
+            'date' => (new \Carbon\Carbon($this->current()->updated_at))->timestamp,
             'user' => User::find($this->current()->user_id)->name,
             'history' => $this->historyCount(),
             'student' => $this->student()
@@ -54,7 +54,7 @@ class ExamLogHistoryResource extends ExamLogResource
                 'id' => $note->id,
                 'text' => $note->text,
                 'user' =>  User::find($note->user_id)->name,
-                'date' => $note->updated_at
+                'date' => (new \Carbon\Carbon($note->updated_at))->timestamp,
             ];
         }
         $data = parent::toArray($request);

@@ -4,13 +4,13 @@
 
 **_namespace:_** examlog
 
-| name    | type   | note          |
-| ------- | ------ | ------------- |
-| id      | int    |               |
-| text    | string |               |
-| date    | string |               |
-| history | int    | history count |
-| student | int    | student ID    |
+| name    | type   | note           |
+| ------- | ------ | -------------- |
+| id      | int    |                |
+| text    | string |                |
+| date    | int    | UNIX timestamp |
+| history | int    | history count  |
+| student | int    | student ID     |
 
 ### ExamLogHistoryResource
 
@@ -26,11 +26,11 @@
 
 **_namespace:_** exam
 
-| name | type   | note |
-| ---- | ------ | ---- |
-| id   | int    |      |
-| text | string |      |
-| date | string |      |
+| name | type   | note           |
+| ---- | ------ | -------------- |
+| id   | int    |                |
+| text | string |                |
+| date | int    | UNIX timestamp |
 
 ### ExamRoomResource
 

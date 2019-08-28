@@ -12,8 +12,8 @@
 
 #### Args:
 
-| name | type   | note |
-| ---- | ------ | ---- |
-| date | string |      |
-| name | string |      |
-| eid  | int    |      |
+| name | type   | note           |
+| ---- | ------ | -------------- |
+| date | int    | UNIX timestamp |
+| name | string |                |
+| eid  | int    |                |

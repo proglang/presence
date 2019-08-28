@@ -16,9 +16,9 @@
 
 ### EXAM_LOG_HISTORY_DATA
 
-| name | type   | note     |
-| ---- | ------ | -------- |
-| id   | int    |          |
-| text | string |          |
-| user | string | username |
-| date | string |          |
+| name | type   | note           |
+| ---- | ------ | -------------- |
+| id   | int    |                |
+| text | string |                |
+| user | string | username       |
+| date | int    | UNIX timestamp |
