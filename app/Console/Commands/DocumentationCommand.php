@@ -52,14 +52,14 @@ class DocumentationCommand extends Command
     public function handle()
     {
         $readme = "./Readme.md";
-        $this->files->put($readme, "#API - Readme" . PHP_EOL . PHP_EOL);
+        $this->files->put($readme, "# API - ReadMe" . PHP_EOL . PHP_EOL);
         foreach ($this->files->files("./_docu/md") as $file) {
             $data = $this->files->get($file);
             $this->files->append($readme, $data . PHP_EOL);
         }
 
         $api = "./API.md";
-        $this->files->put($api, "#API" . PHP_EOL . PHP_EOL);
+        $this->files->put($api, "# API - Dev" . PHP_EOL . PHP_EOL);
         foreach ($this->files->files("./_docu/API") as $file) {
             $data = $this->files->get($file);
             $this->files->append($api, $data . PHP_EOL);
