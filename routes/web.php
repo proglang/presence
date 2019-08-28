@@ -89,4 +89,6 @@ $router->group(['prefix' => ''], function ($router) {
         });
     });
     $router->get('/', ['uses'=>'ApiController@version', 'res'=>'version']);
+    $router->get('/test', ['uses'=>'ApiController@test', 'res'=>'test']);
+    $router->get('/test/test', ['uses'=>'ApiController@test', 'res'=>'test']);
 });
