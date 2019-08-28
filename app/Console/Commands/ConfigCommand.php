@@ -91,6 +91,7 @@ class ConfigCommand extends Command
      */
     public function handle()
     {
+        $this->call('cache:clear');
         $data = self::defaults;
 
         $data['APP_URL'] = $this->ask('Root url of application', 'localhost');

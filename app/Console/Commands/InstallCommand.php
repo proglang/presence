@@ -40,9 +40,6 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-        if ($this->confirm('Create new Config?', true))
-            $this->call('lumen:config');
-        if ($this->confirm('Install Database?', true))
-            $this->call('migrate:fresh', ['--force' => true]);
+        $this->call('migrate:fresh', ['--force' => true]);
     }
 }
