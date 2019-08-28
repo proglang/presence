@@ -21,7 +21,7 @@ class CreateExamUserCollection extends Migration
     {
         Schema::create(self::$table, function (Blueprint $collection) {
             $collection->unsignedInteger('user_id');
-            $collection->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $collection->foreign('user_id')->references('id')->on('users');
             $collection->unsignedInteger('exam_id');
             $collection->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
             $collection->unsignedInteger('rights')->default(0);

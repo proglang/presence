@@ -26,7 +26,7 @@ class CreateStudentPresenceCollection extends Migration
             $collection->foreign('student_id')->references('id')->on('exam_student')->onDelete('cascade');
             
             $collection->unsignedInteger('user_id');
-            $collection->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $collection->foreign('user_id')->references('id')->on('users');
     
             $collection->boolean('present');
             $collection->timestampsTz();

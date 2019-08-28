@@ -26,7 +26,7 @@ class CreateNotesCollection extends Migration
             $collection->foreign('note_id')->references('id')->on('exam_note_ref')->onDelete('cascade');
 
             $collection->unsignedInteger('user_id');
-            $collection->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $collection->foreign('user_id')->references('id')->on('users');
 
             $collection->string('text');
             $collection->timestampsTz();
