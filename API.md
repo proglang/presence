@@ -32,96 +32,119 @@ run commands with `composer *command*` e.g. `composer install`
 
 run commands with `*command*` e.g. `vendor/bin/phpunit`
 
+## Types
+
+### EXAM_USER_RIGHT
+
+| note | r1               | r2                 | r3                 | r4              | r5                          |
+| ---- | ---------------- | ------------------ | ------------------ | --------------- | --------------------------- |
+|      | view             | update             | delete             |                 |                             |
+|      | exam_viewuser    | exam_updateuser    | exam_deleteuser    | exam_adduser    |                             |
+|      | exam_viewroom    | exam_updateroom    | exam_deleteroom    | exam_addroom    |                             |
+|      | exam_viewstudent | exam_updatestudent | exam_deletestudent | exam_addstudent | exam_updatestudent_presence |
+|      | exam_updatelog   | exam_viewlog       | exam_deletelog     | exam_addlog     |                             |
+
+### EXAM_USER_RIGHTS
+
+`[EXAM_USER_RIGHT=>boolean]`
+
+### EXAM_LOG_HISTORY_DATA
+
+| name | type   | note     |
+| ---- | ------ | -------- |
+| id   | int    |          |
+| text | string |          |
+| user | string | username |
+| date | string |          |
+
 ## Resources
 
 ### ExamLogResource
 
 **_namespace:_** examlog
 
-**member**
-
--   id: int
--   text: string
--   date:
--   history:
--   student: int
+| name    | type   | note          |
+| ------- | ------ | ------------- |
+| id      | int    |               |
+| text    | string |               |
+| date    | string |               |
+| history | int    | history count |
+| student | int    | student ID    |
 
 ### ExamLogHistoryResource
 
-**_namespace:_** examlog
-
 **_base:_** ExamLogResource
 
-**member**
+**_namespace:_** examlog
 
--   history.data: []
-    -   id: int
-    -   text: string
-    -   user: ['id':int, 'name': string]
-    -   date:
+| name         | type                  | note |
+| ------------ | --------------------- | ---- |
+| history.data | EXAM_LOG_HISTORY_DATA |      |
 
 ### ExamResource
 
 **_namespace:_** exam
 
-**_member:_**
-
--   id: int -> user ID
--   name: string -> exam Name
--   date:
+| name | type   | note |
+| ---- | ------ | ---- |
+| id   | int    |      |
+| text | string |      |
+| date | string |      |
 
 ### ExamRoomResource
 
 **_namespace:_** examroom
 
-**_member:_**
-
--   id: int -> user ID
--   name: string -> room Name
--   note: string
--   size: int
+| name | type   | note |
+| ---- | ------ | ---- |
+| id   | int    |      |
+| name | string |      |
+| note | string |      |
+| size | int    |      |
 
 ### ExamStudentResource
 
 **_namespace:_** examstudent
 
-**_member:_**
-
--   id: int -> user ID
--   name: string -> room Name
--   ident: string
--   present: bool
+| name    | type   | note                 |
+| ------- | ------ | -------------------- |
+| id      | int    |                      |
+| name    | string |                      |
+| ident   | string | matriculation number |
+| present | bool   |                      |
 
 ### ExamUserResource
 
 **_namespace:_** examuser
 
-**_member:_**
-
--   id: int -> user ID
--   name: string -> room Name
--   note: string
--   rights: {[key:string]=value:bool}
+| name   | type             | note |
+| ------ | ---------------- | ---- |
+| id     | int              |      |
+| name   | string           |      |
+| note   | string           |      |
+| rights | EXAM_USER_RIGHTS |      |
 
 ### UserResource
 
 **_namespace:_** user
 
-**_member:_**
+| name  | type   | note |
+| ----- | ------ | ---- |
+| id    | int    |      |
+| name  | string |      |
+| email | string |      |
 
--   id: int -> user ID
--   name: string -> user Name
--   email: string -> user EMail
-
-### Error
+### ErrorResource
 
 **_namespace:_** -
 
 **_member:_**
 
--   error: string[] -> error identifier list
--   error.msg: string[] -> human readable error messages
--   error.args: {[key]=value} -> arguments
+| name       | type             | note |
+| ---------- | ---------------- | ---- |
+| error      | ERROR_IDENT[]    |      |
+| error.msg  | string[]         |      |
+| error.args | ERROR_IDENT_ARGS |      |
 
 ## Errors
 
@@ -130,135 +153,134 @@ run commands with `*command*` e.g. `vendor/bin/phpunit`
 **_Notes:_**
 
 -   All routes can return an authentication header
+-   All routes can return an AuthenticationResource
 -   All routes can return an Error Resource
 
-### POST /user/login
+### /user
 
-**_POST Parameters:_**
+| type   | url             | params                | return       | authenticated | note |
+| ------ | --------------- | --------------------- | ------------ | ------------- | ---- |
+| POST   | /user/login     | email, password       | UserResource | n             |      |
+| POST   | /user/login/jwt |                       | UserResource | y             |      |
+| POST   | /user/register  | email, name, password | UserResource | n             |      |
+| GET    | /user/logout    |                       |              | y             |      |
+| GET    | /user           |                       | UserResource | y             |      |
+| DELETE | /user           |                       |              | y             |      |
 
--   email: string ->
--   password: string ->
+#### Args:
 
-**_returns:_** UserResource
+| name     | type   | note |
+| -------- | ------ | ---- |
+| email    | string |      |
+| name     | string |      |
+| password | string |      |
 
-### POST /user/register
+### /exam
 
-**_POST Parameters:_**
+**_ All routes are authenticated_**
 
--   email: string ->
--   name: string ->
--   password: string ->
+| type   | url        | params     | return         | note |
+| ------ | ---------- | ---------- | -------------- | ---- |
+| GET    | /exam      |            | ExamResource[] |      |
+| POST   | /exam      | name, date | ExamResource   |      |
+| GET    | /exam/:eid |            | ExamResource   |      |
+| PUT    | /exam/:eid | name, date | ExamResource   |      |
+| DELETE | /exam/:eid |            |                |      |
 
-**_returns:_** UserResource
+#### Args:
 
-### POST /user/verify/{ID:int}
+| name | type   | note |
+| ---- | ------ | ---- |
+| date | string |      |
+| name | string |      |
+| eid  | int    |      |
 
-**_GET Parameters:_**
+### /exam/:eid/log
 
--   ID: int -> user ID
+**_ All routes are authenticated_**
 
-**_POST Parameters:_**
+| type   | url                 | params | return            | note |
+| ------ | ------------------- | ------ | ----------------- | ---- |
+| GET    | /exam/:eid/log      | view?  | ExamLogResource[] |      |
+| POST   | /exam/:eid/log      | text   | ExamLogResource   |      |
+| POST   | /exam/:eid/log/:sid | text   | ExamLogResource   |      |
+| GET    | /exam/:eid/log/:lid |        | ExamLogResource   |      |
+| PUT    | /exam/:eid/log/:lid | text   | ExamLogResource   |      |
+| DELETE | /exam/:eid/log/:lid |        |                   |      |
 
--   name: string ->
--   password: string ->
+#### Args:
 
-**_returns:_** UserResource
+| name | type   | note                     |
+| ---- | ------ | ------------------------ |
+| view | string | values: "all", "deleted" |
+| text | string |                          |
+| eid  | int    | exam ID                  |
+| lid  | int    | log ID                   |
+| sid  | int    | student ID               |
 
-### GET /user
+### /exam/:eid/room
 
-**_returns:_** UserResource
+**_ All routes are authenticated_**
 
-### GET /user/logout
+| type   | url                  | params           | return             | note |
+| ------ | -------------------- | ---------------- | ------------------ | ---- |
+| GET    | /exam/:eid/room      |                  | ExamRoomResource[] |      |
+| POST   | /exam/:eid/room      | name, note, size | ExamRoomResource   |      |
+| GET    | /exam/:eid/room/:rid |                  | ExamRoomResource   |      |
+| PUT    | /exam/:eid/room/:rid | name, note, size | ExamRoomResource   |      |
+| DELETE | /exam/:eid/room/:rid |                  |                    |      |
 
-**_returns:_** -
+#### Args:
 
-### GET /user/refresh
+| name | type   | note    |
+| ---- | ------ | ------- |
+| name | string |         |
+| note | string |         |
+| eid  | int    | exam ID |
+| rid  | int    | room ID |
 
-**_returns:_** -
+### /exam/:eid/student
 
-### POST /exam
+**_ All routes are authenticated_**
 
-**_POST Parameters:_**
+| type   | url                             | params      | return                | note |
+| ------ | ------------------------------- | ----------- | --------------------- | ---- |
+| GET    | /exam/:eid/student              |             | ExamStudentResource[] |      |
+| POST   | /exam/:eid/student              | name, ident | ExamStudentResource   |      |
+| GET    | /exam/:eid/student/:sid         |             | ExamStudentResource   |      |
+| PUT    | /exam/:eid/student/:sid         | name, ident | ExamStudentResource   |      |
+| PUT    | /exam/:eid/student/:sid/present | val         | ExamStudentResource   |      |
+| DELETE | /exam/:eid/student/:sid         |             |                       |      |
 
--   name: string ->
--   date: string ->
+#### Args:
 
-**_returns:_** ExamResource
+| name  | type   | note                 |
+| ----- | ------ | -------------------- |
+| name  | string |                      |
+| ident | string | matriculation number |
+| val   | string |                      |
+| eid   | int    | exam ID              |
+| sid   | int    | student ID           |
 
-### GET /exam
+### /exam/:eid/user
 
-**_returns:_** ExamResource[]
+**_ All routes are authenticated_**
 
-### PUT /exam/{ID:int}
+| type   | url                  | params              | return                | note |
+| ------ | -------------------- | ------------------- | --------------------- | ---- |
+| GET    | /exam/:eid/user      |                     | ExamStudentResource[] |      |
+| POST   | /exam/:eid/user      | note, rights, email | ExamStudentResource   |      |
+| GET    | /exam/:eid/user/:uid |                     | ExamStudentResource   |      |
+| PUT    | /exam/:eid/user/:uid | note, rights        | ExamStudentResource   |      |
+| DELETE | /exam/:eid/user/:uid |                     |                       |      |
 
-**_GET Parameters:_**
+#### Args:
 
--   ID: int -> exam ID
-
-**_POST Parameters:_**
-
--   name: string ->
--   date: string ->
-
-**_returns:_** ExamResource
-
-### GET /exam/{ID:int}
-
-**_GET Parameters:_**
-
--   ID: int -> exam ID
-
-**_returns:_** ExamResource
-
-### DELETE /exam/{ID:int}
-
-**_GET Parameters:_**
-
--   ID: int -> exam ID
-
-**_returns:_** -
-
-### POST /exam/{ID:int}/log
-
-### POST /exam/{ID:int}/log/{studentID:int}
-
-### GET /exam/{ID:int}/log
-
-### PUT /exam/{ID:int}/log/{ID:int}
-
-### GET /exam/{ID:int}/log/{ID:int}
-
-### DELETE /exam/{ID:int}/log/{ID:int}
-
-### POST /exam/{ID:int}/room
-
-### GET /exam/{ID:int}/room
-
-### PUT /exam/{ID:int}/room/{ID:int}
-
-### GET /exam/{ID:int}/room/{ID:int}
-
-### DELETE /exam/{ID:int}/room/{ID:int}
-
-### POST /exam/{ID:int}/student
-
-### GET /exam/{ID:int}/student
-
-### PUT /exam/{ID:int}/student/{ID:int}
-
-### PUT /exam/{ID:int}/student/{ID:int}/present
-
-### GET /exam/{ID:int}/student/{ID:int}
-
-### DELETE /exam/{ID:int}/student/{ID:int}
-
-### POST /exam/{ID:int}/user
-
-### GET /exam/{ID:int}/user
-
-### PUT /exam/{ID:int}/user/{ID:int}
-
-### GET /exam/{ID:int}/user/{ID:int}
-
-### DELETE /exam/{ID:int}/user/{ID:int}
+| name   | type             | note    |
+| ------ | ---------------- | ------- |
+| note   | string           |         |
+| email  | string           |         |
+| rights | EXAM_USER_RIGHTS |         |
+| eid    | int              | exam ID |
+| uid    | int              | user ID |
 

@@ -1,9 +1,20 @@
-### POST /exam/{ID:int}/room
+### /exam/:eid/room
 
-### GET /exam/{ID:int}/room
+**_ All routes are authenticated_**
 
-### PUT /exam/{ID:int}/room/{ID:int}
+| type   | url                  | params           | return             | note |
+| ------ | -------------------- | ---------------- | ------------------ | ---- |
+| GET    | /exam/:eid/room      |                  | ExamRoomResource[] |      |
+| POST   | /exam/:eid/room      | name, note, size | ExamRoomResource   |      |
+| GET    | /exam/:eid/room/:rid |                  | ExamRoomResource   |      |
+| PUT    | /exam/:eid/room/:rid | name, note, size | ExamRoomResource   |      |
+| DELETE | /exam/:eid/room/:rid |                  |                    |      |
 
-### GET /exam/{ID:int}/room/{ID:int}
+#### Args:
 
-### DELETE /exam/{ID:int}/room/{ID:int}
+| name | type   | note    |
+| ---- | ------ | ------- |
+| name | string |         |
+| note | string |         |
+| eid  | int    | exam ID |
+| rid  | int    | room ID |

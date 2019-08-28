@@ -1,41 +1,19 @@
-### POST /exam
+### /exam
 
-**_POST Parameters:_**
+**_ All routes are authenticated_**
 
--   name: string ->
--   date: string ->
+| type   | url        | params     | return         | note |
+| ------ | ---------- | ---------- | -------------- | ---- |
+| GET    | /exam      |            | ExamResource[] |      |
+| POST   | /exam      | name, date | ExamResource   |      |
+| GET    | /exam/:eid |            | ExamResource   |      |
+| PUT    | /exam/:eid | name, date | ExamResource   |      |
+| DELETE | /exam/:eid |            |                |      |
 
-**_returns:_** ExamResource
+#### Args:
 
-### GET /exam
-
-**_returns:_** ExamResource[]
-
-### PUT /exam/{ID:int}
-
-**_GET Parameters:_**
-
--   ID: int -> exam ID
-
-**_POST Parameters:_**
-
--   name: string ->
--   date: string ->
-
-**_returns:_** ExamResource
-
-### GET /exam/{ID:int}
-
-**_GET Parameters:_**
-
--   ID: int -> exam ID
-
-**_returns:_** ExamResource
-
-### DELETE /exam/{ID:int}
-
-**_GET Parameters:_**
-
--   ID: int -> exam ID
-
-**_returns:_** -
+| name | type   | note |
+| ---- | ------ | ---- |
+| date | string |      |
+| name | string |      |
+| eid  | int    |      |

@@ -1,9 +1,21 @@
-### POST /exam/{ID:int}/user
+### /exam/:eid/user
 
-### GET /exam/{ID:int}/user
+**_ All routes are authenticated_**
 
-### PUT /exam/{ID:int}/user/{ID:int}
+| type   | url                  | params              | return                | note |
+| ------ | -------------------- | ------------------- | --------------------- | ---- |
+| GET    | /exam/:eid/user      |                     | ExamStudentResource[] |      |
+| POST   | /exam/:eid/user      | note, rights, email | ExamStudentResource   |      |
+| GET    | /exam/:eid/user/:uid |                     | ExamStudentResource   |      |
+| PUT    | /exam/:eid/user/:uid | note, rights        | ExamStudentResource   |      |
+| DELETE | /exam/:eid/user/:uid |                     |                       |      |
 
-### GET /exam/{ID:int}/user/{ID:int}
+#### Args:
 
-### DELETE /exam/{ID:int}/user/{ID:int}
+| name   | type             | note    |
+| ------ | ---------------- | ------- |
+| note   | string           |         |
+| email  | string           |         |
+| rights | EXAM_USER_RIGHTS |         |
+| eid    | int              | exam ID |
+| uid    | int              | user ID |

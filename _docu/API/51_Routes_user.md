@@ -1,43 +1,18 @@
-### POST /user/login
+### /user
 
-**_POST Parameters:_**
+| type   | url             | params                | return       | authenticated | note |
+| ------ | --------------- | --------------------- | ------------ | ------------- | ---- |
+| POST   | /user/login     | email, password       | UserResource | n             |      |
+| POST   | /user/login/jwt |                       | UserResource | y             |      |
+| POST   | /user/register  | email, name, password | UserResource | n             |      |
+| GET    | /user/logout    |                       |              | y             |      |
+| GET    | /user           |                       | UserResource | y             |      |
+| DELETE | /user           |                       |              | y             |      |
 
--   email: string ->
--   password: string ->
+#### Args:
 
-**_returns:_** UserResource
-
-### POST /user/register
-
-**_POST Parameters:_**
-
--   email: string ->
--   name: string ->
--   password: string ->
-
-**_returns:_** UserResource
-
-### POST /user/verify/{ID:int}
-
-**_GET Parameters:_**
-
--   ID: int -> user ID
-
-**_POST Parameters:_**
-
--   name: string ->
--   password: string ->
-
-**_returns:_** UserResource
-
-### GET /user
-
-**_returns:_** UserResource
-
-### GET /user/logout
-
-**_returns:_** -
-
-### GET /user/refresh
-
-**_returns:_** -
+| name     | type   | note |
+| -------- | ------ | ---- |
+| email    | string |      |
+| name     | string |      |
+| password | string |      |

@@ -4,87 +4,95 @@
 
 **_namespace:_** examlog
 
-**member**
-
--   id: int
--   text: string
--   date:
--   history:
--   student: int
+| name    | type   | note          |
+| ------- | ------ | ------------- |
+| id      | int    |               |
+| text    | string |               |
+| date    | string |               |
+| history | int    | history count |
+| student | int    | student ID    |
 
 ### ExamLogHistoryResource
 
-**_namespace:_** examlog
-
 **_base:_** ExamLogResource
 
-**member**
+**_namespace:_** examlog
 
--   history.data: []
-    -   id: int
-    -   text: string
-    -   user: ['id':int, 'name': string]
-    -   date:
+| name         | type                  | note |
+| ------------ | --------------------- | ---- |
+| history.data | EXAM_LOG_HISTORY_DATA |      |
 
 ### ExamResource
 
 **_namespace:_** exam
 
-**_member:_**
-
--   id: int -> user ID
--   name: string -> exam Name
--   date:
+| name | type   | note |
+| ---- | ------ | ---- |
+| id   | int    |      |
+| text | string |      |
+| date | string |      |
 
 ### ExamRoomResource
 
 **_namespace:_** examroom
 
-**_member:_**
-
--   id: int -> user ID
--   name: string -> room Name
--   note: string
--   size: int
+| name | type   | note |
+| ---- | ------ | ---- |
+| id   | int    |      |
+| name | string |      |
+| note | string |      |
+| size | int    |      |
 
 ### ExamStudentResource
 
 **_namespace:_** examstudent
 
-**_member:_**
-
--   id: int -> user ID
--   name: string -> room Name
--   ident: string
--   present: bool
+| name    | type   | note                 |
+| ------- | ------ | -------------------- |
+| id      | int    |                      |
+| name    | string |                      |
+| ident   | string | matriculation number |
+| present | bool   |                      |
 
 ### ExamUserResource
 
 **_namespace:_** examuser
 
-**_member:_**
-
--   id: int -> user ID
--   name: string -> room Name
--   note: string
--   rights: {[key:string]=value:bool}
+| name   | type             | note |
+| ------ | ---------------- | ---- |
+| id     | int              |      |
+| name   | string           |      |
+| note   | string           |      |
+| rights | EXAM_USER_RIGHTS |      |
 
 ### UserResource
 
 **_namespace:_** user
 
-**_member:_**
+| name  | type   | note |
+| ----- | ------ | ---- |
+| id    | int    |      |
+| name  | string |      |
+| email | string |      |
 
--   id: int -> user ID
--   name: string -> user Name
--   email: string -> user EMail
-
-### Error
+### ErrorResource
 
 **_namespace:_** -
 
 **_member:_**
 
--   error: string[] -> error identifier list
--   error.msg: string[] -> human readable error messages
--   error.args: {[key]=value} -> arguments
+| name       | type             | note |
+| ---------- | ---------------- | ---- |
+| error      | ERROR_IDENT[]    |      |
+| error.msg  | string[]         |      |
+| error.args | ERROR_IDENT_ARGS |      |
+
+### AuthenticationResource
+
+**_namespace:_** -
+
+**_member:_**
+
+| name | type   | note           |
+| ---- | ------ | -------------- |
+| auth | string | JSON Web Token |

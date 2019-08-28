@@ -1,11 +1,22 @@
-### POST /exam/{ID:int}/log
+### /exam/:eid/log
 
-### POST /exam/{ID:int}/log/{studentID:int}
+**_ All routes are authenticated_**
 
-### GET /exam/{ID:int}/log
+| type   | url                 | params | return            | note |
+| ------ | ------------------- | ------ | ----------------- | ---- |
+| GET    | /exam/:eid/log      | view?  | ExamLogResource[] |      |
+| POST   | /exam/:eid/log      | text   | ExamLogResource   |      |
+| POST   | /exam/:eid/log/:sid | text   | ExamLogResource   |      |
+| GET    | /exam/:eid/log/:lid |        | ExamLogResource   |      |
+| PUT    | /exam/:eid/log/:lid | text   | ExamLogResource   |      |
+| DELETE | /exam/:eid/log/:lid |        |                   |      |
 
-### PUT /exam/{ID:int}/log/{ID:int}
+#### Args:
 
-### GET /exam/{ID:int}/log/{ID:int}
-
-### DELETE /exam/{ID:int}/log/{ID:int}
+| name | type   | note                     |
+| ---- | ------ | ------------------------ |
+| view | string | values: "all", "deleted" |
+| text | string |                          |
+| eid  | int    | exam ID                  |
+| lid  | int    | log ID                   |
+| sid  | int    | student ID               |

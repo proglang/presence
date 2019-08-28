@@ -97,7 +97,7 @@ class ExamUserController extends Controller
         }
 
         $this->validateExamUserUpdate($request);
-        $data = $request->only('note', 'level', 'rights');
+        $data = $request->only('note', 'rights');
 
         $res = self::createResponse(200);
         $eu = ExamUserRepository::fromID($exam_id, $user_id);

@@ -35,7 +35,6 @@ trait ValidatesExamUserRequests
     {
         $this->validate($request, [
             'note' => 'string',
-            'level' => 'string',
             'rights' => 'array',
         ]);
     }
