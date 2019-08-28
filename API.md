@@ -51,12 +51,12 @@ run commands with `*command*` e.g. `vendor/bin/phpunit`
 
 ### EXAM_LOG_HISTORY_DATA
 
-| name | type   | note     |
-| ---- | ------ | -------- |
-| id   | int    |          |
-| text | string |          |
-| user | string | username |
-| date | string |          |
+| name | type   | note           |
+| ---- | ------ | -------------- |
+| id   | int    |                |
+| text | string |                |
+| user | string | username       |
+| date | int    | UNIX timestamp |
 
 ## Resources
 
@@ -64,13 +64,13 @@ run commands with `*command*` e.g. `vendor/bin/phpunit`
 
 **_namespace:_** examlog
 
-| name    | type   | note          |
-| ------- | ------ | ------------- |
-| id      | int    |               |
-| text    | string |               |
-| date    | string |               |
-| history | int    | history count |
-| student | int    | student ID    |
+| name    | type   | note           |
+| ------- | ------ | -------------- |
+| id      | int    |                |
+| text    | string |                |
+| date    | int    | UNIX timestamp |
+| history | int    | history count  |
+| student | int    | student ID     |
 
 ### ExamLogHistoryResource
 
@@ -86,11 +86,11 @@ run commands with `*command*` e.g. `vendor/bin/phpunit`
 
 **_namespace:_** exam
 
-| name | type   | note |
-| ---- | ------ | ---- |
-| id   | int    |      |
-| text | string |      |
-| date | string |      |
+| name | type   | note           |
+| ---- | ------ | -------------- |
+| id   | int    |                |
+| text | string |                |
+| date | int    | UNIX timestamp |
 
 ### ExamRoomResource
 
@@ -200,11 +200,11 @@ run commands with `*command*` e.g. `vendor/bin/phpunit`
 
 #### Args:
 
-| name | type   | note |
-| ---- | ------ | ---- |
-| date | string |      |
-| name | string |      |
-| eid  | int    |      |
+| name | type   | note           |
+| ---- | ------ | -------------- |
+| date | int    | UNIX timestamp |
+| name | string |                |
+| eid  | int    |                |
 
 ### /exam/:eid/log
 
