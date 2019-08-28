@@ -27,8 +27,9 @@ export const list = () => (dispatch: any) => axios.get('exam')
     .then((res: AxiosResponse<IResponse>) => {
         handleSuccess(res);
         if (res.data.exams) {
+            res.data.exams.forEach((value) => value.date = value.date * 1000)
             dispatch(eReducer._SET(res.data.exams))
-            if (res.data.exams.length===1)
+            if (res.data.exams.length === 1)
                 select(res.data.exams[0].id)(dispatch);
         }
         return true;
@@ -47,11 +48,13 @@ export const reload = (index: number) => (dispatch: any) => {
     return true;
 }
 
-export const update = (id: number, data: IUpdateExamData) => (dispatch: any) => axios.put(`exam/${id}`, data)
+export const update = (id: number, data: IUpdateExamData) => (dispatch: any) => axios.put(`exam/${id}`, { ...data, date: Math.floor(data.date / 1000) })
     .then((res: AxiosResponse<IResponse>) => {
         handleSuccess(res);
-        if (res.data.exam)
+        if (res.data.exam) {
+            res.data.exam.date = res.data.exam.date * 1000
             dispatch(eReducer._UPDATE(res.data.exam))
+        }
         return true;
     })
     .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
@@ -64,7 +67,7 @@ export const del = (id: number) => (dispatch: any) => axios.delete(`exam/${id}`)
     .catch((res: { response: AxiosResponse<IResponse> }) =>
         ({ data: res.response.data.error, code: res.response.status }))
 
-export const create = (data: IUpdateExamData) => (dispatch: any) => axios.post(`exam`, data)
+export const create = (data: IUpdateExamData) => (dispatch: any) => axios.post(`exam`, { ...data, date: Math.floor(data.date / 1000) })
     .then((res: AxiosResponse<IResponse>) => {
         handleSuccess(res);
         if (res.data.exam)
