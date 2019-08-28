@@ -20,16 +20,10 @@ $router->group(['prefix' => ''], function ($router) {
         $router->post('login', ['uses' => 'AuthController@login', 'res' => 'UserResource']);
         $router->post('register', ['uses' => 'AuthController@register', 'res' => 'UserResource']);
 
-        //$router->group(['prefix' => 'verify/{user_id:[0-9]}'], function ($router) {
-        //$router->get('{token}', 'AuthController@verifyUser', 'res'=>'blah']);
-        // $router->post('/', 'AuthController@register2', 'res'=>'blah']);
-        //});
-
         $router->group(['middleware' => 'auth'], function ($router) {
             $router->post('login/jwt', ['uses' => 'AuthController@jwtlogin', 'res' => 'UserResource']);
             $router->get('logout', ['uses' => 'AuthController@logout', 'res' => '']);
             $router->delete('/', ['uses' => 'AuthController@delete', 'res' => 'delete']);
-            // $router->get('refresh', 'AuthController@refresh', 'res'=>'blah']);
             $router->get('/', ['uses' => 'AuthController@get', 'res' => 'UserResource']);
         });
     });
