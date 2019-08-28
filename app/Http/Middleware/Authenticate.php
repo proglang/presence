@@ -47,11 +47,11 @@ class Authenticate extends BaseMiddleware
         $this->auth->setRequest($request);
         try {
             if (!$this->auth->parseToken()->authenticate()) {
-                throw new AuthenticationException('user', "User Errror", 401);
+                throw new AuthenticationException('user', "User Error", 401);
             }
             $user = (new AuthenticatedUserRepository());
             if ($user->isTemporary())
-                throw new AuthenticationException('user', "User Errror", 401);
+                throw new AuthenticationException('user', "User Error", 401);
 
             $payload = $this->auth->getPayload();
             $token = $payload->get('token');

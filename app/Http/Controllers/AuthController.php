@@ -89,7 +89,7 @@ class AuthController extends Controller
     public function logout()
     {
         $this->guard()->logout();
-        return $this->respondSuccess();
+        return $this->respondSuccess(false);
     }
 
     /**
@@ -100,7 +100,7 @@ class AuthController extends Controller
     public function delete()
     {
         $res = AuthenticatedUserRepository::deleteS();
-        return self::createResponse(200, null, true)->addJson('delete', $res);
+        return self::createResponse(200, null, false)->addJson('delete', $res);
     }
 
     /**

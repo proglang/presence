@@ -12,6 +12,7 @@ use Illuminate\Database\QueryException;
 use App\Http\Resources\ExamResource;
 use App\Exceptions\CreateException;
 use App\Exceptions\NotFoundException;
+use Carbon\Carbon;
 
 class ExamRepository extends BaseDatabaseRepository
 {
@@ -33,7 +34,7 @@ class ExamRepository extends BaseDatabaseRepository
             $exam = Exam::create([
                 "creator_id" => $user->getID(),
                 "name" => $name,
-                "date" => $date,
+                "date" => Carbon::createFromTimestamp($date),
                 "locked" => false
             ]);
         } catch (QueryException $e) {
@@ -134,10 +135,10 @@ class ExamRepository extends BaseDatabaseRepository
         $this->assertValid();
         return $this->exam->date;
     }
-    public function setDate(string $date, bool $save = true): ExamRepository
+    public function setDate(int $date, bool $save = true): ExamRepository
     {
         $this->assertValid();
-        $this->exam->date = $date;
+        $this->exam->date = Carbon::createFromTimestamp($date);
         if ($save) self::save($this->exam);
         return $this;
     }

@@ -15,6 +15,11 @@ class Exam extends Model
     use Encryptable;
     protected $table = 'exams';
 
+    /*public function getDateFormat()
+    {
+        return 'U';
+    }*/
+
     //protected $table = 'exam';
     /**
      * The attributes that are mass assignable.
@@ -28,6 +33,9 @@ class Exam extends Model
         'locked'
     ];
 
+    public function getDateAttribute( $value) {
+        return (new \Carbon\Carbon($value))->timestamp;
+    }
     public function getNameAttribute($value) {
         return self::Decrypt($value);
     }

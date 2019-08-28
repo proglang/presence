@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 trait ResponseHelper
 {
-    protected static function createResponse($statusCode = 200, $headers = [], $auth = false): Response
+    protected static function createResponse($statusCode = 200, $headers = null, $auth = false): Response
     {
         if ($headers == null) {
             $headers = [];
@@ -42,8 +42,8 @@ trait ResponseHelper
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected static function respondSuccess()
+    protected static function respondSuccess($auth = false)
     {
-        return self::respond(null, 204);
+        return self::createResponse(204, null, $auth);
     }
 }
