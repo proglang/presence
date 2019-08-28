@@ -16,6 +16,10 @@ use Illuminate\Database\QueryException;
 
 class UserRepository extends BaseDatabaseRepository // implements IResponseRepository
 {
+    private static function createToken()
+    {
+        return str_replace("/", "_", base64_encode(random_bytes(30)));
+    }
     protected $user = null;
     public static function clean()
     {
@@ -36,7 +40,7 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
         if ($exam == null) throw new NotFoundException("exam", "Exam not Found", 404, $id);
         return new UserRepository($exam);
     }
-    static public function fromMail(string $email, bool $create): UserRepository
+    static public function fromMail(string $email, bool $create = false): ?UserRepository
     {
         $user = User::where('email_hash', self::getMailHash($email))->first();
         if ($user == null && $create) {
@@ -50,6 +54,7 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
                 throw new CreateException("user", "Cannot Register User", 422, $e->getMessage());
             }
         } else {
+            if ($user == null) return null;
             return new UserRepository($user);
         }
     }
@@ -66,7 +71,7 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
     {
         return new User([
             'email' => $email,
-            'token' => str_replace("/", "_", base64_encode(random_bytes(30))),
+            'token' => self::createToken(),
             'verified' => true //Todo: Verification
         ]);
     }
@@ -105,7 +110,7 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
             $this->user->delete();
         } catch (QueryException $e) {
             $this->user->temporary = true;
-            $this->user->token = str_replace("/", "_", base64_encode(random_bytes(30)));
+            $this->user->token = self::createToken();
             self::save($this->user);
             return false;
         }
@@ -145,10 +150,10 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
         $this->assertValid();
         return $this->user->token;
     }
-    public function setToken(string $token, bool $save = true): UserRepository
+    public function setToken(string $token = null, bool $save = true): UserRepository
     {
         $this->assertValid();
-        $this->user->token = $token;
+        $this->user->token = $token == null ? self::createToken() : $token;
         if ($save) self::save($this->user);
         return $this;
     }
@@ -192,8 +197,16 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
     public static function registerUser(string $email, string $name, string $password): UserRepository
     {
         try {
-            $user = self::_createUser($email);
-            $user = new UserRepository($user);
+            $user = self::fromMail($email);
+            if ($user != null && $user->isTemporary()) {
+                $user->setName($name);
+                $user->setPassword($password);
+                $user->user->temporary = false;
+                $user->setToken();
+                self::save($user->user);
+                return $user;
+            }
+            $user = new UserRepository(self::_createUser($email));
             $user->setPassword($password, false)->setName($name, false);
             self::save($user->user);
         } catch (QueryException $e) {

@@ -8,6 +8,7 @@
 namespace App\Http\Validators;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 trait ValidatesUserRequests
 {
@@ -33,22 +34,16 @@ trait ValidatesUserRequests
      */
     protected function validateRegister(Request $request)
     {
+        $request->merge(['email_hash' => hash('sha256', $request->email)]);
         $this->validate($request, [
             'name' => 'required|max:50|string',
-            'email'    => 'required|unique:users,email_hash,sha256|email|max:255',
-            'password' => 'password',
-        ]);
-    }
-    /**
-     * Validate register request input
-     *
-     * @param  Request $request
-     * @throws \Illuminate\Auth\Access\ValidationException
-     */
-    protected function validateRegister2(Request $request)
-    {
-        $this->validate($request, [
-            'name' => 'required|max:50|alpha_num',
+            'email'    => 'required|email|max:255',
+            'email_hash' => [
+                'required',
+                Rule::unique('users', 'email_hash')->where(function ($query) {
+                    return $query->where('temporary', false);
+                }),
+            ],
             'password' => 'password',
         ]);
     }
