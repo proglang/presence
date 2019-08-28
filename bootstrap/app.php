@@ -32,13 +32,6 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-//Todo: cache settings
-//$cached_config_file = __DIR__ . '/../storage/app/cached_config.php';
-//if (file_exists($cached_config_file)) {
-//config(require $cached_config_file);
-// config(['app.key'=>'AAAAAAAAAABBBBBBBBBBCCCCCCCCCCDD'] );
-//}
-
 $app->withFacades();
 
 $app->withEloquent();

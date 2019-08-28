@@ -5,31 +5,25 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 
-class ConfigClearCommand extends Command
+class InstallCommand extends Command
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $signature = 'config:clear';
+    protected $signature = 'api:install';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Remove the configuration cache file';
+    protected $description = 'Installs application';
+
 
     /**
-     * The filesystem instance.
-     *
-     * @var \Illuminate\Filesystem\Filesystem
-     */
-    protected $files;
-
-    /**
-     * Create a new config clear command instance.
+     * Create a new config cache command instance.
      *
      * @param  \Illuminate\Filesystem\Filesystem  $files
      * @return void
@@ -37,19 +31,20 @@ class ConfigClearCommand extends Command
     public function __construct(Filesystem $files)
     {
         parent::__construct();
-
-        $this->files = $files;
     }
 
     /**
      * Execute the console command.
      *
      * @return void
+     *
+     * @throws \LogicException
      */
     public function handle()
     {
-        $this->files->delete('./storage/app/cached_config.php');
-
-        $this->info('Configuration cache cleared!');
+        if ($this->confirm('Create new Config?', true))
+            $this->call('lumen:config');
+        if ($this->confirm('Install Database?', true))
+            $this->call('migrate:fresh', ['--force' => true]);
     }
 }

@@ -13,8 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\ConfigCacheCommand::class,
-        Commands\ConfigClearCommand::class
+        Commands\ConfigCommand::class,
+        Commands\RouteList::class,
+        Commands\InstallCommand::class
     ];
 
     /**

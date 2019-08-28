@@ -17,83 +17,81 @@
 $router->group(['prefix' => ''], function ($router) {
     //! /auth
     $router->group(['prefix' => 'user'], function ($router) {
-        $router->post('login', 'AuthController@login');
-        $router->post('register', 'AuthController@register');
+        $router->post('login', ['uses' => 'AuthController@login', 'res' => 'UserResource']);
+        $router->post('register', ['uses' => 'AuthController@register', 'res' => 'UserResource']);
 
-        $router->group(['prefix' => 'verify/{user_id:[0-9]}'], function ($router) {
-            $router->get('{token}', 'AuthController@verifyUser');
-            $router->post('/', 'AuthController@register2');
-        });
+        //$router->group(['prefix' => 'verify/{user_id:[0-9]}'], function ($router) {
+        //$router->get('{token}', 'AuthController@verifyUser', 'res'=>'blah']);
+        // $router->post('/', 'AuthController@register2', 'res'=>'blah']);
+        //});
 
         $router->group(['middleware' => 'auth'], function ($router) {
-            $router->post('login/jwt', 'AuthController@jwtlogin');
-            $router->get('logout', 'AuthController@logout');
-            $router->get('refresh', 'AuthController@refresh');
-            $router->get('/', 'AuthController@get');
+            $router->post('login/jwt', ['uses' => 'AuthController@jwtlogin', 'res' => 'UserResource']);
+            $router->get('logout', ['uses' => 'AuthController@logout', 'res' => '']);
+            // $router->get('refresh', 'AuthController@refresh', 'res'=>'blah']);
+            $router->get('/', ['uses' => 'AuthController@get', 'res' => 'UserResource']);
         });
     });
     $router->group(['middleware' => 'auth'], function ($router) {
-         //! /exam
+        //! /exam
         $router->group(['prefix' => 'exam'], function ($router) {
-            $router->post('/', 'ExamController@create');
-            $router->get('/', 'ExamController@list');
+            $router->post('/', ['uses' => 'ExamController@create',  'res' => 'ExamResource']);
+            $router->get('/', ['uses' => 'ExamController@list', 'res' => 'ExamResource[]']);
             //! /exam/${exam_id}
             $router->group(['prefix' => '{exam_id:[0-9]+}'], function ($router) {
-                $router->put('/', 'ExamController@update');
-                $router->get('/', 'ExamController@get');
-                $router->delete('/', 'ExamController@delete');
+                $router->put('/', ['uses' => 'ExamController@update', 'res' => 'ExamResource']);
+                $router->get('/', ['uses' => 'ExamController@get', 'res' => 'ExamResource']);
+                $router->delete('/', ['uses' => 'ExamController@delete', 'res' => '']);
 
                 //! /exam/${exam_id}/user
                 $router->group(['prefix' => 'user'], function ($router) {
-                    $router->post('/', 'ExamUserController@add');
-                    $router->get('/', 'ExamUserController@list');
+                    $router->post('/', ['uses' => 'ExamUserController@add', 'res' => 'ExamUserResource']);
+                    $router->get('/', ['uses' => 'ExamUserController@list', 'res' => 'ExamUserResource[]']);
                     //! /exam/${exam_id}/user/${user_id}
                     $router->group(['prefix' => '{user_id:[0-9]+}'], function ($router) {
-                        $router->put('/', 'ExamUserController@update');
-                        $router->get('/', 'ExamUserController@get');
-                        $router->delete('/', 'ExamUserController@delete');
+                        $router->put('/', ['uses' => 'ExamUserController@update', 'res' => 'ExamUserResource']);
+                        $router->get('/', ['uses' => 'ExamUserController@get', 'res' => 'ExamUserResource']);
+                        $router->delete('/', ['uses' => 'ExamUserController@delete', 'res' => '']);
                     });
                 });
 
                 //! /exam/${exam_id}/room
                 $router->group(['prefix' => 'room'], function ($router) {
-                    $router->post('/', 'ExamRoomController@add');
-                    $router->get('/', 'ExamRoomController@list');
+                    $router->post('/', ['uses' => 'ExamRoomController@add', 'res' => 'ExamRoomResource']);
+                    $router->get('/', ['uses' => 'ExamRoomController@list', 'res' => 'ExamRoomResource[]']);
                     //! /exam/${exam_id}/room/${room_id}
                     $router->group(['prefix' => '{room_id:[0-9]+}'], function ($router) {
-                        $router->put('/', 'ExamRoomController@update');
-                        $router->get('/', 'ExamRoomController@get');
-                        $router->delete('/', 'ExamRoomController@delete');
+                        $router->put('/', ['uses' => 'ExamRoomController@update', 'res' => 'ExamRoomResource']);
+                        $router->get('/', ['uses' => 'ExamRoomController@get', 'res' => 'ExamRoomResource']);
+                        $router->delete('/', ['uses' => 'ExamRoomController@delete', 'res' => '']);
                     });
                 });
 
                 //! /exam/${exam_id}/student
                 $router->group(['prefix' => 'student'], function ($router) {
                     //! /exam/${exam_id}/room/${student_id}
-                    $router->post('/', 'ExamStudentController@add');
-                    $router->get('/', 'ExamStudentController@list');
+                    $router->post('/', ['uses' => 'ExamStudentController@add', 'res' => 'ExamStudentResource']);
+                    $router->get('/', ['uses' => 'ExamStudentController@list', 'res' => 'ExamStudentResource[]']);
                     $router->group(['prefix' => '{student_id:[0-9]+}'], function ($router) {
-                        $router->put('/presence', 'ExamStudentController@setPresence');
-                        $router->put('/', 'ExamStudentController@update');
-                        $router->get('/', 'ExamStudentController@get');
-                        $router->delete('/', 'ExamStudentController@delete');
+                        $router->put('/presence', ['uses' => 'ExamStudentController@setPresence', 'res' => 'ExamStudentResource']);
+                        $router->put('/', ['uses' => 'ExamStudentController@update', 'res' => 'ExamStudentResource']);
+                        $router->get('/', ['uses' => 'ExamStudentController@get', 'res' => 'ExamStudentResource']);
+                        $router->delete('/', ['uses' => 'ExamStudentController@delete', 'res' => '']);
                     });
                 });
                 //! /exam/${exam_id}/log
                 $router->group(['prefix' => 'log'], function ($router) {
-                    $router->post('/{student_id:[0-9]+}', 'ExamLogController@add');
-                    $router->post('/', 'ExamLogController@add');
-                    $router->get('/', 'ExamLogController@list');
+                    $router->post('/{student_id:[0-9]+}', ['uses' => 'ExamLogController@add', 'res' => 'ExamLogResource']);
+                    $router->post('/', ['uses' => 'ExamLogController@add', 'res' => 'ExamLogResource']);
+                    $router->get('/', ['uses' => 'ExamLogController@list', 'res' => 'ExamLogResource[]']);
                     $router->group(['prefix' => '{note_id:[0-9]+}'], function ($router) {
-                        $router->put('/', 'ExamLogController@update');
-                        $router->get('/', 'ExamLogController@get');
-                        $router->delete('/', 'ExamLogController@delete');
+                        $router->put('/', ['uses' => 'ExamLogController@update', 'res' => 'ExamLogResource']);
+                        $router->get('/', ['uses' => 'ExamLogController@get', 'res' => 'ExamLogResource']);
+                        $router->delete('/', ['uses' => 'ExamLogController@delete', 'res' => '']);
                     });
                 });
             });
         });
     });
-    $router->get('/', function () use ($router) {
-        return $router->app->version();
-    });
+    $router->get('/', ['uses'=>'ApiController@version', 'res'=>'version']);
 });
