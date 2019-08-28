@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 usage() { echo "Usage: $0 [-i]" 1>&2; exit 1; }
 
