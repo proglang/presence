@@ -41,7 +41,7 @@ class ExamUserRepository extends BaseDatabaseRepository
         $exam = self::toExamRepository($exam);
         $ret = ExamUser::where([['exam_id', $exam->getID()], ['user_id', $user->getID()]])->first();
         if ($ret!=null) {
-            throw new ValidationException('user.exists', 'User already added!', 422, ['exam'=>$exam->getID(), 'user'=>$user->getID()]);
+            throw new ValidationException(["User already added"],['email.Unique'], ['email.Unique'=>[]]);
         }
         ExamUserRightsRepository::create($exam, $user);
         return self::fromID($exam, $user);

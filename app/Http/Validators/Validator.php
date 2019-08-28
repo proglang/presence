@@ -14,39 +14,44 @@ trait ValidationFn
     private function getRegex($name)
     {
         $regex = [
-            'lower' => "/[a-z]/",
-            'upper' => "/[A-Z]/",
-            'special' => "/[@$!%*#?&]/",
-            'digit' => "/[0-9]/"
+            'lower' => "a-z",
+            'upper' => "A-Z",
+            'special' => "@$!%*#?&",
+            'digit' => "0-9"
         ];
         if (!isset($regex[$name])) return "";
         return $regex[$name];
     }
+    private function toRegex($r) {
+        if ($r=="") return "";
+        return  "/[$r]/";
+    }
     public function validateHasLower($attribute, $value, $parameters)
     {
         $count = $this->getParam($parameters, 0, 1);
-        $ret = preg_match_all($this->getRegex('lower'), $value);
+        $ret = preg_match_all($this->toRegex($this->getRegex('lower')), $value);
         if (!$ret) return false;
         return $ret >= $count;
     }
     protected function validateHasUpper($attribute, $value, $parameters)
     {
         $count = $this->getParam($parameters, 0, 1);
-        $ret = preg_match_all($this->getRegex('upper'), $value);
+        $ret = preg_match_all($this->toRegex($this->getRegex('upper')), $value);
         if (!$ret) return false;
         return $ret >= $count;
     }
     protected function validateHasDigit($attribute, $value, $parameters)
     {
         $count = $this->getParam($parameters, 0, 1);
-        $ret = preg_match_all($this->getRegex('digit'), $value);
+        $ret = preg_match_all($this->toRegex($this->getRegex('digit')), $value);
         if (!$ret) return false;
         return $ret >= $count;
     }
     protected function validateHasSpecial($attribute, $value, $parameters)
     {
         $count = $this->getParam($parameters, 0, 1);
-        $ret = preg_match_all($this->getRegex('special'), $value);
+        $special = $this->toRegex($this->getParam($parameters, 1, $this->getRegex('special')));
+        $ret = preg_match_all($special, $value);
         if (!$ret) return false;
         return $ret >= $count;
     }
@@ -54,7 +59,7 @@ trait ValidationFn
     {
         $count = strlen($value);
         foreach ($parameters as  $name) {
-            $ret = preg_match_all($this->getRegex($name), $value);
+            $ret = preg_match_all($this->toRegex($this->getRegex($name)), $value);
             $count = $count - ($ret ? $ret : 0);
         }
         return $count==0;
@@ -79,7 +84,8 @@ trait ValidationRepl
     }
     protected function replaceHasSpecial($message, $attribute, $rule, $parameters)
     {
-        return str_replace(':min', $this->getParam($parameters, 0, 1), $message);
+        $message = str_replace(':min', $this->getParam($parameters, 0, 1), $message);
+        return str_replace(':regex', $this->getParam($parameters, 1, $this->getRegex('special')), $message);
     }
     protected function replaceHasDigit($message, $attribute, $rule, $parameters)
     {
@@ -89,7 +95,7 @@ trait ValidationRepl
 trait ValidationReplaceRules
 {
     protected static $replaceRules = [
-        'password' => ['string|hasLower:2|hasUpper:2|hasSpecial:1|hasDigit:2|required|min:10|max:255|noForbidden:lower,upper,special,digit'],
+        'password' => ['string|hasLower:2|hasUpper:2|hasSpecial:1,@$!%*#?&|hasDigit:2|required|min:10|max:255|noForbidden:lower,upper,special,digit'],
     ];
     private static function ReplaceRule($rule)
     {
@@ -117,7 +123,7 @@ class Validator extends BaseValidator
         'has_lower' => "The :attribute must contain at least :min lower characters",
         'has_upper' => "The :attribute must contain at least :min upper characters",
         'has_digit' => "The :attribute must contain at least :min digits",
-        'has_special' => "The :attribute must contain at least :min special characters (@$!%*#?&)",
+        'has_special' => "The :attribute must contain at least :min special characters (:regex)",
         'no_forbidden'=> "The :attribute contains forbidden characters!",
     ];
     private function getParam($attr, $index, $default)

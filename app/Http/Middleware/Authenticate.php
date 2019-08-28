@@ -18,6 +18,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\AuthenticationException;
 use Closure;
 use Tymon\JWTAuth\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -26,28 +27,13 @@ use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
 use App\Repositories\AuthenticatedUserRepository;
-use Illuminate\Support\Facades\Auth;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 class Authenticate extends BaseMiddleware
 {
-    function __construct(JWTAuth $auth) {
+    function __construct(JWTAuth $auth)
+    {
         parent::__construct($auth);
     }
-
-    private const user_not_found = 0;
-    private const disabled_token = 1;
-    private const invalid_token = 2;
-    private const expired_token = 3;
-    private const unknown = 4;
-
-    private const messages = [
-        self::user_not_found=>'user not found',
-        self::invalid_token=>'token invalid',
-        self::expired_token=>'token expired',
-        self::disabled_token=>'token disabled',
-        self::unknown=>'unknown'
-    ];
     /**
      * Handle an incoming request.
      *
@@ -61,37 +47,26 @@ class Authenticate extends BaseMiddleware
         $this->auth->setRequest($request);
         try {
             if (!$this->auth->parseToken()->authenticate()) {
-                return $this->handleException(self::user_not_found);
+                throw new AuthenticationException('user', "User Errror", 401);
             }
             $user = (new AuthenticatedUserRepository());
-            if ($user->isTemporary()) return $this->handleException(self::user_not_found);
+            if ($user->isTemporary())
+                throw new AuthenticationException('user', "User Errror", 401);
 
             $payload = $this->auth->getPayload();
             $token = $payload->get('token');
             if (!$user->checkToken($token)) {
-                return $this->handleException(self::disabled_token);
+                throw new AuthenticationException('token.disabled', "Token disabled", 401);
             }
         } catch (TokenExpiredException $e) {
-            return $this->handleException(self::expired_token);
+            throw new AuthenticationException('token.expired', "Token expired", 401);
         } catch (TokenInvalidException $e) {
-            return $this->handleException(self::invalid_token);
+            throw new AuthenticationException('token.invalid', "Token invalid", 401);
         } catch (JWTException $e) {
             if ($optional === null) {
-                return $this->handleException(self::unknown, $e->getMessage());
+                throw new AuthenticationException('unknown', "unknown Error", 401, $e->getMessage());
             }
         }
         return $next($request);
-    }
-    private function handleException($code, $msg = '') {
-        $msg=self::messages[$code].": $msg";
-        return response(
-            [
-                'error'=>[
-                    'login'=>[
-                        'code'=>$code,
-                        'msg'=> $msg
-                    ]
-                ]
-            ], 401);
     }
 }

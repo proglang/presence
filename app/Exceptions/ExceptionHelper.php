@@ -62,11 +62,13 @@ class RenderExceptionBase extends ErrorException
 
     protected $machineMsg = null;
     protected $data = null;
-    public function __construct($machineMsg, $msg = null, $code = 500, $data = null)
+    protected $args = null;
+    public function __construct($machineMsg, $msg = null, $code = 500, $data = null, $args = null)
     {
         parent::__construct($msg, $code);
         $this->machineMsg = $machineMsg;
         $this->data = $data;
+        $this->args = $args;
     }
     public function setMachineMessage(string $string)
     {
@@ -75,6 +77,6 @@ class RenderExceptionBase extends ErrorException
     }
     public function renderError(string $errorclass = null, string $msg = null): Response
     {
-        return self::toResponse($this, $errorclass, $msg, $this->machineMsg, $this->data);
+        return self::toResponse($this, $errorclass, $msg, $this->machineMsg, $this->data, $this->args);
     }
 }

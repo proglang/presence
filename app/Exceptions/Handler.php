@@ -8,7 +8,7 @@
 namespace App\Exceptions;
 
 use Exception;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\ValidationException as _ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
@@ -29,7 +29,7 @@ class Handler extends ExceptionHandler
         AuthorizationException::class,
         HttpException::class,
         ModelNotFoundException::class,
-        ValidationException::class,
+        _ValidationException::class,
         IRenderException::class
     ];
 
@@ -59,7 +59,7 @@ class Handler extends ExceptionHandler
         if ($exception instanceof IRenderException) {
             return $exception->render()->addJson("errorHTML", $html);
         }
-        if ($exception instanceof ValidationException) {
+        if ($exception instanceof _ValidationException) {
             foreach ($exception->validator->failed() as $key => $value) {
                 foreach ($value as $vkey => $args) {
                     $err[] = "$key.$vkey";
@@ -70,7 +70,7 @@ class Handler extends ExceptionHandler
             foreach ($exception->validator->errors()->messages() as $key => $value) {
                 $msg[] = $value;
             }
-            return self::toResponse(
+            return $this->render($request, new ValidationException($msg, $err, $err_args)); /*self::toResponse(
                 $exception,
                 "validation",
                 "Validation Exception",
@@ -78,7 +78,7 @@ class Handler extends ExceptionHandler
                 $msg,
                 $err_args,
                 422
-            );
+            );*/
         }
 
         $ret = self::createResponse(500);
