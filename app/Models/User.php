@@ -18,6 +18,18 @@ class User extends Model implements JWTSubject, AuthenticatableContract
     use Authenticatable;
     use Encryptable;
 
+    // this is a recommended way to declare event handlers
+    public static function boot()
+    {
+        parent::boot();
+        static::deleted(function() { // after delete() method call this
+            User::where('temporary', 1)->each(function($val) {
+                try {
+                    $val->delete();
+                }catch(QueryException $e){};
+            });
+        });
+    }
     protected $table = 'users';
     /**
      * The attributes that are mass assignable.
@@ -47,25 +59,29 @@ class User extends Model implements JWTSubject, AuthenticatableContract
         'email_hash'
     ];
 
-    public function getEmailAttribute($value) {
+    public function getEmailAttribute($value)
+    {
         return self::Decrypt($value);
     }
-    public function setEmailAttribute($value) {
+    public function setEmailAttribute($value)
+    {
         $this->attributes['email'] = self::Encrypt($value);
         $this->attributes['email_hash'] = hash("sha256", strtolower($value));
     }
-    public function getNameAttribute($value) {
+    public function getNameAttribute($value)
+    {
         return self::Decrypt($value);
     }
-    public function setNameAttribute($value) {
+    public function setNameAttribute($value)
+    {
         $this->attributes['name'] = self::Encrypt($value);
     }
 
     public function setPasswordAttribute($pass)
     {
-        if ($pass!=null) {
+        if ($pass != null) {
             $this->attributes['password'] = Hash::make($pass);
-        }else {
+        } else {
             $this->attributes['password'] = $pass;
         }
     }

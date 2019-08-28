@@ -22,7 +22,6 @@ trait ValidatesExamUserRequests
         $this->validate($request, [
             'email'    => 'required|email',
             'note' => 'string',
-            'level' => 'string',
             'rights' => 'array',
         ]);
     }

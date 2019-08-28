@@ -27,8 +27,8 @@ class AuthController extends Controller
      */
     protected function getCredentials(Request $request)
     {
-        
-        return ['email_hash' => UserRepository::getMailHash($request->email), 'password' => ($request->password)];
+
+        return ['email_hash' => UserRepository::getMailHash($request->email), 'password' => ($request->password), 'temporary' => false];
     }
 
     public function login(Request $request)
@@ -66,21 +66,6 @@ class AuthController extends Controller
     /**
      * User Registration if created by Exam owner
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param int $user_id
-     * @return App\Http\Response\Response 
-     */
-    public function register2(Request $request, int $user_id)
-    {
-        //Todo: Implement this
-        $this->validateRegister2($request);
-        $data = $request->only('password', 'name');
-        return self::createResponse(501);
-    }
-
-    /**
-     * User Registration if created by Exam owner
-     *
      * @param int $user_id
      * @param string $token
      *
@@ -106,6 +91,17 @@ class AuthController extends Controller
     {
         $this->guard()->logout();
         return $this->respondSuccess();
+    }
+
+    /**
+     * Log the user out (Invalidate the token)
+     *
+     * @return App\Http\Response\Response
+     */
+    public function delete()
+    {
+        $res = AuthenticatedUserRepository::deleteS();
+        return self::createResponse(200, null, true)->addJson('delete', $res);
     }
 
     /**

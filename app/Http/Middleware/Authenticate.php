@@ -63,9 +63,12 @@ class Authenticate extends BaseMiddleware
             if (!$this->auth->parseToken()->authenticate()) {
                 return $this->handleException(self::user_not_found);
             }
+            $user = (new AuthenticatedUserRepository());
+            if ($user->isTemporary()) return $this->handleException(self::user_not_found);
+
             $payload = $this->auth->getPayload();
             $token = $payload->get('token');
-            if (!AuthenticatedUserRepository::checkTokenS($token)) {
+            if (!$user->checkToken($token)) {
                 return $this->handleException(self::disabled_token);
             }
         } catch (TokenExpiredException $e) {

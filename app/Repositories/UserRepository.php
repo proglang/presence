@@ -12,12 +12,20 @@ use App\Models\User;
 use App\Models\Exam;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
 
 class UserRepository extends BaseDatabaseRepository // implements IResponseRepository
 {
     protected $user = null;
+    public static function clean()
+    {
+        $res = User::where('temporary', true)->get();
+        foreach ($res as $entry) {
+            try {
+                $entry->delete();
+            } catch (QueryException $e) { }
+        }
+    }
     public function __construct(User $user)
     {
         $this->user = $user;
@@ -59,7 +67,7 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
         return new User([
             'email' => $email,
             'token' => str_replace("/", "_", base64_encode(random_bytes(30))),
-            'verified' => (env('REGISTER_USE_VERIFICATION', false) != true)
+            'verified' => true //Todo: Verification
         ]);
     }
     public function isValid(): bool
@@ -72,6 +80,37 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
         return $this->user->id;
     }
 
+    public function delete(): bool
+    {
+        $this->assertValid();
+        $exams = Exam::where('creator_id', $this->user->id)->get();
+        foreach ($exams as $exam) {
+            $user = $exam->user->where('id', "!=", $this->user->id)->where('temporary', false);
+            if (count($user) == 0) {
+                $exam->delete();
+            } else {
+                $cnt = [null, -1];
+                foreach ($user as $u) {
+                    $t = ExamUserRightsRepository::fromID($exam->id, $u->id)->count();
+                    if ($t > $cnt[1]) {
+                        $cnt[1] = $t;
+                        $cnt[0] = $u->id;
+                    }
+                }
+                $exam->creator_id = $cnt[0];
+                self::save($exam);
+            }
+        }
+        try {
+            $this->user->delete();
+        } catch (QueryException $e) {
+            $this->user->temporary = true;
+            $this->user->token = str_replace("/", "_", base64_encode(random_bytes(30)));
+            self::save($this->user);
+            return false;
+        }
+        return true;
+    }
     public function getName(): string
     {
         $this->assertValid();
@@ -120,6 +159,10 @@ class UserRepository extends BaseDatabaseRepository // implements IResponseRepos
     public function isVerified(): bool
     {
         return $this->user->verified;
+    }
+    public function isTemporary(): bool
+    {
+        return $this->user->temporary;
     }
     public function verify(string $token, bool $save = true): bool
     {
@@ -195,6 +238,10 @@ class AuthenticatedUserRepository extends UserRepository
         } else {
             parent::__construct(User::find($id));
         }
+    }
+    public static function deleteS()
+    {
+        return (new AuthenticatedUserRepository())->delete();
     }
     public static function checkTokenS(string $token)
     {

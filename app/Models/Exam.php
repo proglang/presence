@@ -8,6 +8,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
 
 class Exam extends Model
 {
@@ -53,11 +54,11 @@ class Exam extends Model
                 'note'=>'creator'
             ]);
         });
-        static::deleting(function($exam) { // before delete() method call this
-            $exam->user->where('temporary', 1)->each(function($val) {
-                if ($val->exam->count()==0) {
+        static::deleted(function() { // after delete() method call this
+            User::where('temporary', 1)->each(function($val) {
+                try {
                     $val->delete();
-                };
+                }catch(QueryException $e){};
             });
         });
     }

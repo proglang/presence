@@ -28,6 +28,7 @@ $router->group(['prefix' => ''], function ($router) {
         $router->group(['middleware' => 'auth'], function ($router) {
             $router->post('login/jwt', ['uses' => 'AuthController@jwtlogin', 'res' => 'UserResource']);
             $router->get('logout', ['uses' => 'AuthController@logout', 'res' => '']);
+            $router->delete('delete', ['uses' => 'AuthController@delete', 'res' => 'delete']);
             // $router->get('refresh', 'AuthController@refresh', 'res'=>'blah']);
             $router->get('/', ['uses' => 'AuthController@get', 'res' => 'UserResource']);
         });

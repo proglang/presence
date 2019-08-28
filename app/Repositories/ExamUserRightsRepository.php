@@ -42,12 +42,6 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
         'exam_updatelog' => 26,
 
     ];
-    const Level = [
-        'admin' => [],
-        'updater' => [],
-        'viewer' => [],
-        'none' => [],
-    ];
     protected $user = null;
     protected $exam = null;
     public function __construct(ExamRepository $exam, UserRepository $user)
@@ -154,18 +148,6 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
             }
         }
         return true;
-    }
-    public function setLevel(?string $name, ?ExamUserRightsRepository $user = null)
-    {
-        if ($name == null) return true;
-        if (!isset(self::Level[$name])) {
-            throw new NotFoundException("right", "Right not found", 404, $name);
-        }
-        $rights = self::Level[$name];
-        foreach (array_keys(self::RIGHTS) as $key) {
-            $rights[$key] = ($rights[$key] ?? false) == true;
-        }
-        return $this->setRights($rights, $user);
     }
     //! Basic exam rights
     public function canViewExam(): bool
@@ -343,6 +325,13 @@ class ExamUserRightsRepository extends BaseDatabaseRepository
         $res = [];
         foreach (array_keys(self::RIGHTS) as $right) {
             $res[$right] = $this->getRight($right);
+        }
+        return $res;
+    }
+    public function count() {
+        $res = 0;
+        foreach (array_keys(self::RIGHTS) as $right) {
+            $res+= $this->getRight($right)?1:0;
         }
         return $res;
     }

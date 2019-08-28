@@ -43,11 +43,10 @@ class ExamUserController extends Controller
         }
         $this->validateExamUser($request);
         $rep = UserRepository::fromMail($request->email, true);
-        $data = $request->only('note', 'level', 'rights');
+        $data = $request->only('note', 'rights');
         $eu = ExamUserRepository::addUser($exam_id, $rep->getID());
         $eu->setNote($data['note'] ?? '');
         $rights = $eu->getRights();
-        $rights->setLevel($data['level']  ?? null);
         $rights->setRights($data['rights']  ?? []);
         $eu->refresh();
         return self::createResponse(201)->addResource($eu->toResource());
@@ -104,7 +103,6 @@ class ExamUserController extends Controller
         $eu = ExamUserRepository::fromID($exam_id, $user_id);
         $eu->setNote($data['note'] ?? '');
         $rights = $eu->getRights();
-        $rights->setLevel($data['level']  ?? null, $eur);
         $rights->setRights($data['rights']  ?? [], $eur);
         $eu->refresh();
         $res->addResource($eu->toResource());

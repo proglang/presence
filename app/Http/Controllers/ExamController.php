@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\ExamResource;
 use App\Repositories\AuthExamUserRightsRepository;
 use App\Exceptions\UserAccessException;
+use App\Repositories\UserRepository;
 
 class ExamController extends Controller
 {
@@ -110,6 +111,7 @@ class ExamController extends Controller
         $eu = new AuthExamUserRightsRepository($exam_id);
         if ($eu->canDeleteExam()) {
             $eu->getExam()->delete();
+            UserRepository::clean();
             return self::createResponse(204);
         }
         throw new UserAccessException('delete', 'Cannot delete exam', 403, $exam_id);
