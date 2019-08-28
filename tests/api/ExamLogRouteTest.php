@@ -31,7 +31,7 @@ class ExamLogRouteTest extends TestCase
         $ret = [
             'id' => $enr->id,
             'text' => $text == null ? $enr->current()->text : $text,
-            'date' => $enr->current()->updated_at,
+            'date' => (new \Carbon\Carbon($enr->current()->updated_at))->timestamp,
             'user' => User::find($enr->current()->user_id)->name,
             'history' => $enr->historyCount(),
             'student' => $enr->student()
@@ -43,7 +43,7 @@ class ExamLogRouteTest extends TestCase
                     'id' => $note->id,
                     'text' => $note->text,
                     'user' => User::find($note->user_id)->name,
-                    'date' => $note->updated_at
+                    'date' => (new \Carbon\Carbon($note->updated_at))->timestamp,
                 ];
             }
         }

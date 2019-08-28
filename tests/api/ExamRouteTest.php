@@ -61,7 +61,7 @@ class ExamRouteTest extends TestCase
         $ret = [
             'id' => $exam->id,
             'name' => $exam2 ? $exam2->name : $exam->name,
-            'date' => $exam2 ? $exam2->date : $exam->date,
+            'date' => (new \Carbon\Carbon($exam2 ? $exam2->date : $exam->date))->timestamp,
             'rights' => $rights ? $rights : $exam_user->getRights()->list()
         ];
         return $ret;
