@@ -42,36 +42,40 @@ class ExamRepository extends BaseDatabaseRepository
         // creator automatically has all rights so no point in using access checking class
         return new ExamRepository($exam);
     }
-    public function getUser() {
+    public function getUser()
+    {
         $res = [];
         foreach ($this->exam->user as $value) {
             $res[] = ExamUserRepository::fromID($this->exam->id, $value->id);
         }
         return $res;
     }
-    public function getRooms() {
+    public function getRooms()
+    {
         $res = [];
         foreach ($this->exam->rooms as $value) {
             $res[] = ExamRoomRepository::fromID($value->id);
         }
         return $res;
     }
-    public function getStudents() {
+    public function getStudents()
+    {
         $res = [];
         foreach ($this->exam->students as $value) {
             $res[] = ExamStudentRepository::fromID($value->id);
         }
         return $res;
     }
-    public function getNotes(int $type = null) {
+    public function getNotes(int $type = null)
+    {
         $res = [];
-        if ($type==2) {
+        if ($type == 2) {
             foreach ($this->exam->allNotes as $value) {
                 $res[] = ExamLogRepository::fromID($value->id);
             }
             return $res;
         }
-        if ($type==1) {
+        if ($type == 1) {
             foreach ($this->exam->deletedNotes as $value) {
                 $res[] = ExamLogRepository::fromID($value->id);
             }
@@ -130,7 +134,7 @@ class ExamRepository extends BaseDatabaseRepository
         $this->assertValid();
         return $this->exam->date;
     }
-    public function setDate(int $date, bool $save = true): ExamRepository
+    public function setDate(string $date, bool $save = true): ExamRepository
     {
         $this->assertValid();
         $this->exam->date = $date;

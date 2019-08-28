@@ -25,13 +25,14 @@ class ExamLogRouteTest extends TestCase
         }
         return $url;
     }
-    static protected function _getResult(ExamNoteRef $enr, ?string $text=null, bool $history = false)
+    static protected function _getResult(ExamNoteRef $enr, ?string $text = null, bool $history = false)
     {
         $enr->refresh();
         $ret = [
             'id' => $enr->id,
-            'text' => $text==null?$enr->current()->text:$text,
+            'text' => $text == null ? $enr->current()->text : $text,
             'date' => $enr->current()->updated_at,
+            'user' => User::find($enr->current()->user_id)->name,
             'history' => $enr->historyCount(),
             'student' => $enr->student()
         ];
@@ -39,16 +40,16 @@ class ExamLogRouteTest extends TestCase
             $ret['history.data'] = [];
             foreach ($enr->history as $note) {
                 $ret['history.data'][] = [
-                    'id'=>$note->id,
-                    'text'=>$note->text,
-                    'user'=>['id'=>$note->user_id, 'name'=>User::find($note->user_id)->first()->name],
-                    'date'=>$note->updated_at
+                    'id' => $note->id,
+                    'text' => $note->text,
+                    'user' => User::find($note->user_id)->name,
+                    'date' => $note->updated_at
                 ];
             }
         }
         return $ret;
     }
-    
+
     public function test__GET()
     {
         $admin = factory(User::class)->create();
@@ -81,13 +82,13 @@ class ExamLogRouteTest extends TestCase
         );
 
 
-        $enr = ExamNoteRef::create(['exam_id'=>$exam->id]);
-        $n1 = factory(Note::class)->create(['note_id'=>$enr->id, 'user_id'=>$user->id]);
-        $n2 = factory(Note::class)->create(['note_id'=>$enr->id, 'user_id'=>$user->id]);
+        $enr = ExamNoteRef::create(['exam_id' => $exam->id]);
+        $n1 = factory(Note::class)->create(['note_id' => $enr->id, 'user_id' => $user->id]);
+        $n2 = factory(Note::class)->create(['note_id' => $enr->id, 'user_id' => $user->id]);
 
         $student = factory(ExamStudent::class)->create(['exam_id' => $exam->id]);
-        $enr2 = ExamNoteRef::create(['exam_id'=>$exam->id, 'student_id'=>$student->id]);
-        factory(Note::class)->create(['note_id'=>$enr2->id, 'user_id'=>$user->id]);
+        $enr2 = ExamNoteRef::create(['exam_id' => $exam->id, 'student_id' => $student->id]);
+        factory(Note::class)->create(['note_id' => $enr2->id, 'user_id' => $user->id]);
 
 
         $result = [];
@@ -111,7 +112,7 @@ class ExamLogRouteTest extends TestCase
             ]
         );
     }
-    
+
     public function test__POST()
     {
         $admin = factory(User::class)->create();
@@ -236,9 +237,9 @@ class ExamLogRouteTest extends TestCase
         );
 
 
-        $enr = ExamNoteRef::create(['exam_id'=>$exam->id]);
-        $n1 = factory(Note::class)->create(['note_id'=>$enr->id, 'user_id'=>$user->id]);
-        $n2 = factory(Note::class)->create(['note_id'=>$enr->id, 'user_id'=>$user->id]);
+        $enr = ExamNoteRef::create(['exam_id' => $exam->id]);
+        $n1 = factory(Note::class)->create(['note_id' => $enr->id, 'user_id' => $user->id]);
+        $n2 = factory(Note::class)->create(['note_id' => $enr->id, 'user_id' => $user->id]);
 
         $result = self::_getResult($enr, $n2->text, true);
 
@@ -267,10 +268,10 @@ class ExamLogRouteTest extends TestCase
         $exam = factory(Exam::class)->create(['creator_id' => $admin->id]);
 
 
-        $enr = ExamNoteRef::create(['exam_id'=>$exam->id]);
-        factory(Note::class)->create(['note_id'=>$enr->id, 'user_id'=>$user->id]);
+        $enr = ExamNoteRef::create(['exam_id' => $exam->id]);
+        factory(Note::class)->create(['note_id' => $enr->id, 'user_id' => $user->id]);
 
-        $res = $this->actingAs($admin)->json('PUT', self::_getURL($exam->id, $enr->id), ['text'=>'test']);
+        $res = $this->actingAs($admin)->json('PUT', self::_getURL($exam->id, $enr->id), ['text' => 'test']);
         $enr = ExamNoteRef::latest('id')->first();
 
         $this->assertEquals(200, $this->response->status());
@@ -280,7 +281,7 @@ class ExamLogRouteTest extends TestCase
             ]
         );
 
-        $res = $this->actingAs($user)->json('PUT', self::_getURL($exam->id, $enr->id), ['text'=>'test']);
+        $res = $this->actingAs($user)->json('PUT', self::_getURL($exam->id, $enr->id), ['text' => 'test']);
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
@@ -298,7 +299,7 @@ class ExamLogRouteTest extends TestCase
         );
 
         $exam_user->getRights()->setCanUpdateExamLog(true);
-        $res = $this->actingAs($user)->json('PUT', self::_getURL($exam->id, $enr->id), ['text'=>'test2']);
+        $res = $this->actingAs($user)->json('PUT', self::_getURL($exam->id, $enr->id), ['text' => 'test2']);
         $this->assertEquals(200, $this->response->status());
         $res->seeJson(
             [
@@ -314,14 +315,14 @@ class ExamLogRouteTest extends TestCase
 
         $exam = factory(Exam::class)->create(['creator_id' => $admin->id]);
 
-        $enr = ExamNoteRef::create(['exam_id'=>$exam->id]);
-        $n1 = factory(Note::class)->create(['note_id'=>$enr->id, 'user_id'=>$user->id]);
+        $enr = ExamNoteRef::create(['exam_id' => $exam->id]);
+        $n1 = factory(Note::class)->create(['note_id' => $enr->id, 'user_id' => $user->id]);
 
         $res = $this->actingAs($admin)->json('DELETE', self::_getURL($exam->id, $enr->id));
         $this->assertEquals(204, $this->response->status());
 
-        $enr = ExamNoteRef::create(['exam_id'=>$exam->id]);
-        $n1 = factory(Note::class)->create(['note_id'=>$enr->id, 'user_id'=>$user->id]);
+        $enr = ExamNoteRef::create(['exam_id' => $exam->id]);
+        $n1 = factory(Note::class)->create(['note_id' => $enr->id, 'user_id' => $user->id]);
         $res = $this->actingAs($user)->json('DELETE', self::_getURL($exam->id, $enr->id));
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
@@ -330,8 +331,8 @@ class ExamLogRouteTest extends TestCase
             ]
         );
 
-        $enr = ExamNoteRef::create(['exam_id'=>$exam->id]);
-        $n1 = factory(Note::class)->create(['note_id'=>$enr->id, 'user_id'=>$user->id]);
+        $enr = ExamNoteRef::create(['exam_id' => $exam->id]);
+        $n1 = factory(Note::class)->create(['note_id' => $enr->id, 'user_id' => $user->id]);
         $exam_user = ExamUserRepository::addUser($exam->id, $user->id);
         $res = $this->actingAs($user)->json('DELETE', self::_getURL($exam->id, $enr->id));
         $this->assertEquals(403, $this->response->status());
@@ -341,24 +342,24 @@ class ExamLogRouteTest extends TestCase
             ]
         );
 
-        $enr = ExamNoteRef::create(['exam_id'=>$exam->id]);
-        $n1 = factory(Note::class)->create(['note_id'=>$enr->id, 'user_id'=>$user->id]);
+        $enr = ExamNoteRef::create(['exam_id' => $exam->id]);
+        $n1 = factory(Note::class)->create(['note_id' => $enr->id, 'user_id' => $user->id]);
         $exam_user->getRights()->setCanDeleteExamLog(true);
         $res = $this->actingAs($user)->json('DELETE', self::_getURL($exam->id, $enr->id));
         $this->assertEquals(204, $this->response->status());
-        
-        $enr = ExamNoteRef::create(['exam_id'=>$exam->id]);
-        $n1 = factory(Note::class)->create(['note_id'=>$enr->id, 'user_id'=>$user->id]);
+
+        $enr = ExamNoteRef::create(['exam_id' => $exam->id]);
+        $n1 = factory(Note::class)->create(['note_id' => $enr->id, 'user_id' => $user->id]);
 
         $this->actingAs($admin)->json('GET', self::_getURL($exam->id));
         $js = json_decode($this->response->content());
         $this->assertEquals(count($js->examlogs), 3);
 
-        $this->actingAs($admin)->json('GET', self::_getURL($exam->id), ['view'=>'deleted']);
+        $this->actingAs($admin)->json('GET', self::_getURL($exam->id), ['view' => 'deleted']);
         $js = json_decode($this->response->content());
         $this->assertEquals(count($js->examlogs), 2);
 
-        $this->actingAs($admin)->json('GET', self::_getURL($exam->id), ['view'=>'all']);
+        $this->actingAs($admin)->json('GET', self::_getURL($exam->id), ['view' => 'all']);
         $js = json_decode($this->response->content());
         $this->assertEquals(count($js->examlogs), 5);
     }

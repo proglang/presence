@@ -53,7 +53,7 @@ class ExamLogHistoryResource extends ExamLogResource
             $ret[] = [
                 'id' => $note->id,
                 'text' => $note->text,
-                'user' => ['id' => $note->user_id, 'name' => User::find($note->user_id)->name],
+                'user' =>  User::find($note->user_id)->name,
                 'date' => $note->updated_at
             ];
         }

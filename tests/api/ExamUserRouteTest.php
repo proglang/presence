@@ -65,6 +65,7 @@ class ExamUserRouteTest extends TestCase
                     [
                         "id" => $user->id,
                         "name" => $user->name,
+                        "email" => $user->email,
                         "note" => $exam_user->getNote(),
                         "rights" => $rights
                     ]
@@ -93,12 +94,14 @@ class ExamUserRouteTest extends TestCase
                     [
                         "id" => $user->id,
                         "name" => $user->name,
+                        "email" => $user->email,
                         "note" => $exam_user->getNote(),
                         "rights" => $rights
                     ],
                     [
                         "id" => $user2->id,
                         "name" => $user2->name,
+                        "email" => $user2->email,
                         "note" => $exam_user2->getNote(),
                         "rights" => $_rights
                     ]
@@ -124,7 +127,7 @@ class ExamUserRouteTest extends TestCase
         $user2 = factory(User::class)->create();
         // $exam_user = ExamUserRepository::fromID($exam->id, $user->id);
         $id = $exam->id;
-        $res = $this->actingAs($user)->json('POST', "/exam/$id/user", ['id' => $user2->id, 'note' => 'Hello world!']);
+        $res = $this->actingAs($user)->json('POST', "/exam/$id/user", ['email' => $user2->email, 'note' => 'Hello world!']);
         $this->assertEquals(201, $this->response->status());
 
         $exam_user2 = ExamUserRepository::fromID($exam->id, $user2->id);
@@ -134,6 +137,7 @@ class ExamUserRouteTest extends TestCase
                 [
                     "id" => $user2->id,
                     "name" => $user2->name,
+                    "email" => $user2->email,
                     "note" => $exam_user2->getNote(),
                     "rights" => $rights2
                 ]
@@ -165,6 +169,7 @@ class ExamUserRouteTest extends TestCase
                 [
                     "id" => $user->id,
                     "name" => $user->name,
+                    "email" => $user->email,
                     "note" => $exam_user->getNote(),
                     "rights" => $rights
                 ]
@@ -204,6 +209,7 @@ class ExamUserRouteTest extends TestCase
                 [
                     "id" => $user2->id,
                     "name" => $user2->name,
+                    "email" => $user2->email,
                     "note" => 'abc',
                     "rights" => $rights2
                 ]

@@ -46,7 +46,7 @@ class UserRouteTest extends TestCase
         $res = $this->json('POST', '/user/register', ['email' => $myuser->email, 'password' => $pw, 'name' => $myuser->name]);
         $this->assertEquals(422, $this->response->status());
         $res->seeJson(
-            ['error' => ["validation.email.Unique"]]
+            ['error' => ["validation.error"]]
         );
 
         $myuser = factory(User::class)->make();
@@ -55,12 +55,12 @@ class UserRouteTest extends TestCase
         $res = $this->json('POST', '/user/register', ['email' => $myuser->email, 'password' => '', 'name' => $myuser->name]);
         $this->assertEquals(422, $this->response->status());
         $res->seeJson(
-            ['error' => ["validation.password.Required"]]
+            ['error' => ["validation.error"]]
         );
         $res = $this->json('POST', '/user/register', ['email' => $myuser->email, 'password' => 'a', 'name' => $myuser->name]);
         $this->assertEquals(422, $this->response->status());
         $res->seeJson(
-            ['error' => ["validation.password.HasDigit", "validation.password.HasLower", "validation.password.HasSpecial", "validation.password.HasUpper", "validation.password.Min"]]
+            ['error' => [ "validation.error"]]
         );
     }
 

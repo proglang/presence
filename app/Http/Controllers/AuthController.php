@@ -41,7 +41,6 @@ class AuthController extends Controller
         return self::createResponse(200, null, true)->addResource(AuthenticatedUserRepository::getUserResourceS());
     }
 
-    // Todo: Validation and Tests
     public function jwtlogin()
     {
         return self::createResponse(200, null, true)->addResource(AuthenticatedUserRepository::getUserResourceS());

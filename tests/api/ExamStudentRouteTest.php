@@ -23,7 +23,7 @@ class ExamStudentRouteTest extends TestCase
             $url = "$url/$id";
         }
         if ($add) {
-            $url = "$url/present";
+            $url = "$url/presence";
         }
         return $url;
     }
