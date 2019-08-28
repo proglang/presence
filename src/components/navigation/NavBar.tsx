@@ -83,7 +83,7 @@ const getLeft = [
     // <NavLinkItem type="public" link={{ to: "/about", exact: false }} icon={{ name: "question circle" }} label="nav.about" />
 ]
 const getRight = [
-    // <NavLinkItem type="user" link={{to:"/user", exact: true}} icon={{name: "user"}} label="nav.user" />,
+    <NavLinkItem type="user" link={{to:"/user", exact: true}} icon={{name: "user"}} label="nav.user" />,
     // <NavLinkItem type="public" link={{ to: "/config", exact: false }} icon={{ name: "settings" }} label="nav.config" />,
     <NavLinkItem type="guest" link={{ to: "/login", exact: false }} icon={{ name: "sign in" }} label="nav.login" />,
     <NavLinkItem type="user" link={{ to: "/logout", exact: false }}  icon={{ name: "log out" }} label="nav.logout" />

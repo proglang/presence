@@ -67,7 +67,7 @@ export const register = (data: IRegisterData) => (dispatch: any) => axios.post('
 
 
 
-export const del = () => (dispatch: any) => axios.delete('user/delete')
+export const del = () => (dispatch: any) => axios.delete('user')
     .then((res: AxiosResponse<IResponse>) => {
         return true;
     })
