@@ -1,4 +1,4 @@
-# API
+#API - Readme
 
 ## Server Requirements
 
@@ -11,9 +11,10 @@
 ## Installation
 
 1. Create a new SQL Database
-2. run _php artisan api:install_
+2. run `php artisan api:install`
 3. **_Save the Application Key!_**  
    If you loose it you won't be able to access the encrypted data in the database anymore.
+4. Setup the Webserver to serve `./public` at the desired url e.g.: _`https://example.com/api`_.
 
 ## Commands
 
@@ -24,10 +25,16 @@
 | api:config  | create .env settings file |
 | api:install | installs api              |
 
-run commands with _php artisan \*command\*_ e.g. _php artisan list_
+run commands with `php artisan *command*` e.g. `php artisan list`
 
 ## Troubleshooting
 
 -   Some Pages are not found
     -   Make sure mod_rewrite is enabled (Apache)
     -   <https://laravel.com/docs/5.8#web-server-configuration>
+
+## References
+
+-   <https://lumen.laravel.com/docs/5.8>
+-   <https://laravel.com/docs/5.8/installation>
+
