@@ -47,7 +47,7 @@ class AddStudentListForm extends React.Component<IAddStudentListFormProps & Redu
     }
     public render() {
         const { data } = this.state
-        if (data.length == 0)
+        if (data.length === 0)
             return <Segment basic>
                 <Dropzone
                     callback={this.setList}

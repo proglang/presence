@@ -25,6 +25,7 @@ import * as  user from './api/api.user';
 import ExamUserPage from './components/pages/ExamUserPage';
 import ExamStudentPage from './components/pages/ExamStudentPage';
 import ExamLogPage from './components/pages/ExamLogPage';
+import UserPage from './components/pages/UserPage';
 
 
 export interface IAppProps {
@@ -73,6 +74,7 @@ class App extends React.Component<IAppProps & { login: any, login2: any }, IAppS
             <Route.Guest path="/login/:type?/:data?" exact component={LoginPage} />
             <Route.Public path="/logout" exact component={LogoutPage} />
             <Route.User path="/exam/list" exact component={ExamPage} />
+            <Route.User path="/user" exact component={UserPage} />
             <Route.User req="exam_viewuser" path="/exam/user" exact component={ExamUserPage} />
             <Route.User req="exam_viewstudent" path="/exam/student" exact component={ExamStudentPage} />
             <Route.User req="exam_viewlog" path="/exam/log" exact component={ExamLogPage} />

@@ -66,6 +66,13 @@ export const register = (data: IRegisterData) => (dispatch: any) => axios.post('
     .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
 
 
+
+export const del = () => (dispatch: any) => axios.delete('user/delete')
+    .then((res: AxiosResponse<IResponse>) => {
+        return true;
+    })
+    .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
+
 export const logout = () => (dispatch: any) => {
     setUser(undefined, dispatch);
     axios.get('user/logout');
