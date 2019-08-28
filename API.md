@@ -17,10 +17,11 @@ run commands with `php artisan *command*` e.g. `php artisan list`
 
 ### Composer
 
-| command       | description                      |
-| ------------- | -------------------------------- |
-| install       | install dependencies             |
-| dump-autoload | update autoload with new classes |
+| command                                | description                      |
+| -------------------------------------- | -------------------------------- |
+| install                                | install dependencies             |
+| install --no-dev --optimize-autoloader | install dependencies             |
+| dump-autoload                          | update autoload with new classes |
 
 run commands with `composer *command*` e.g. `composer install`
 
@@ -145,6 +146,16 @@ run commands with `*command*` e.g. `vendor/bin/phpunit`
 | error      | ERROR_IDENT[]    |      |
 | error.msg  | string[]         |      |
 | error.args | ERROR_IDENT_ARGS |      |
+
+### AuthenticationResource
+
+**_namespace:_** -
+
+**_member:_**
+
+| name | type   | note           |
+| ---- | ------ | -------------- |
+| auth | string | JSON Web Token |
 
 ## Errors
 
