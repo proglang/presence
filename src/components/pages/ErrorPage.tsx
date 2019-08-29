@@ -62,3 +62,18 @@ export class Error401 extends React.Component<ICodeErrorProps> {
         return (<Error {...this.props} code={401} />);
     }
 }
+
+export class ErrorConfig extends React.Component<ICodeErrorProps> {
+    public render() {
+        return (
+            <Error {...this.props} code={500}>
+                <Message icon error>
+                    <Icon name="exclamation triangle" />
+                    <Message.Content>
+                        <Message.Header>App Configuration Error</Message.Header>
+                        <p>./config.js not found!</p>
+                    </Message.Content>
+                </Message>
+            </Error>);
+    }
+}

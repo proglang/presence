@@ -20,7 +20,7 @@ import ExamStudentPage from './components/pages/ExamStudentPage'
 import ExamUserPage from './components/pages/ExamUserPage';
 import ConfigPage from './components/pages/ConfigPage';
 */
-import { Error404 } from "./components/pages/ErrorPage";
+import { Error404, ErrorConfig } from "./components/pages/ErrorPage";
 
 import { Container } from 'semantic-ui-react';
 import { trace } from './util/debug';
@@ -31,6 +31,7 @@ import ExamUserPage from './components/pages/ExamUserPage';
 import ExamStudentPage from './components/pages/ExamStudentPage';
 import ExamLogPage from './components/pages/ExamLogPage';
 import UserPage from './components/pages/UserPage';
+import { checkConfig } from './util/settings';
 
 
 export interface IAppProps {
@@ -67,6 +68,18 @@ class App extends React.Component<IAppProps & { login: any, login2: any }, IAppS
 
   public render() {
     //active={this.state.loading}
+    if (!checkConfig()) {
+     return  <div
+        id="App"
+        style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      >
+        <Container style={{ flex: 1 }}>
+          <Route.Public component={ErrorConfig} />
+        </Container>
+
+      </div>
+
+    }
     return (
       <div
         id="App"
