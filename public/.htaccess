@@ -1,0 +1,4 @@
+<Files config.sh>
+Order allow,deny
+Deny from all
+</Files>
