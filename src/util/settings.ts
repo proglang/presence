@@ -3,13 +3,13 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-declare var app_config: any;
-const data = app_config;
+//@ts-ignore
+const data = document.config;
 
 function getValue<T>(name: string, def: T) {
   if (!data) return def;
   const val = data[name];
-  if (val===undefined) return def;
+  if (val === undefined) return def;
   return val;
 }
 
