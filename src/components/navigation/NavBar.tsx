@@ -73,7 +73,7 @@ const mapStateToProps = (state: IReduxRootProps): ReduxProps => {
 const NavLinkItem = connect(mapStateToProps)(withRouter(_NavLinkItem));
 
 const getLeft = [
-    <NavLinkItem type="public" link={{ to: "/", exact: true }} icon={{ name: "home" }} label="nav.home" />,
+//    <NavLinkItem type="public" link={{ to: "/", exact: true }} icon={{ name: "home" }} label="nav.home" />,
 
     <NavLinkItem type="user" link={{ to: "/exam/list", exact: false }} icon={{ name: "clipboard" }} label="nav.exam.list" />,
     <NavLinkItem type="user" right={'exam_viewstudent'} link={{ to: "/exam/student", exact: false }} icon={{ name: "graduation cap" }} label="nav.exam.student" />,
@@ -109,7 +109,7 @@ export default class NavBar extends React.Component<{}> {
                 <Responsive maxWidth={Responsive.onlyComputer.minWidth}>
                     <Menu fixed="top" inverted>
                         <Menu.Item>
-                            <Image size="mini" src="/favicon.ico" />
+                            <Image size="mini" src="./favicon.ico" />
                         </Menu.Item>
                         <Menu.Item onClick={this.handleToggle}>
                             <Icon name="sidebar" />

@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import React from 'react';
-import { Route, RouteProps, Redirect } from 'react-router-dom'
+import { Route, RouteProps, Redirect as RedirectReact } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { Error401 } from '../pages/ErrorPage'
 import { IReduxRootProps } from '../../rootReducer';
@@ -23,27 +23,39 @@ const mapStateToProps = (state: IReduxRootProps): ReduxProps => {
     access: exam ? exam.rights : null
   })
 }
-export interface IRouteProps {
-  RedirectOnError?: string;
+
+export interface IRouteRedirectCProps {
+  auth: string;
+  default: string;
 }
+
+class RouteRedirectC extends React.Component<IRouteRedirectCProps & RouteProps & ReduxProps> {
+  public render() {
+    const { login, auth, default: def } = this.props;
+    if (!!login) return (<RedirectReact to={auth} />)
+    return (<RedirectReact to={def} />)
+  }
+}
+export const Redirect = connect(mapStateToProps)(RouteRedirectC);
+
+
 export interface IPrivateRouteProps {
   req?: TRight;
 }
 
-class UserRouteC extends React.Component<IRouteProps & IPrivateRouteProps & RouteProps & ReduxProps> {
+class UserRouteC extends React.Component<IPrivateRouteProps & RouteProps & ReduxProps> {
   public render() {
-    const { login, access, req, RedirectOnError } = this.props;
-    if (!login) return RedirectOnError ? <Redirect to={RedirectOnError} /> : <Error401 />;
-    if (req && (!access || !access[req])) return RedirectOnError ? <Redirect to={RedirectOnError} /> : <Error401 />;
+    const { login, access, req } = this.props;
+    if (!login) return (<Error401 />);
+    if (req && (!access || !access[req])) return (<RedirectReact to="/" />)
     return (<Route {...this.props} />);
   }
 }
 export const User = connect(mapStateToProps)(UserRouteC);
 
-class GuestRouteC extends React.Component<IRouteProps & RouteProps & ReduxProps> {
+class GuestRouteC extends React.Component<RouteProps & ReduxProps> {
   public render() {
-    const { RedirectOnError, login } = this.props;
-    if (!!login) return (<Redirect to={RedirectOnError ? RedirectOnError : "/"} />)
+    if (!!this.props.login) return (<RedirectReact to="/" />)
     return (<Route {...this.props} />);
   }
 }

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import * as Route from './components/routes/Routes';
-import { Switch, Redirect } from 'react-router-dom'
+import { Switch } from 'react-router-dom'
 
 import NavBar from './components/navigation/NavBar'
 import Footer from './components/footer/Footer';
@@ -75,8 +75,7 @@ class App extends React.Component<IAppProps & { login: any, login2: any }, IAppS
         <NavBar />
         <Container style={{ flex: 1 }}>
           <Switch>
-            <Route.Guest path="/" exact RedirectOnError="/user/login"/>
-            <Route.User path="/" exact RedirectOnError="/exam/user"/>
+            <Route.Redirect path="/" exact auth="/exam/list" default="/login" />
 
             <Route.Guest path="/login/:type?/:data?" exact component={LoginPage} />
             <Route.Public path="/logout" exact component={LogoutPage} />
