@@ -10,6 +10,8 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { TRights, TRight } from '../../api/api.exam.user';
 import { IReduxRootProps } from '../../rootReducer';
+
+import Logo  from '../../_res/favicon.png' ;
 // import ExamSelectionDropdown from './ExamSelection';
 
 interface INavLinkItem {
@@ -109,7 +111,7 @@ export default class NavBar extends React.Component<{}> {
                 <Responsive maxWidth={Responsive.onlyComputer.minWidth}>
                     <Menu fixed="top" inverted>
                         <Menu.Item>
-                            <Image size="mini" src="./favicon.ico" />
+                            <Image size="mini" src={Logo} />
                         </Menu.Item>
                         <Menu.Item onClick={this.handleToggle}>
                             <Icon name="sidebar" />
@@ -135,7 +137,7 @@ export default class NavBar extends React.Component<{}> {
                 <Responsive minWidth={Responsive.onlyComputer.minWidth} className="menu">
                     <Menu fixed="top" inverted>
                         <Menu.Item>
-                            <Image size="mini" src="/favicon.ico" />
+                            <Image size="mini" src={Logo} />
                         </Menu.Item>
                         {getLeft.map((item, index) => React.cloneElement(item, { key: index }))}
                         <Menu.Menu position="right">
