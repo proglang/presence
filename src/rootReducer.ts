@@ -3,6 +3,11 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+// Copyright (c) 2019 Stefan Schweizer
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 import { combineReducers } from 'redux';
 import { intlReducer, IntlState } from 'react-intl-redux'
 import { reducer as dbg_reducer } from './util/debug';

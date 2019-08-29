@@ -1,3 +1,8 @@
+// Copyright (c) 2019 Stefan Schweizer
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 import React from 'react';
 import * as Route from './components/routes/Routes';
 import { Switch } from 'react-router-dom'

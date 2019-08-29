@@ -1,6 +1,8 @@
 {
   "name": "exam_react",
   "version": "0.1.0",
+  "license": "MIT",
+  "author": {"name": "Stefan Schweizer"},
   "private": true,
   "homepage" : ".",
   "dependencies": {

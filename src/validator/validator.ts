@@ -1,3 +1,8 @@
+// Copyright (c) 2019 Stefan Schweizer
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 type ValidateReturn = true | string;
 const validateLength = (name: string, str: string, length: number = 1) => {
     return str.length >= length ? true : `error.${name}.length.${length}`;

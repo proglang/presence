@@ -1,3 +1,8 @@
+// Copyright (c) 2019 Stefan Schweizer
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 import { IData, IList } from '../api/api.exam.user';
 import * as user from './user'
 import * as exam from './exam'

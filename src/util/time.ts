@@ -1,3 +1,8 @@
+// Copyright (c) 2019 Stefan Schweizer
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 import { IntlShape } from "react-intl";
 
 export const getDateString = (intl: IntlShape, unix: number) => {

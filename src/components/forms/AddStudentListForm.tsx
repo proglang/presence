@@ -1,3 +1,8 @@
+// Copyright (c) 2019 Stefan Schweizer
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 import * as React from 'react';
 import _Dropzone from '../table/Dropzone';
 import * as examstudent from '../../api/api.exam.student';

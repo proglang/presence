@@ -1,3 +1,8 @@
+// Copyright (c) 2019 Stefan Schweizer
+// 
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 import axios, { AxiosResponse } from 'axios';
 
 import * as _exam from './api.exam'
