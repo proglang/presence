@@ -5,3 +5,4 @@
 -   PDO PHP Extension
 -   Mbstring PHP Extension
 -   MySQL, PostgreSQL or SQLite
+-   composer (optional: Only needed if installed from git-repository)
