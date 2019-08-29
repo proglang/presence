@@ -6,10 +6,11 @@ import * as _examlog from './api.exam.log'
 import * as _examstudent from './api.exam.student'
 import * as _user from './api.user'
 import { setToken } from '../util/login';
+import { API_PATH } from '../util/settings';
 
 
 // axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:80/api'
+axios.defaults.baseURL = API_PATH;
 // axios.defaults.data = {}
 
 

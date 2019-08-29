@@ -76,7 +76,7 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
   export2 = () => {
     const _s = this.props.student
     const student = (log: examlog.IData) => !log.student ? "" : `${_s[log.student].name} (${_s[log.student].ident})`;
-    const date = (log: examlog.IData) => getDateTimeString(this.props.intl, Date.parse(log.date));
+    const date = (log: examlog.IData) => getDateTimeString(this.props.intl, log.date);
     const ex = new Exporter(Object.values(this.props.log), [
       { k: 'id', t: 'id' },
       { k: 'text', t: 'text' },
@@ -96,7 +96,7 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
   export = () => {
     const _s = this.props.student
     const student = (log: examlog.IData) => !log.student ? "" : `${_s[log.student].name} (${_s[log.student].ident})`;
-    const date = (log: examlog.IData) => getDateTimeString(this.props.intl, Date.parse(log.date));
+    const date = (log: examlog.IData) => getDateTimeString(this.props.intl, log.date);
     const ex = new Exporter(Object.values(this.props.log), [
       { k: 'id', t: 'id' },
       { k: 'text', t: 'text' },
@@ -119,7 +119,7 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
           header={[
             { k: "text", t: "common.text" },
             { k: "user", t: "common.user" },
-            { k: "date", t: "common.date", fn: (val) => [getDateTimeString(this.props.intl, Date.parse(val.date)), true] },
+            { k: "date", t: "common.date", fn: (val) => [getDateTimeString(this.props.intl, val.date), true] },
             { k: "student", t: "common.student", fn: this.addStudent },
             { k: 'btn', fn: this.addButtons, t: <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
           data={this.props.log}

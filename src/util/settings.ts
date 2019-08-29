@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 // @ts-ignore: Property error
-const data = window.env;
+const data = app_config;
 
 function getValue<T>(name: string, def: T) {
   if (!data) return def;

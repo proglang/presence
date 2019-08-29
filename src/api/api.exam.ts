@@ -70,8 +70,10 @@ export const del = (id: number) => (dispatch: any) => axios.delete(`exam/${id}`)
 export const create = (data: IUpdateExamData) => (dispatch: any) => axios.post(`exam`, { ...data, date: Math.floor(data.date / 1000) })
     .then((res: AxiosResponse<IResponse>) => {
         handleSuccess(res);
-        if (res.data.exam)
+        if (res.data.exam) {
+            res.data.exam.date = res.data.exam.date * 1000
             dispatch(eReducer._UPDATE(res.data.exam))
+        }
         return true;
     })
     .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
