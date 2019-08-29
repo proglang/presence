@@ -23,23 +23,27 @@ const mapStateToProps = (state: IReduxRootProps): ReduxProps => {
     access: exam ? exam.rights : null
   })
 }
+export interface IRouteProps {
+  RedirectOnError?: string;
+}
 export interface IPrivateRouteProps {
   req?: TRight;
 }
 
-class UserRouteC extends React.Component<IPrivateRouteProps & RouteProps & ReduxProps> {
+class UserRouteC extends React.Component<IRouteProps & IPrivateRouteProps & RouteProps & ReduxProps> {
   public render() {
-    const {login, access, req} = this.props;
-    if (!login) return (<Error401 />);
-    if (req && (!access || !access[req])) return (<Redirect to="/exam/list" />)
+    const { login, access, req, RedirectOnError } = this.props;
+    if (!login) return RedirectOnError ? <Redirect to={RedirectOnError} /> : <Error401 />;
+    if (req && (!access || !access[req])) return RedirectOnError ? <Redirect to={RedirectOnError} /> : <Error401 />;
     return (<Route {...this.props} />);
   }
 }
 export const User = connect(mapStateToProps)(UserRouteC);
 
-class GuestRouteC extends React.Component<RouteProps & ReduxProps> {
+class GuestRouteC extends React.Component<IRouteProps & RouteProps & ReduxProps> {
   public render() {
-    if (!!this.props.login) return (<Redirect to="/" />)
+    const { RedirectOnError, login } = this.props;
+    if (!!login) return (<Redirect to={RedirectOnError ? RedirectOnError : "/"} />)
     return (<Route {...this.props} />);
   }
 }

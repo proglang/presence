@@ -3,8 +3,9 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-//@ts-ignore
-const data = document.config;
+// @ts-ignore: Property error
+declare var app_config: { [key: string]: any } | undefined;
+const data = app_config;
 
 function getValue<T>(name: string, def: T) {
   if (!data) return def;
