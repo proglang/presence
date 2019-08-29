@@ -17,7 +17,7 @@ function set_config(){
 
 echo "Enter absolute API URL: e.g. '/api'"
 read api_url
-echo "Enter absolute APP URL: e.g. '/'"
-read app_url
+#echo "Enter absolute APP URL: e.g. '/'"
+#read app_url
 
 set_config
