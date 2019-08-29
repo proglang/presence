@@ -6,7 +6,7 @@
 // React
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router-dom'
 import * as serviceWorker from './serviceWorker';
 
 // Redux
@@ -33,7 +33,6 @@ import './style.css'
 
 // App
 import App from './App';
-import { APP_PATH } from './util/settings';
 
 
 
@@ -56,9 +55,9 @@ initLoca()(store.dispatch);
 ReactDOM.render(
     <Provider store={store}>
         <IntlProvider locale="de">
-            <BrowserRouter forceRefresh={!('pushState' in window.history)} basename={APP_PATH}>
+            <HashRouter /*forceRefresh={!('pushState' in window.history)} basename={APP_PATH}*/>
                 <App />
-            </BrowserRouter>
+            </HashRouter>
         </IntlProvider>
     </Provider>, document.getElementById('root'));
 
