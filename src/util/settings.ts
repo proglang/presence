@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-// @ts-ignore: Property error
+declare var app_config: any;
 const data = app_config;
 
 function getValue<T>(name: string, def: T) {
