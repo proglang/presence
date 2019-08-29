@@ -4,6 +4,7 @@
   "license": "MIT",
   "author": {"name": "Stefan Schweizer"},
   "private": true,
+  "homepage" : ".",
   "dependencies": {
     "@types/jest": "^24.0.15",
     "@types/node": "^12.0.8",

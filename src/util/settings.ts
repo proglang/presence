@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-
 // Copyright (c) 2019 Stefan Schweizer
 //
 // This software is released under the MIT License.
