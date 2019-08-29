@@ -34,7 +34,7 @@ class ExamStudentRepository extends BaseDatabaseRepository
         }
         return new ExamStudentRepository($ret);
     }
-    public static function add($exam, int $ident):ExamStudentRepository {
+    public static function add($exam, $ident):ExamStudentRepository {
         $exam = self::toExamRepository($exam);
         $es = ExamStudent::create(["exam_id"=>$exam->getID(), 'ident'=>$ident]);
         return new ExamStudentRepository($es);
@@ -64,7 +64,7 @@ class ExamStudentRepository extends BaseDatabaseRepository
         $this->assertValid();
         return $this->er->ident;
     }
-    public function setIdent(?int $ident, bool $save = true): ExamStudentRepository
+    public function setIdent($ident, bool $save = true): ExamStudentRepository
     {
         if ($ident==null) return $this;
         $this->assertValid();
