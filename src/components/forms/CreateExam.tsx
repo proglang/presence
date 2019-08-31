@@ -61,6 +61,7 @@ class CreateExamForm extends React.Component<ICreateExamFormProps  & ReduxFn & W
                     timeFormat={getTimeFormat(this.props.intl)}
                     preserveViewMode={false}
                     validator={() => validate.date(data.date)}
+                    localization={this.props.intl.locale}
                 />
             </FormBase>)
     }

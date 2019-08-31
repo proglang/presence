@@ -10,6 +10,8 @@ import { updateIntl } from 'react-intl-redux'
 import messages_de from "./data/de.json";
 import messages_en from "./data/en.json";
 
+import 'moment/locale/de';
+
 // Localization
 const defaultLang = "en";
 const messages: {[key:string]: {[key:string]:string}} = {
