@@ -5,8 +5,9 @@
 
 
 import * as React from 'react';
-import { Icon, Table, Input, InputOnChangeData } from "semantic-ui-react";
+import { Icon, Table, Input, InputOnChangeData, Responsive } from "semantic-ui-react";
 import { injectIntl, WrappedComponentProps, FormattedMessage } from 'react-intl';
+import TypeChangeInput from '../util/TypeChangeInput';
 
 
 export type ISortFn1<T> = (key: string | number, val1: T, val2: T) => boolean;
@@ -38,6 +39,8 @@ export interface IObjectTableState<T> {
     sortCol?: number | string;
     sortDir: "ascending" | "descending"
     filter: { [key: number]: {}, [key: string]: {} };
+
+    currentWidth: number;
 }
 
 class _TextWrapper extends React.Component<{ id: string } & WrappedComponentProps> {
@@ -53,7 +56,8 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
         this.state = {
             filter: {},
             sortDir: "ascending",
-            selected: []
+            selected: [],
+            currentWidth: 0,
         }
     }
     componentDidMount = () => {
@@ -125,15 +129,34 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
         this.setState({ selected: arr })
     }
     public render() {
-        const { data, header, sortable } = this.props;
+        //@ts-ignore
+        const mobile = Responsive.onlyComputer.minWidth > this.state.currentWidth;
+
+        const { data, header, sortable, filter, selectKey } = this.props;
         const { filter: filterState, sortCol, sortDir } = this.state;
         const filterVal = Object(filterState);
-        const filtered = Object.values(data).filter((value: T) =>
-            Object.keys(filterState).every((key: string) =>
-                String(Object(value)[key]).includes(String(filterState[key]))));
+
+        let filtered: any[] = [];
+        if (!mobile) {
+            filtered = Object.values(data).filter((value: T) =>
+                Object.keys(filterState).every((key: string) =>
+                    key === "global" || String(Object(value)[key]).toLowerCase().includes(String(filterState[key]).toLowerCase())));
+        } else {
+            filtered = Object.values(data).filter((value: T) =>
+                !filterState["global"] || !filter || header.some(({ k: _key }) => {
+                    const key = (typeof (_key) === "string" || typeof (_key) === "number") ? _key : null;
+                    const show = (key && (filter === true || filter[_key])) === true
+                    if (show && key) {
+                        return String(Object(value)[_key]).toLowerCase().includes(String(filterState["global"]).toLowerCase())
+                    }
+                    return false;
+                }
+                )
+            )
+
+        }
 
         if (sortable && sortCol) {
-
             let sortfn = typeof (sortable) === 'function' ? ((a: T, b: T) => sortable(sortCol, a, b)) : null;
             sortfn = sortable === true ? ((a, b) => Object(a)[sortCol] <= Object(b)[sortCol]) : sortfn;
             if (sortfn === null) {
@@ -148,14 +171,13 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                     filtered.reverse()
             }
         }
-        const filter = this.props.filter
-        const selectKey = this.props.selectKey
-        return (
-            <Table celled striped sortable={!!sortable}>
+        return ([
+            <Responsive key="1" fireOnMount onUpdate={(_, data: any) => this.setState({ currentWidth: data.width })} />,
+            <Table key="2" celled striped sortable={!!sortable}>
                 <Table.Header>
                     {!!filter &&
                         <Table.Row>
-                            {header.map((val, index) => {
+                            {!mobile && header.map((val, index) => {
                                 const key = (typeof (val.k) === "string" || typeof (val.k) === "number") ? val.k : null;
                                 const show = (key && (filter === true || filter[key])) === true
                                 return <Table.HeaderCell key={index} style={{ padding: 0 }}>
@@ -174,9 +196,22 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                                     }
                                 </Table.HeaderCell>
                             })}
+                            {mobile &&
+                                <Table.HeaderCell style={{ padding: 0 }}>
+                                    <TypeChangeInput
+                                        fluid
+                                        onChange={this.OnFilterChange("global")}
+                                        value={filterVal["global"]}
+                                        icon={filterVal["global"] ? <Icon name='delete' link onClick={() => {
+                                            this.SetFilter("global", "");
+                                        }}
+                                        /> : null}
+                                    />
+                                </Table.HeaderCell>
+                            }
                         </Table.Row>
                     }
-                    <Table.Row>
+                    {!mobile && <Table.Row>
                         {header.map((data, index) => {
                             const key = (typeof (data.k) === "string" || typeof (data.k) === "number") ? data.k : null;
                             const text = typeof (data.t) !== "string" ? data.t : <TextWrapper id={data.t} />;
@@ -190,7 +225,7 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                                 </Table.HeaderCell>
                             )
                         })}
-                    </Table.Row>
+                    </Table.Row>}
                 </Table.Header>
                 <Table.Body>
                     {filtered.map((row, row_id) => {
@@ -233,6 +268,6 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                     )}
                 </Table.Body>
             </Table>
-        );
+        ]);
     }
 }
