@@ -62,7 +62,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
     if (data.rights.exam_viewuser) {
       const btn = <Popup
         key="3"
-        trigger={<Button basic icon='address book' onClick={() => goto(data.id, "exam/user")} />}
+        trigger={<Button basic icon='address book' onClick={() => goto(data.id, `exam/${data.id}/user`)} />}
         content={(<FormattedMessage id="nav.exam.user" />)}
       />
       ret.push(btn);
@@ -70,7 +70,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
     if (data.rights.exam_viewstudent) {
       const btn = <Popup
         key="4"
-        trigger={<Button basic icon='graduation cap' onClick={() => goto(data.id, "exam/student")} />}
+        trigger={<Button basic icon='graduation cap' onClick={() => goto(data.id, `exam/${data.id}/student`)} />}
         content={(<FormattedMessage id="nav.exam.student" />)}
       />
       ret.push(btn);
@@ -78,7 +78,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
     /*if (data.rights.exam_viewroom) {
       const btn = <Popup
         key="5"
-        trigger={<Button basic icon='map marker alternate' onClick={() => goto(data.id, "exam/room")} />}
+        trigger={<Button basic icon='map marker alternate' onClick={() => goto(data.id, `exam/${data.id}/room`)} />}
         content={(<FormattedMessage id="nav.exam.room" />)}
       />
       ret.push(btn);
@@ -86,7 +86,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
     if (data.rights.exam_viewlog) {
       const btn = <Popup
         key="6"
-        trigger={<Button basic icon='tasks' onClick={() => goto(data.id, "exam/log")} />}
+        trigger={<Button basic icon='tasks' onClick={() => goto(data.id, `exam/${data.id}/log`)} />}
         content={(<FormattedMessage id="nav.exam.log" />)}
       />
       ret.push(btn);

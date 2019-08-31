@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import React from 'react';
-import * as Route from './components/routes/Routes';
+import PublicRoute from './components/routes/PublicRoute';
 import { Switch } from 'react-router-dom'
 
 import NavBar from './components/navigation/NavBar'
@@ -32,6 +32,9 @@ import ExamStudentPage from './components/pages/ExamStudentPage';
 import ExamLogPage from './components/pages/ExamLogPage';
 import UserPage from './components/pages/UserPage';
 import { checkConfig } from './util/settings';
+import Redirect from './components/routes/Redirect';
+import GuestRoute from './components/routes/GuestRoute';
+import UserRoute from './components/routes/UserRoute';
 
 
 export interface IAppProps {
@@ -74,7 +77,7 @@ class App extends React.Component<IAppProps & { login: any, login2: any }, IAppS
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
         <Container style={{ flex: 1 }}>
-          <Route.Public component={ErrorConfig} />
+          <PublicRoute component={ErrorConfig} />
         </Container>
 
       </div>
@@ -88,17 +91,17 @@ class App extends React.Component<IAppProps & { login: any, login2: any }, IAppS
         <NavBar />
         <Container style={{ flex: 1 }}>
           <Switch>
-            <Route.Redirect path="/" exact auth="/exam/list" default="/login" />
+            <Redirect path="/" exact auth="/exam/list" default="/login" />
 
-            <Route.Guest path="/login/:type?/:data?" exact component={LoginPage} />
-            <Route.Public path="/logout" exact component={LogoutPage} />
-            <Route.User path="/exam/list" exact component={ExamPage} />
-            <Route.User path="/user" exact component={UserPage} />
-            <Route.User req="exam_viewuser" path="/exam/user" exact component={ExamUserPage} />
-            <Route.User req="exam_viewstudent" path="/exam/student" exact component={ExamStudentPage} />
-            <Route.User req="exam_viewlog" path="/exam/log" exact component={ExamLogPage} />
+            <GuestRoute path="/login" exact component={LoginPage} />
+            <PublicRoute path="/logout" exact component={LogoutPage} />
+            <UserRoute path="/exam/list" exact component={ExamPage} />
+            <UserRoute path="/user" exact component={UserPage} />
+            <UserRoute req="exam_viewuser" path="/exam/:id/user" exact component={ExamUserPage} />
+            <UserRoute req="exam_viewstudent" path="/exam/:id/student" exact component={ExamStudentPage} />
+            <UserRoute req="exam_viewlog" path="/exam/:id/log" exact component={ExamLogPage} />
 
-            <Route.Public component={Error404} />
+            <PublicRoute component={Error404} />
           </Switch>
         </Container>
         <Footer />

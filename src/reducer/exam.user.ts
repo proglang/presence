@@ -15,7 +15,7 @@ const DELETE = "EXAM_USER_DELETE"
 
 export const _RESET = () => ({ type: RESET });
 export const _SET = (data: IData[]) => ({ type: SET, data });
-export const _UPDATE = ( data: IData) => ({ type: UPDATE, data });
+export const _UPDATE = (data: IData) => ({ type: UPDATE, data });
 export const _SELECT = (user_id: number) => ({ type: SELECT, id: user_id });
 export const _DELETE = (user_id: number) => ({ type: DELETE, id: user_id });
 
@@ -26,8 +26,8 @@ export const reducer = (state: IList = INITIAL_STATE, action: any = {}): IList =
         case SET:
             {
                 const list = action.data.reduce((acc: any, cur: IData) => { acc[cur.id] = cur; return acc; }, {});
-                const selected = (state.selected && list[state.selected])?state.selected:undefined;
-                return {...list, selected}
+                const selected = (state.selected && list[state.selected]) ? state.selected : undefined;
+                return { ...list, selected }
             }
         case UPDATE:
             if (state === null) {
@@ -42,6 +42,7 @@ export const reducer = (state: IList = INITIAL_STATE, action: any = {}): IList =
         case RESET:
         case user.RESET:
         case exam.RESET:
+        case exam.SELECT:
         case exam.DELETE:
             return INITIAL_STATE
         default:

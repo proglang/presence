@@ -8,6 +8,7 @@
   "nav.exam.log": "Logs",
 
   "label.edit": "Edit",
+  "label.delete": "Delete",
   "label.name": "Name",
   "label.user": "User",
   "label.text": "Text",
@@ -48,7 +49,7 @@
 
   "submit.user": "Add User",
   "submit.update.user": "Update User",
-  
+
   "submit.log": "Add Log Entry",
   "submit.update.log": "Update Log Entry",
 

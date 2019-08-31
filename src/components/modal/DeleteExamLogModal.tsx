@@ -69,8 +69,8 @@ class DeleteExamLogModal extends React.Component<IDeleteExamLogModalProps & Redu
                     <Modal.Actions
                         onActionClick={this.onActionClick}
                         actions={[
-                            this.props.intl.formatMessage({ "id": "button.cancel" }),
-                            { key: 'delete', negative: true, content: this.props.intl.formatMessage({ "id": "button.delete" }), loading: this.state.loading },
+                            this.props.intl.formatMessage({ "id": "label.cancel" }),
+                            { key: 'delete', negative: true, content: this.props.intl.formatMessage({ "id": "label.delete" }), loading: this.state.loading },
                         ]}
                     />
                 </Modal>

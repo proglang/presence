@@ -34,11 +34,11 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
       loading: false,
     }
   }
-  componentDidMount = () => {
+  /*componentDidMount = () => {
     //| Send Request to Server
     if (Object.keys(this.props.log).length === 0)
       this.refreshTable();
-  }
+  }*/
   refreshTable = () => {
     if (!this.props.exam) {
       return;

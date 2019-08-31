@@ -23,14 +23,14 @@ export interface IData {
 
 export type IList = { [key: number]: IData, selected?: number }
 
-export const list = () => (dispatch: any) => axios.get('exam')
+export const list = (id?: number) => (dispatch: any) => axios.get('exam')
     .then((res: AxiosResponse<IResponse>) => {
         handleSuccess(res);
         if (res.data.exams) {
             res.data.exams.forEach((value) => value.date = value.date * 1000)
             dispatch(eReducer._SET(res.data.exams))
-            if (res.data.exams.length === 1)
-                select(res.data.exams[0].id)(dispatch);
+            if (res.data.exams.length === 1 || id)
+                select(id ? id : res.data.exams[0].id)(dispatch);
         }
         return true;
     })
@@ -38,14 +38,15 @@ export const list = () => (dispatch: any) => axios.get('exam')
 
 export const select = (index: number) => (dispatch: any) => {
     dispatch(eReducer._SELECT(index));
-    reload(index)(dispatch);
-    return true;
+    return reload(index)(dispatch);
 }
 export const reload = (index: number) => (dispatch: any) => {
-    user.list(index)(dispatch);
-    log.list(index)(dispatch);
-    student.list(index)(dispatch);
-    return true;
+    return new Promise((cb) => {
+        let i = 0;
+        user.list(index)(dispatch).then(() => { i = i + 1; if (i === 3) cb(); });
+        log.list(index)(dispatch).then(() => { i = i + 1; if (i === 3) cb(); });
+        student.list(index)(dispatch).then(() => { i = i + 1; if (i === 3) cb(); });
+    })
 }
 
 export const update = (id: number, data: IUpdateExamData) => (dispatch: any) => axios.put(`exam/${id}`, { ...data, date: Math.floor(data.date / 1000) })

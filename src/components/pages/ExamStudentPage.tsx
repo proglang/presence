@@ -37,11 +37,11 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
         }
     }
 
-    componentDidMount = () => {
+    /* componentDidMount = () => {
         //| Send Request to Server
         if (Object.keys(this.props.student).length === 0)
             this.refreshTable();
-    }
+    }*/
     refreshTable = () => {
         if (!this.props.exam) {
             return;

@@ -30,11 +30,6 @@ class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxP
       loading: false,
     }
   }
-  componentDidMount = () => {
-    //| Send Request to Server
-    if (Object.keys(this.props.user).length === 0)
-      this.refreshTable();
-  }
   refreshTable = () => {
     if (!this.props.exam) {
       return;
@@ -57,7 +52,7 @@ class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxP
       const btn = <Popup
         key="1"
         trigger={<Button basic icon='edit' onClick={() => goto(data.id)} />}
-        content={(<FormattedMessage id="common.button.edit" />)}
+        content={(<FormattedMessage id="label.edit" />)}
       />
       ret.push(btn);
     }
@@ -65,7 +60,7 @@ class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxP
       const btn = <Popup
         key="7"
         trigger={<DeleteExamUserModal key="7" exam={exam.id} id={data.id} />}
-        content={(<FormattedMessage id="common.button.delete" />)}
+        content={(<FormattedMessage id="label.delete" />)}
       />
       ret.push(btn);
     }
@@ -137,4 +132,6 @@ const mapStateToProps = (state: IReduxRootProps): ReduxProps => {
     self: self ? self.id : null
   })
 }
-export default connect(mapStateToProps, { load: examuser.list, reset: examuser.reset, select: examuser.select })(injectIntl(ExamUserPage))
+export default connect(mapStateToProps,
+  { load: examuser.list, reset: examuser.reset, select: examuser.select }
+)(injectIntl(ExamUserPage))

@@ -9,7 +9,7 @@ import * as user from './user'
 export const RESET = "EXAM_RESET"
 const SET = "EXAM_SET"
 const UPDATE = "EXAM_UPDATE"
-const SELECT = "EXAM_SELECT"
+export const SELECT = "EXAM_SELECT"
 export const DELETE = "EXAM_DELETE"
 
 export const _RESET = () => ({ type: RESET });

@@ -42,6 +42,7 @@ export const reducer = (state: IList = INITIAL_STATE, action: any = {}): IList =
         case RESET:
         case user.RESET:
         case exam.RESET:
+        case exam.SELECT:
         case exam.DELETE:
             return INITIAL_STATE
         default:
