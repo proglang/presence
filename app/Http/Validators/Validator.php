@@ -13,17 +13,23 @@ trait ValidationFn
 {
     private function getRegex($name)
     {
-        $regex = [
-            'lower' => "a-z",
-            'upper' => "A-Z",
-            'special' => "@$!%*#?&",
-            'digit' => "0-9"
-        ];
-        if (!isset($regex[$name])) return "";
-        return $regex[$name];
+        if ($name == "lower") {
+            return "a-z";
+        }
+        if ($name == "upper") {
+            return "A-Z";
+        }
+        if ($name == "special") {
+            return config('validation.password.specialchar');
+        }
+        if ($name == "digit") {
+            return "0-9";
+        }
+        return "";
     }
-    private function toRegex($r) {
-        if ($r=="") return "";
+    private function toRegex($r)
+    {
+        if ($r == "") return "";
         return  "/[$r]/";
     }
     public function validateHasLower($attribute, $value, $parameters)
@@ -49,6 +55,7 @@ trait ValidationFn
     }
     protected function validateHasSpecial($attribute, $value, $parameters)
     {
+        if ($this->getRegex('special') == "") return true;
         $count = $this->getParam($parameters, 0, 1);
         $special = $this->toRegex($this->getParam($parameters, 1, $this->getRegex('special')));
         $ret = preg_match_all($special, $value);
@@ -59,14 +66,17 @@ trait ValidationFn
     {
         $count = strlen($value);
         foreach ($parameters as  $name) {
-            $ret = preg_match_all($this->toRegex($this->getRegex($name)), $value);
+            $regex = $this->getRegex($name);
+            if ($regex == "") continue;
+            $ret = preg_match_all($this->toRegex($regex), $value);
             $count = $count - ($ret ? $ret : 0);
         }
-        return $count==0;
+        return $count == 0;
     }
-    public function validateUnique($attribute, $value, $parameters) {
+    public function validateUnique($attribute, $value, $parameters)
+    {
         $encryption = $parameters[2] ?? null;
-        if ($encryption!=null && $encryption!="NULL") {
+        if ($encryption != null && $encryption != "NULL") {
             $value = hash($encryption, $value);
         }
         return parent::validateUnique($attribute, $value, $parameters);
@@ -94,16 +104,48 @@ trait ValidationRepl
 }
 trait ValidationReplaceRules
 {
-    protected static $replaceRules = [
-        'password' => ['string|hasLower:2|hasUpper:2|hasSpecial:1,@$!%*#?&|hasDigit:2|required|min:10|max:255|noForbidden:lower,upper,special,digit'],
-    ];
+    //protected static $replaceRules = [
+    //    'password' => self::ReplacePW,//['hasUpper:2|hasSpecial:1,@$!%*#?&|hasDigit:2],
+    //];
+    private static function ReplaceRulePassword()
+    {
+        $rule = 'string|required|max:255|noForbidden:lower,upper,special,digit';
+
+        $pw_length = config('validation.password.length');
+        $lc_count = config('validation.password.lowercase');
+        $uc_count = config('validation.password.uppercase');
+        $d_count = config('validation.password.digit');
+        $sc_count = config('validation.password.special');
+        $schars = config('validation.password.specialchar');
+        $sc_count = $schars == "" ? 0 : $sc_count;
+
+        if ($pw_length > 0) {
+            $rule = $rule . "|min:" . $pw_length;
+        }
+        if ($lc_count > 0) {
+            $rule = $rule . "|hasLower:" . $lc_count;
+        }
+        if ($uc_count > 0) {
+            $rule = $rule . "|hasUpper:" . $uc_count;
+        }
+        if ($d_count > 0) {
+            $rule = $rule . "|hasDigit:" . $d_count;
+        }
+        if ($sc_count > 0) {
+            $rule = $rule . "|hasSpecial:" . $sc_count . "," . $schars;
+        }
+
+        return [$rule];
+    }
     private static function ReplaceRule($rule)
     {
-        if (!isset(self::$replaceRules[$rule])) {
+        $cl = [get_called_class(), 'ReplaceRule' . $rule];
+        if (!method_exists($cl[0], $cl[1]) || !is_callable($cl)) {
             return [$rule];
         }
+        $ruleval = call_user_func_array($cl, []);
         $rules = [];
-        foreach (self::$replaceRules[$rule] as $value) {
+        foreach ($ruleval as $value) {
             if (is_string($value)) {
                 $rules = array_merge($rules, explode("|", $value));
             } else {
@@ -124,7 +166,7 @@ class Validator extends BaseValidator
         'has_upper' => "The :attribute must contain at least :min upper characters",
         'has_digit' => "The :attribute must contain at least :min digits",
         'has_special' => "The :attribute must contain at least :min special characters (:regex)",
-        'no_forbidden'=> "The :attribute contains forbidden characters!",
+        'no_forbidden' => "The :attribute contains forbidden characters!",
     ];
     private function getParam($attr, $index, $default)
     {
