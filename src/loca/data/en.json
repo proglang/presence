@@ -6,6 +6,7 @@
   "nav.exam.student": "Studentlist",
   "nav.exam.user": "Userlist",
   "nav.exam.log": "Logs",
+  "nav.logout": "Logout",
 
   "label.edit": "Edit",
   "label.delete": "Delete",

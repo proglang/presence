@@ -189,7 +189,8 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                                     {(show && key) &&
                                         <Input
                                             fluid
-                                            index={index}
+                                            key={index}
+
                                             type="text"
                                             onChange={this.OnFilterChange(key)}
                                             value={filterVal[key]}
@@ -219,7 +220,7 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                     {!mobile && <Table.Row>
                         {header.map((data, index) => {
                             const key = (typeof (data.k) === "string" || typeof (data.k) === "number") ? data.k : null;
-                            const text = typeof (data.t) !== "string" ? data.t : <TextWrapper id={data.t} />;
+                            const text = typeof (data.t) !== "string" ? data.t : <TextWrapper key={index} id={data.t} />;
                             return (
                                 <Table.HeaderCell
                                     sorted={sortCol === key ? sortDir : undefined}
@@ -254,7 +255,7 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                                     const { validator, ...childProps } = tsnode.props;
                                     const nprop = this.props.colPropFn(row, data.k)
                                     if (typeof (nprop) === 'object')
-                                        return React.createElement(tsnode.type, { ...childProps, ...nprop })
+                                        return React.createElement(tsnode.type, { key: index, ...childProps, ...nprop })
                                 }
                                 return c;
                             })
@@ -266,7 +267,7 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                             const { validator, ...childProps } = tsnode.props;
                             const nprop = this.props.rowPropFn(row)
                             if (typeof (nprop) === 'object')
-                                return React.createElement(tsnode.type, { ...childProps, ...nprop })
+                                return React.createElement(tsnode.type, { key: row_id, ...childProps, ...nprop })
                         }
                         return r;
                     }
