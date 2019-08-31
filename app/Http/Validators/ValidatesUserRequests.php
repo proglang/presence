@@ -21,8 +21,8 @@ trait ValidatesUserRequests
     protected function validateLogin(Request $request)
     {
         $this->validate($request, [
-            'email'    => 'required|email|max:255',
-            'password' => 'password',
+            'email'    => 'required|string',
+            'password' => 'required|string',
         ]);
     }
 
