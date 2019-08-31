@@ -72,7 +72,6 @@ class EditExamForm extends React.Component<IEditExamFormProps  & ReduxFn & Wrapp
                     preserveViewMode={false}
                     validator={() => validate.date(data.date)}
                     localization={this.props.intl.locale}
-
                 />
             </FormBase>)
     }
