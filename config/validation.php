@@ -2,11 +2,11 @@
 
 return [
     'password' => [
-        'length' => env('VAL_PW_LENGTH', 5),
-        'lowercase' => env('VAL_PW_LC_COUNT', 1),
-        'uppercase' => env('VAL_PW_UC_COUNT', 1),
-        'digit' => env('VAL_PW_DIGIT_COUNT', 1),
-        'special' => env('VAL_PW_SC_COUNT', 1),
-        'specialchar' => env('VAL_PW_SC', '@$!%*#?&'),
+        'length' => env('VALIDATEIDATE_PASSWORD_LENGTH', 5),
+        'lowercase' => env('VALIDATE_PASSWORD_LOWERCASE_COUNT', 1),
+        'uppercase' => env('VALIDATE_PASSWORD_UPPERCASE_COUNT', 1),
+        'digit' => env('VALIDATE_PASSWORD_DIGIT_COUNT', 1),
+        'special' => env('VALIDATE_PASSWORD_SPECIAL_COUNT', 1),
+        'specialchar' => env('VALIDATE_PASSWORD_SPECIAL_CHARACTERS', '@$!%*#?&'),
     ],
 ];

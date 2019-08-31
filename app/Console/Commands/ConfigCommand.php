@@ -35,7 +35,7 @@ class ConfigCommand extends Command
         'APP_DEBUG' => null,
         'APP_URL' => null, // http://localhost/,
         'APP_TIMEZONE' => 'UTC',
-        1=>null,
+        1 => null,
 
         'DB_CONNECTION' => null,
         'DB_HOST' => null,
@@ -43,15 +43,24 @@ class ConfigCommand extends Command
         'DB_DATABASE' => null,
         'DB_USERNAME' => null,
         'DB_PASSWORD' => null,
-        2=>null,
+        2 => null,
 
         'CACHE_DRIVER' => 'database',
         'QUEUE_CONNECTION' => 'sync',
-        3=>null,
+        3 => null,
 
         'JWT_SECRET' => null,
         'JWT_TTL' => 3600,
         'JWT_REFRESH_TTL' => 3600,
+
+        4 => null,
+        'length' => 5,
+        'lowercase' => 1,
+        'uppercase' => 1,
+        'digit' => 1,
+        'special' => 1,
+        'specialchar' => '@$!%*#?&',
+
     ];
 
     /**
@@ -131,7 +140,7 @@ class ConfigCommand extends Command
         $tbl = [];
         foreach ($data as $key => $value) {
             if (is_int($key)) {
-                $tbl[] = ['',''];
+                $tbl[] = ['', ''];
                 $this->files->append($path, PHP_EOL);
                 continue;
             }
