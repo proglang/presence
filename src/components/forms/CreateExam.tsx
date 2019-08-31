@@ -21,7 +21,7 @@ export interface ICreateExamFormState {
     data: exam.IUpdateExamData;
 }
 
-class CreateExamForm extends React.Component<ICreateExamFormProps  & ReduxFn & WrappedComponentProps, ICreateExamFormState> {
+class CreateExamForm extends React.Component<ICreateExamFormProps & ReduxFn & WrappedComponentProps, ICreateExamFormState> {
     constructor(props: ICreateExamFormProps  & ReduxFn & WrappedComponentProps) {
         super(props);
         this.state = {

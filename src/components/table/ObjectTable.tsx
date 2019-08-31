@@ -13,12 +13,17 @@ import TypeChangeInput from '../util/TypeChangeInput';
 export type ISortFn1<T> = (key: string | number, val1: T, val2: T) => boolean;
 export type ISortFn2<T> = (val1: T, val2: T) => boolean;
 
+export interface IObjectTableHeader<T> {
+    k: string | number
+    fn?: ((val: T) => [any, boolean])
+    t: any
+}
 export interface IObjectTableProps<T> {
     format?: { [key: number]: {}, [key: string]: {} };
     sortable?: boolean | ISortFn1<T> | { [key: number]: boolean | ISortFn2<T>, [key: string]: boolean | ISortFn2<T> };
     defaultSortCol?: number | string;
 
-    header: { k: string | number, fn?: ((val: T) => [any, boolean]), t: any }[]
+    header: IObjectTableHeader<T>[]
     data: { [key: number]: T, [key: string]: T };
 
     verifier?: { [key: number]: (val: T) => boolean };
@@ -197,7 +202,7 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                                 </Table.HeaderCell>
                             })}
                             {mobile &&
-                                <Table.HeaderCell style={{ padding: 0 }}>
+                                <Table.HeaderCell style={{ padding: 0 }} colSpan={header.length}>
                                     <TypeChangeInput
                                         fluid
                                         onChange={this.OnFilterChange("global")}

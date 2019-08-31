@@ -10,8 +10,8 @@ import { injectIntl, WrappedComponentProps, FormattedMessage } from 'react-intl'
 import * as examstudent from '../../api/api.exam.student';
 import * as examuser from '../../api/api.exam.user';
 
-import ObjectTable from '../table/ObjectTable';
-import { Popup, Button, Container, Checkbox } from 'semantic-ui-react';
+import ObjectTable, { IObjectTableHeader } from '../table/ObjectTable';
+import { Popup, Button, Container, Checkbox, Responsive } from 'semantic-ui-react';
 import ExamStudentForm from '../forms/ExamStudentForm';
 import DeleteExamStudentModal from '../modal/DeleteExamStudentModal';
 import AddStudentListForm from '../forms/AddStudentListForm';
@@ -24,6 +24,7 @@ export interface IExamStudentPageProps {
 export interface IExamStudentPageState {
     loading: boolean;
     updatePresence: { [key: number]: boolean }
+    currentWidth: number
 }
 
 class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & ReduxProps & WrappedComponentProps, IExamStudentPageState> {
@@ -31,7 +32,8 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
         super(props);
         this.state = {
             loading: false,
-            updatePresence: {}
+            updatePresence: {},
+            currentWidth: 0
         }
     }
 
@@ -107,23 +109,35 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
         return [ret, false];
     }
 
-  export = () => {
-    const present = (log: examstudent.IData) => log.present?"y":"n";
-    const ex = new Exporter(Object.values(this.props.student), [
-      { k: 'id', t: 'id' },
-      { k: 'ident', t: 'ident' },
-      { k: 'name', t: 'name' },
-      { k: present, t: 'present' },
-    ])
-    //ex.toCSV('log');
-    // ex.toXLS('log');
-    // ex.toJSON('log');
-    ex.toXLSX('student')
-  }
+    export = () => {
+        const present = (log: examstudent.IData) => log.present ? "y" : "n";
+        const ex = new Exporter(Object.values(this.props.student), [
+            { k: 'id', t: 'id' },
+            { k: 'ident', t: 'ident' },
+            { k: 'name', t: 'name' },
+            { k: present, t: 'present' },
+        ])
+        //ex.toCSV('log');
+        // ex.toXLS('log');
+        // ex.toJSON('log');
+        ex.toXLSX('student')
+    }
     public render() {
+        //@ts-ignore
+        const mobile = Responsive.onlyComputer.minWidth > this.state.currentWidth;
         const { updatePresence } = this.state
+
+        const header:IObjectTableHeader<examstudent.IData>[] = [
+            { k: "present", t: "label.present", fn: this.addPresence },
+            { k: "ident", t: "label.ident" },
+            { k: "name", t: "label.name" },
+        ]
+        if (!mobile) {
+            header.push({ k: 'btn', fn: this.addButtons, t: <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> })
+        }
         return (
             <Container as="main">
+                <Responsive key="1" fireOnMount onUpdate={(_, data: any) => this.setState({ currentWidth: data.width })} />,
                 <Table
                     format={{ 1: { collapsing: true } }}
                     sortable={{
@@ -131,17 +145,13 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
                     }}
                     colPropFn={
                         (d: examstudent.IData, col: any) =>
-                            col !== 'present' ? null : { style: { backgroundColor: updatePresence[d.id] ? 'yellow' : d.present ? 'green' : 'red' },onClick: ()=>this.setPresence(d.id, !d.present) }
+                            col !== 'present' ? null : { style: { backgroundColor: updatePresence[d.id] ? 'yellow' : d.present ? 'green' : 'red' }, onClick: () => this.setPresence(d.id, !d.present) }
                     }
-                    header={[
-                        { k: "present", t: "label.present", fn: this.addPresence },
-                        { k: "ident", t: "label.ident" },
-                        { k: "name", t: "label.name" },
-                        { k: 'btn', fn: this.addButtons, t: <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
+                    header={header}
                     data={this.props.student}
                     filter={{ 'name': true, 'ident': true }}
                     onSelect={(data: examstudent.IData) => { this.props.select(data.id) }}
-                    
+
                     selectKey={'id'}
                     selected={this.props.selected ? [this.props.selected] : undefined}
                 />
