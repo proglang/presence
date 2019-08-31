@@ -23,13 +23,13 @@ class LoginForm extends React.Component<ILoginFormProps &  WrappedComponentProps
     }
     onChange = (e: ChangeEvent<HTMLInputElement>) => this.setState({ data: { ...this.state.data, [e.target.name]: e.target.value } });
     public render() {
-        const pwl = this.props.intl.formatMessage({ id: "auth.label.password" })
-        const usl = this.props.intl.formatMessage({ id: "auth.label.email" })
+        const pwl = this.props.intl.formatMessage({ id: "label.password" })
+        const usl = this.props.intl.formatMessage({ id: "label.email" })
         const { data } = this.state;
         //Todo: Input Validation
         //Todo: Submit Function
         return (
-            <FormBase button="auth.label.submit.login" onSubmit={() => this.props.login(this.state.data)}>
+            <FormBase button="submit.login" onSubmit={() => this.props.login(this.state.data)}>
                 <Form.Input
                     icon="user"
                     iconPosition="left"

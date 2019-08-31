@@ -44,7 +44,7 @@ export default class Dropzone<T> extends React.Component<IDropzoneProps<T>, IDro
                                 <Icon name='file excel' />
                                 <input {...getInputProps()} />
                             </Header>
-                            <Button primary onClick={getRootProps().onClick}><FormattedMessage id="label.document.add"/></Button>
+                            <Button primary onClick={getRootProps().onClick}><FormattedMessage id="label.file.load"/></Button>
                         </div>
                     </Segment>
                 )}

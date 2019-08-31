@@ -30,14 +30,14 @@ class RegisterForm extends React.Component<IRegisterFormProps & WrappedComponent
     }
 
     public render() {
-        const nl = this.props.intl.formatMessage({ id: "auth.label.name" })
-        const pwl = this.props.intl.formatMessage({ id: "auth.label.password" })
-        const pwrl = this.props.intl.formatMessage({ id: "auth.label.password.repeat" })
-        const usl = this.props.intl.formatMessage({ id: "auth.label.email" })
-        const tosl = this.props.intl.formatMessage({ id: "auth.label.tos" })
+        const nl = this.props.intl.formatMessage({ id: "label.name" })
+        const pwl = this.props.intl.formatMessage({ id: "label.password" })
+        const pwrl = this.props.intl.formatMessage({ id: "label.password.repeat" })
+        const usl = this.props.intl.formatMessage({ id: "label.email" })
+        // const tosl = this.props.intl.formatMessage({ id: "label.tos" })
         const { data } = this.state;
         return (
-            <FormBase button="auth.label.submit" onSubmit={() => this.props.register(this.state.data)}>
+            <FormBase button="submit.register" onSubmit={() => this.props.register(this.state.data)}>
                 <Form.Input
                     icon="user"
                     iconPosition="left"
@@ -80,13 +80,14 @@ class RegisterForm extends React.Component<IRegisterFormProps & WrappedComponent
                     onChange={this.onChange}
                     validator={() => validate.password2(data.password, data.password2)}
                 />
-                <Form.Checkbox
+                
+                {/*<Form.Checkbox
                     name="tos"
                     label={tosl}
                     checked={data.tos}
                     onChange={this.onCBtnChange}
-                    validator={() => data.tos === true ? true : "error.tos"}
-                />
+                    validator={() => data.tos === true ? true : {id: "validation.tos"}}
+                />*/}
             </FormBase>)
     }
 }

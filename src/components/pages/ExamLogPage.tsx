@@ -59,7 +59,7 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
       const btn = <Popup
         key="1"
         trigger={<Button basic icon='edit' onClick={() => goto(data.id)} />}
-        content={(<FormattedMessage id="common.button.edit" />)}
+        content={(<FormattedMessage id="label.edit" />)}
       />
       ret.push(btn);
     }
@@ -67,7 +67,7 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
       const btn = <Popup
         key="7"
         trigger={<DeleteExamLogModal key="7" exam={exam.id} id={data.id} />}
-        content={(<FormattedMessage id="common.button.delete" />)}
+        content={(<FormattedMessage id="label.delete" />)}
       />
       ret.push(btn);
     }
@@ -76,6 +76,7 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
   addStudent = (log: examlog.IData): [any, boolean] => {
     if (!log.student) return [null, true]
     const s = this.props.student[log.student]
+    if (!s) return [null, true];
     return [`${s.name} (${s.ident})`, true]
   }
   export2 = () => {
@@ -89,7 +90,7 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
       { k: date, t: 'date' }
     ])
 
-    const present = (log: examstudent.IData) => log.present?"y":"n";
+    const present = (log: examstudent.IData) => log.present ? "y" : "n";
     const ex2 = new Exporter(Object.values(this.props.student), [
       { k: 'id', t: 'id' },
       { k: 'ident', t: 'ident' },
@@ -119,25 +120,25 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
         <Table
           format={{ 1: { collapsing: true } }}
           sortable={{
-            text: true, user: true, date: true
+            text: true, user: true, date: true, student: true
           }}
           header={[
-            { k: "text", t: "common.text" },
-            { k: "user", t: "common.user" },
-            { k: "date", t: "common.date", fn: (val) => [getDateTimeString(this.props.intl, val.date), true] },
-            { k: "student", t: "common.student", fn: this.addStudent },
+            { k: "text", t: "label.text" },
+            { k: "student", t: "label.ident", fn: this.addStudent },
+            { k: "date", t: "label.date", fn: (val) => [getDateTimeString(this.props.intl, val.date), true] },
+            { k: "user", t: "label.user" },
             { k: 'btn', fn: this.addButtons, t: <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
           data={this.props.log}
-          filter={{ 'text': true, 'user': true, 'date': true }}
+          filter={{ 'text': true, 'user': true, 'date': true, 'student': true }}
           onSelect={(data: examlog.IData) => { this.props.select(data.id) }}
           selectKey={'id'}
           selected={this.props.selected ? [this.props.selected] : undefined}
         />
         <ExamLogForm add={true} />
         {this.props.selected && <ExamLogForm add={false} />}
-        <Button onClick={this.export} content={'export'} />
 
-        {<Button onClick={this.export2} content="ts"/>}
+        <Button onClick={this.export} content={'export'} />
+        {<Button onClick={this.export2} content="ts" />}
       </Container>
     );
   }

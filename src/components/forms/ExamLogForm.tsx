@@ -65,7 +65,7 @@ class ExamLogForm extends React.Component<IExamLogFormProps & ReduxFn & ReduxPro
         const student = this.props.intl.formatMessage({ id: "label.select.student" })
         const text = this.props.intl.formatMessage({ id: "label.text" })
         return (
-            <FormBase button={"label.submit." + (this.props.add ? "add" : "update")} onSubmit={this.addLog}>
+            <FormBase button={"submit" + (this.props.add ? "" : ".update")+".log"} onSubmit={this.addLog}>
                 <Form.Input
                     name="ident"
                     type="text"

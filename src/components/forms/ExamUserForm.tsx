@@ -8,7 +8,7 @@ import { injectIntl, WrappedComponentProps, FormattedMessage } from 'react-intl'
 import { FormBase } from './FormBase'
 import { connect } from 'react-redux';
 import * as examuser from '../../api/api.exam.user';
-import { Form, Grid, Icon, Label, Dropdown } from 'semantic-ui-react';
+import { Form, Grid, Icon, Label, Dropdown, Responsive } from 'semantic-ui-react';
 import { IReduxRootProps } from '../../rootReducer';
 
 
@@ -74,10 +74,14 @@ class ExamUserForm extends React.Component<IExamUserFormProps & ReduxFn & ReduxP
         const { data } = this.state;
         const ri = examuser.rightIcons;
         const baserights = Object.keys(ri);
-        const getIndex = (index: number) => index < 3 ? 0 : index < 7 ? 1 : index < 11 ? 2 : index < 16 ? 3 : 4;
+        // with room: const getIndex = (index: number) => index < 3 ? 0 : index < 7 ? 1 : index < 11 ? 2 : index < 16 ? 3 : 4;
+        const getIndex = (index: number) => index < 3 ? 0 : index < 7 ? 1 : index < 12 ? 2 : 3;
         const lst = baserights.reduce((prev: string[][], cur: string, index: number) => { prev[getIndex(index)].push(cur); return prev }, [[], [], [], [], []])
+
+        //@ts-ignore
+        const width: number = Responsive.onlyComputer.minWidth
         return (
-            <FormBase button={"label.submit." + (this.props.add ? "add" : "update")} onSubmit={this.addUser}>
+            <FormBase button={"submit" + (this.props.add ? "" : ".update") + ".user"} onSubmit={this.addUser}>
                 {this.props.add && <Form.Input
                     name="email"
                     type="email"
@@ -94,45 +98,66 @@ class ExamUserForm extends React.Component<IExamUserFormProps & ReduxFn & ReduxP
                     value={data.note}
                     onChange={this.onChange}
                 />
-                <Grid>
-                    {
-                        lst.map((value, index) => {
-                            //@ts-ignore
-                            return <Grid.Row columns={5} key={index}>
-                                {
-                                    value.map((val, i) => {
-                                        return [<Grid.Column key={i}>
-                                            <Form.Checkbox onClick={undefined/*this.onChangeCB*/} checked={!!Object(data.rights)[val]} name={val} label={{
-                                                children:
-                                                    <Label>
-                                                        <Icon name={examuser.getIcon(val)} color={examuser.getRightColor(val)} />
-                                                        <FormattedMessage id={"user.rights." + val} />
-                                                    </Label>
-                                            }}
-                                            />
-                                        </Grid.Column>, index === 0 && i === 2 ? <Grid.Column floated={"right"} key={i + 1}>
-                                            <Dropdown
-                                                fluid
-                                                search
-                                                placeholder={''}
-                                                value={this.state.level}
-                                                onChange={this.selectRight}
-                                                scrolling
-                                                clearable
-                                                options={Object.keys(examuser.rank).reduce((val, cur, index): any => ([...val, { key: index, value: cur, text: cur }]), [])}
-                                                selection
-                                            >
+                <Responsive minWidth={width}>
+                    <Grid>
+                        {
+                            lst.map((value, index) => {
+                                //@ts-ignore
+                                return <Grid.Row columns={5} key={index}>
+                                    {
+                                        value.map((val, i) => {
+                                            return [<Grid.Column key={i}>
+                                                <Form.Checkbox onClick={undefined/*this.onChangeCB*/} checked={!!Object(data.rights)[val]} name={val} label={{
+                                                    children:
+                                                        <Label>
+                                                            <Icon name={examuser.getIcon(val)} color={examuser.getRightColor(val)} />
+                                                            <FormattedMessage id={"user.rights." + val} />
+                                                        </Label>
+                                                }}
+                                                />
+                                            </Grid.Column>, index === 0 && i === 2 ? <Grid.Column floated={"right"} key={i + 1}>
+                                                <Dropdown
+                                                    fluid
+                                                    search
+                                                    placeholder={''}
+                                                    value={this.state.level}
+                                                    onChange={this.selectRight}
+                                                    scrolling
+                                                    clearable
+                                                    selection
+                                                    options={
+                                                        Object.keys(examuser.rank).reduce(
+                                                            (val, cur, index): any => ([...val, { key: index, value: cur, text: this.props.intl.formatMessage({ id: "user.rank." + cur }) }])
+                                                            , [])
+                                                    }
+                                                />
+                                            </Grid.Column> : null]
 
-                                            </Dropdown>
-                                        </Grid.Column> : null]
-
-                                    })
-                                }
-                            </Grid.Row>
-                        })
-                    }
-                </Grid>
-            </FormBase>
+                                        })
+                                    }
+                                </Grid.Row>
+                            })
+                        }
+                    </Grid>
+                </Responsive >
+                <Responsive maxWidth={width - 1}>
+                    <Dropdown
+                        fluid
+                        search
+                        placeholder={''}
+                        value={this.state.level}
+                        onChange={this.selectRight}
+                        scrolling
+                        clearable
+                        selection
+                        options={
+                            Object.keys(examuser.rank).reduce(
+                                (val, cur, index): any => ([...val, { key: index, value: cur, text: this.props.intl.formatMessage({ id: "user.rank." + cur }) }])
+                                , [])
+                        }
+                    />
+                </Responsive>
+            </FormBase >
         );
     }
 }

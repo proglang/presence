@@ -3,15 +3,15 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import axios, { AxiosResponse } from 'axios';
-import { handleSuccess, IResponse } from './api';
+import axios, { AxiosResponse, AxiosError } from 'axios';
+import { handleSuccess, IResponse, handleError } from './api';
 
 import * as euReducer from '../reducer/exam.user';
 import { SemanticICONS, SemanticCOLORS } from 'semantic-ui-react/dist/commonjs/generic';
 
 export type TRight = 'view' | 'delete' | 'update' |
     'exam_viewuser' | 'exam_adduser' | 'exam_deleteuser' | 'exam_updateuser' |
-    'exam_viewroom' | 'exam_addroom' | 'exam_deleteroom' | 'exam_updateroom' |
+   // 'exam_viewroom' | 'exam_addroom' | 'exam_deleteroom' | 'exam_updateroom' |
     'exam_viewstudent' | 'exam_addstudent' | 'exam_deletestudent' | 'exam_updatestudent' | 'exam_updatestudent_presence' |
     'exam_viewlog' | 'exam_addlog' | 'exam_deletelog' | 'exam_updatelog';
 
@@ -26,10 +26,10 @@ export const rightIcons: { [key in TRight]: SemanticICONS } = {
     'exam_deleteuser': 'address book',
     'exam_adduser': 'address book',
 
-    'exam_viewroom': 'map marker alternate',
+  /*  'exam_viewroom': 'map marker alternate',
     'exam_updateroom': 'map marker alternate',
     'exam_deleteroom': 'map marker alternate',
-    'exam_addroom': 'map marker alternate',
+    'exam_addroom': 'map marker alternate',*/
 
     'exam_viewstudent': 'graduation cap',
     'exam_updatestudent': 'graduation cap',
@@ -55,10 +55,10 @@ export const rank: { [key in TRank]: { [key in TRight]: boolean } } = {
         exam_deleteuser: false,
         exam_adduser: false,
 
-        exam_viewroom: false,
+  /*      exam_viewroom: false,
         exam_updateroom: false,
         exam_deleteroom: false,
-        exam_addroom: false,
+        exam_addroom: false,*/
 
         exam_viewstudent: false,
         exam_updatestudent: false,
@@ -82,10 +82,10 @@ export const rank: { [key in TRank]: { [key in TRight]: boolean } } = {
         exam_deleteuser: false,
         exam_adduser: false,
 
-        exam_viewroom: true,
+    /*    exam_viewroom: true,
         exam_updateroom: false,
         exam_deleteroom: false,
-        exam_addroom: false,
+        exam_addroom: false,*/
 
         exam_viewstudent: true,
         exam_updatestudent: true,
@@ -109,10 +109,10 @@ export const rank: { [key in TRank]: { [key in TRight]: boolean } } = {
         exam_deleteuser: true,
         exam_adduser: true,
 
-        exam_viewroom: true,
+   /*     exam_viewroom: true,
         exam_updateroom: true,
         exam_deleteroom: true,
-        exam_addroom: true,
+        exam_addroom: true,*/
 
         exam_viewstudent: true,
         exam_updatestudent: true,
@@ -175,7 +175,7 @@ export const list = (exam_id: number) => (dispatch: any) => axios.get(`exam/${ex
             dispatch(euReducer._SET(res.data.examusers))
         return true;
     })
-    .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
+    .catch((res: AxiosError<IResponse>) => handleError(res));
 
 export const update = (exam_id: number, user_id: number, data: IUpdateData) => (dispatch: any) => axios.put(`exam/${exam_id}/user/${user_id}`, data)
     .then((res: AxiosResponse<IResponse>) => {
@@ -184,15 +184,14 @@ export const update = (exam_id: number, user_id: number, data: IUpdateData) => (
             dispatch(euReducer._UPDATE(res.data.examuser))
         return true;
     })
-    .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
+    .catch((res: AxiosError<IResponse>) => handleError(res));
 
 export const del = (exam_id: number, user_id: number) => (dispatch: any) => axios.delete(`exam/${exam_id}/user/${user_id}`)
     .then((res: AxiosResponse<IResponse>) => {
         dispatch(euReducer._DELETE(user_id))
         return true;
     })
-    .catch((res: { response: AxiosResponse<IResponse> }) =>
-        ({ data: res.response.data.error, code: res.response.status }))
+    .catch((res: AxiosError<IResponse>) => handleError(res));
 
 export const create = (exam_id: number, data: ICreateData) => (dispatch: any) => axios.post(`exam/${exam_id}/user`, data)
     .then((res: AxiosResponse<IResponse>) => {
@@ -201,4 +200,4 @@ export const create = (exam_id: number, data: ICreateData) => (dispatch: any) =>
             dispatch(euReducer._UPDATE(res.data.examuser))
         return true;
     })
-    .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
+    .catch((res: AxiosError<IResponse>) => handleError(res));

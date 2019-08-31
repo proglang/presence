@@ -56,7 +56,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
       const btn = <Popup
         key="1"
         trigger={<Button basic icon='edit' onClick={() => goto(data.id)} />}
-        content={(<FormattedMessage id="common.button.edit" />)} />
+        content={(<FormattedMessage id="label.edit" />)} />
       ret.push(btn);
     }
     if (data.rights.exam_viewuser) {
@@ -75,14 +75,14 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
       />
       ret.push(btn);
     }
-    if (data.rights.exam_viewroom) {
+    /*if (data.rights.exam_viewroom) {
       const btn = <Popup
         key="5"
         trigger={<Button basic icon='map marker alternate' onClick={() => goto(data.id, "exam/room")} />}
         content={(<FormattedMessage id="nav.exam.room" />)}
       />
       ret.push(btn);
-    }
+    }*/
     if (data.rights.exam_viewlog) {
       const btn = <Popup
         key="6"
@@ -110,7 +110,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
           format={{ 1: { collapsing: true } }}
           sortable={{ 'name': true, 'date': true }}
           header={[
-            { "k": "name", "t": "common.name" }, { "k": "date", "t": "common.date" },
+            { "k": "name", "t": "label.name" }, { "k": "date", "t": "label.date" },
             { "k": 'btn', 'fn': this.addButtons, "t": <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
           data={Object.values(this.props.exams).reduce((acc: any, cur) => { acc[cur.id] = { ...cur, date: getDateTimeString(this.props.intl, cur.date) }; return acc; }, {})}
           filter={{ 'name': true, 'date': true }}

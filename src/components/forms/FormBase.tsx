@@ -9,12 +9,13 @@ import { Form, Message } from 'semantic-ui-react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect, DispatchProp } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
-import { writeMsg } from '../../util/debug';
+import * as api from '../../api/api';
+import { IValidationErrorMsg } from '../../validator/validator';
 
 interface IFormBase_Errors {
-    msg?: string[];
+    msg: IValidationErrorMsg[];
     global?: string;
-    [key: string]: boolean | string | string[] | undefined;
+    field: { [key: string]: boolean };
 }
 interface IFormBase_State {
     errors: IFormBase_Errors;
@@ -29,45 +30,62 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp & Wrapped
     _IsMounted = false;
 
     state: IFormBase_State = {
-        errors: {},
+        errors: { msg: [], field: {} },
         loading: false
     }
     onSubmit(children: React.ReactNode) {
-        const errors: IFormBase_Errors = {};
-        errors.msg = []
+        const errors: IFormBase_Errors = { msg: [], field: {} };
         React.Children.forEach(children, (child) => {
             // Todo: Check Node Type -> Validation depending on type
             const tsnode = child as React.ReactElement;
-            if (tsnode===null) return;
+            if (tsnode === null) return;
             const { validator, value, name } = tsnode.props
             var msg: string | true;
             if (!!validator && (msg = validator(value, tsnode.props)) !== true) {
                 //@ts-ignore
                 errors.msg.push(msg);
-                errors[name] = true;
+                errors.field[name] = true;
             }
         })
-        if (errors.msg.length === 0) delete errors.msg;
-        this.setState({ errors, loading: !errors.msg });
-        if (errors.msg) return;
+        //@ts-ignore
+        this.setState({ errors, loading: !errors.msg.length > 0 });
+        if (errors.msg.length > 0) return;
 
         this.props.onSubmit(this.props.dispatch)
-            .then((res: any) => {
+            .then((res: api.IError | true) => {
                 if (!this._IsMounted) return;
                 this.setState({ loading: false })
                 if (typeof (res) !== 'object') return;
-                const { code, data } = res;
-                this.setState({ errors: { msg: data } })
-                writeMsg(code, data);
+                const errors: IFormBase_Errors = { msg: [], field: {} };
+                const validation = res.validation;
+                if (validation) {
+                    React.Children.forEach(children, (child) => {
+                        // Todo: Check Node Type -> Validation depending on type
+                        const tsnode = child as React.ReactElement;
+                        if (tsnode === null) return;
+                        const { name } = tsnode.props
+                        if (validation.check(name)) {
+                            //@ts-ignore
+                            validation.getMessages(name).forEach(msg => errors.msg.push(msg))
+                            errors.field[name] = true;
+                        }
+                    })
+                } else {
+                    //@ts-ignore
+                    errors.msg.push("Unknown Error!");
+                }
+                this.setState({ errors });
             })
             .catch((err: any) => {
                 if (!this._IsMounted) return;
                 this.setState({ loading: false })
+                const errors: IFormBase_Errors = { msg: [], field: {} };
                 if (err.response === undefined) {
-                    this.setState({ errors: { global: err.message + ": " + err.isAxiosError }, loading: false })
+                    errors.global = err.message + ": " + err.isAxiosError;
                 } else {
-                    this.setState({ errors: err.response.data.errors, loading: false })
+                    errors.global = "Unknwon Error!";
                 }
+                this.setState({ errors });
             })
 
     }
@@ -84,17 +102,18 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp & Wrapped
             <Form onSubmit={() => this.onSubmit(children)} loading={loading} error={Object.keys(errors).length !== 0}>
                 {React.Children.map(children, (node, index) => {
                     const tsnode = node as React.ReactElement<any>;
-                    if (tsnode===null) return;
+                    if (tsnode === null) return;
                     const { validator, ...childProps } = tsnode.props;
-                    return React.createElement(tsnode.type, { key: index, error: errors[tsnode.props.name], ...childProps })
+                    return React.createElement(tsnode.type, { key: index, error: errors.field[tsnode.props.name], ...childProps })
                 })}
                 <Form.Button fluid primary>{this.props.intl.formatMessage({ id: button })}</Form.Button>
-                <Message error>
-                    <Message.List>
-                        {errors.global && <Message.Item>{<FormattedMessage id={errors.global} />}</Message.Item>}
-                        {errors.msg && errors.msg.map(item => <Message.Item key={item}>{<FormattedMessage id={item} />}</Message.Item>)}
-                    </Message.List>
-                </Message>
+                {(errors.global || errors.msg.length > 0) &&
+                    <Message error>
+                        <Message.List>
+                            {errors.global && <Message.Item>{<FormattedMessage id={errors.global} />}</Message.Item>}
+                            {errors.msg.map((item, index) => <Message.Item key={index}>{<FormattedMessage id={item.id} values={item.args} />}</Message.Item>)}
+                        </Message.List>
+                    </Message>}
             </Form>
         );
 

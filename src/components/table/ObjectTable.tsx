@@ -6,6 +6,7 @@
 
 import * as React from 'react';
 import { Icon, Table, Input, InputOnChangeData } from "semantic-ui-react";
+import { injectIntl, WrappedComponentProps, FormattedMessage } from 'react-intl';
 
 
 export type ISortFn1<T> = (key: string | number, val1: T, val2: T) => boolean;
@@ -38,6 +39,13 @@ export interface IObjectTableState<T> {
     sortDir: "ascending" | "descending"
     filter: { [key: number]: {}, [key: string]: {} };
 }
+
+class _TextWrapper extends React.Component<{ id: string } & WrappedComponentProps> {
+    public render() {
+        return <FormattedMessage id={this.props.id} />
+    }
+}
+const TextWrapper = injectIntl(_TextWrapper);
 
 export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>, IObjectTableState<T>> {
     constructor(props: IObjectTableProps<T>) {
@@ -171,13 +179,14 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                     <Table.Row>
                         {header.map((data, index) => {
                             const key = (typeof (data.k) === "string" || typeof (data.k) === "number") ? data.k : null;
+                            const text = typeof (data.t) !== "string" ? data.t : <TextWrapper id={data.t} />;
                             return (
                                 <Table.HeaderCell
                                     sorted={sortCol === key ? sortDir : undefined}
                                     onClick={() => this.handleSort(key)}
                                     key={index}
                                 >
-                                    {data.t}
+                                    {text}
                                 </Table.HeaderCell>
                             )
                         })}

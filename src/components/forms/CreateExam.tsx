@@ -36,11 +36,11 @@ class CreateExamForm extends React.Component<ICreateExamFormProps  & ReduxFn & W
         this.setState({ data: { ...this.state.data, [data.name]: parseDateString(this.props.intl, data.value) } })
     }
     public render() {
-        const name = this.props.intl.formatMessage({ id: "auth.label.name" })
-        const date = this.props.intl.formatMessage({ id: "auth.label.date" })
+        const name = this.props.intl.formatMessage({ id: "label.name" })
+        const date = this.props.intl.formatMessage({ id: "label.date" })
         const { data } = this.state;
         return (
-            <FormBase button="auth.label.submit.CreateExam" onSubmit={() => this.props.create(this.state.data)}>
+            <FormBase button="submit.exam" onSubmit={() => this.props.create(this.state.data)}>
                 <Form.Input
                     name="name"
                     type="text"

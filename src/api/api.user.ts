@@ -3,9 +3,9 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 import * as uReducer from '../reducer/user';
-import { handleSuccess, IResponse } from './api';
+import { handleSuccess, IResponse, handleError } from './api';
 import { deleteToken, getToken, setToken } from '../util/login';
 import { list } from './api.exam'
 
@@ -43,7 +43,7 @@ export const token_login = () => (dispatch: any) => {
             setUser(res.data.user, dispatch);
             return true;
         })
-        .catch((res: { response: AxiosResponse<IResponse> }) => {
+        .catch(() => {
             setUser(undefined, dispatch);
             return false;
         })
@@ -55,7 +55,7 @@ export const login = (data: ILoginData) => (dispatch: any) => axios.post('user/l
         setUser(res.data.user, dispatch);
         return true;
     })
-    .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
+    .catch((res: AxiosError<IResponse>) => handleError(res));
 
 export const register = (data: IRegisterData) => (dispatch: any) => axios.post('user/register', data)
     .then((res: AxiosResponse<IResponse>) => {
@@ -63,7 +63,7 @@ export const register = (data: IRegisterData) => (dispatch: any) => axios.post('
         setUser(res.data.user, dispatch);
         return true;
     })
-    .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
+    .catch((res: AxiosError<IResponse>) => handleError(res));
 
 
 
@@ -71,7 +71,7 @@ export const del = () => (dispatch: any) => axios.delete('user')
     .then((res: AxiosResponse<IResponse>) => {
         return true;
     })
-    .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
+    .catch((res: AxiosError<IResponse>) => handleError(res));
 
 export const logout = () => (dispatch: any) => {
     setUser(undefined, dispatch);

@@ -7,7 +7,7 @@ import * as React from 'react';
 import _Dropzone from '../table/Dropzone';
 import * as examstudent from '../../api/api.exam.student';
 import { connect } from 'react-redux';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { injectIntl, WrappedComponentProps, FormattedMessage } from 'react-intl';
 import { IReduxRootProps } from '../../rootReducer';
 import ObjectTable from '../table/ObjectTable';
 import { Button, Segment } from 'semantic-ui-react';
@@ -61,9 +61,9 @@ class AddStudentListForm extends React.Component<IAddStudentListFormProps & Redu
             </Segment >
         return (
             <Segment basic>
-                <ObjectTable data={Object({ ...data })} header={[{ k: 'ident', t: 'ident' }, { k: 'name', t: 'name' }]} />
-                <Button onClick={this.reset} content="rs" />
-                <Button onClick={this.sendList} content="sl" />
+                <ObjectTable data={Object({ ...data })} header={[{ k: 'ident', t: 'label.ident' }, { k: 'name', t: 'label.name' }]} />
+                <Button onClick={this.reset}><FormattedMessage id="label.reset"/></Button>
+                <Button onClick={this.sendList}><FormattedMessage id="submit.student.list"/></Button>
             </Segment>
         );
     }

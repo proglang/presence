@@ -73,7 +73,7 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
             const btn = <Popup
                 key="1"
                 trigger={<Button basic icon='edit' onClick={() => goto(data.id)} />}
-                content={(<FormattedMessage id="common.button.edit" />)}
+                content={(<FormattedMessage id="label.edit" />)}
             />
             ret.push(btn);
         }
@@ -81,7 +81,7 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
             const btn = <Popup
                 key="7"
                 trigger={<DeleteExamStudentModal key="7" exam={exam.id} id={data.id} />}
-                content={(<FormattedMessage id="common.button.delete" />)}
+                content={(<FormattedMessage id="label.delete" />)}
             />
             ret.push(btn);
         }
@@ -102,7 +102,7 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
                     onClick={() => this.setPresence(data.id, !data.present)}
                 />
             }
-            content={(<FormattedMessage id="common.button.delete" />)}
+            content={(<FormattedMessage id="label.presence.set" />)}
         />
         return [ret, false];
     }
@@ -134,9 +134,9 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
                             col !== 'present' ? null : { style: { backgroundColor: updatePresence[d.id] ? 'yellow' : d.present ? 'green' : 'red' },onClick: ()=>this.setPresence(d.id, !d.present) }
                     }
                     header={[
-                        { k: "present", t: "common.present", fn: this.addPresence },
-                        { k: "ident", t: "common.ident" },
-                        { k: "name", t: "common.name" },
+                        { k: "present", t: "label.present", fn: this.addPresence },
+                        { k: "ident", t: "label.ident" },
+                        { k: "name", t: "label.name" },
                         { k: 'btn', fn: this.addButtons, t: <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
                     data={this.props.student}
                     filter={{ 'name': true, 'ident': true }}

@@ -64,7 +64,7 @@ class ExamStudentForm extends React.Component<IExamStudentFormProps & ReduxFn & 
         const ident = this.props.intl.formatMessage({ id: "label.ident" })
         const { data } = this.state;
         return (
-            <FormBase button={"label.submit." + (this.props.add ? "add" : "update")} onSubmit={this.addUser}>
+            <FormBase button={"submit" + (this.props.add ? "" : ".update")+".student"} onSubmit={this.addUser}>
                 <Form.Input
                     name="ident"
                     type="text"

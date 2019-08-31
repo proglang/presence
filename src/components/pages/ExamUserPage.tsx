@@ -79,11 +79,11 @@ class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxP
         position="top center"
         key={index}
         trigger={<Icon color={examuser.getRightColor(cur[0])} style={{ margin: 0, fontSize: "1.4em" }} size='small' name={cur[1]} />}
-        content={(<FormattedMessage id={"user.right." + cur[0]} />)}
+        content={(<FormattedMessage id={"right.user." + cur[0]} />)}
       />
     }
     )
-    ret.splice(11, 0, <br key="lb" />);
+    ret.splice(7, 0, <br key="lb" />);
     return [ret, true];
   }
   public render() {
@@ -97,8 +97,8 @@ class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxP
             }
           }}
           header={[
-            { k: "name", t: "common.name" }, { k: "email", t: "common.email" }, { k: "note", t: "common.note" },
-            { k: 'rights', fn: this.addRights, t: "common.rights" },
+            { k: "name", t: "label.name" }, { k: "email", t: "label.email" }, { k: "note", t: "label.note" },
+            { k: 'rights', fn: this.addRights, t: "label.rights" },
             { k: 'btn', fn: this.addButtons, t: <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
           data={this.props.user}
           filter={{ 'name': true, 'email': true, 'note': true }}

@@ -46,11 +46,11 @@ class EditExamForm extends React.Component<IEditExamFormProps  & ReduxFn & Wrapp
         this.setState({ data: { ...this.state.data, [data.name]: parseDateString(this.props.intl, data.value) } })
     }
     public render() {
-        const name = this.props.intl.formatMessage({ id: "auth.label.name" })
-        const date = this.props.intl.formatMessage({ id: "auth.label.date" })
+        const name = this.props.intl.formatMessage({ id: "label.name" })
+        const date = this.props.intl.formatMessage({ id: "label.date" })
         const { data } = this.state;
         return (
-            <FormBase button="auth.label.submit.EditExam" onSubmit={() => this.props.update(this.props.exam.id, this.state.data)}>
+            <FormBase button="submit.update.exam" onSubmit={() => this.props.update(this.props.exam.id, this.state.data)}>
                 <Form.Input
                     name="name"
                     type="text"

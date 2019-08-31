@@ -3,8 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import axios, { AxiosResponse } from 'axios';
-import { handleSuccess, IResponse } from './api';
+import axios, { AxiosResponse, AxiosError } from 'axios';
+import { handleSuccess, IResponse, handleError } from './api';
 
 import * as eReducer from '../reducer/exam';
 import * as user from './api.exam.user'
@@ -34,7 +34,7 @@ export const list = () => (dispatch: any) => axios.get('exam')
         }
         return true;
     })
-    .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
+    .catch((res: AxiosError<IResponse>) => handleError(res));
 
 export const select = (index: number) => (dispatch: any) => {
     dispatch(eReducer._SELECT(index));
@@ -57,15 +57,14 @@ export const update = (id: number, data: IUpdateExamData) => (dispatch: any) => 
         }
         return true;
     })
-    .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
+    .catch((res: AxiosError<IResponse>) => handleError(res));
 
 export const del = (id: number) => (dispatch: any) => axios.delete(`exam/${id}`)
     .then((res: AxiosResponse<IResponse>) => {
         dispatch(eReducer._DELETE(id))
         return true;
     })
-    .catch((res: { response: AxiosResponse<IResponse> }) =>
-        ({ data: res.response.data.error, code: res.response.status }))
+    .catch((res: AxiosError<IResponse>) => handleError(res));
 
 export const create = (data: IUpdateExamData) => (dispatch: any) => axios.post(`exam`, { ...data, date: Math.floor(data.date / 1000) })
     .then((res: AxiosResponse<IResponse>) => {
@@ -76,4 +75,4 @@ export const create = (data: IUpdateExamData) => (dispatch: any) => axios.post(`
         }
         return true;
     })
-    .catch((res: { response: AxiosResponse<IResponse> }) => ({ data: res.response.data.error, code: res.response.status }))
+    .catch((res: AxiosError<IResponse>) => handleError(res));
