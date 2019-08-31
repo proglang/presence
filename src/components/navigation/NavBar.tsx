@@ -12,7 +12,6 @@ import { TRights, TRight } from '../../api/api.exam.user';
 import { IReduxRootProps } from '../../rootReducer';
 
 import Logo from '../../_res/logo.png';
-import { number } from 'prop-types';
 // import ExamSelectionDropdown from './ExamSelection';
 
 interface INavLinkItem {

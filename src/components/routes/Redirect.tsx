@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import React from 'react';
-import { Route, RouteProps, Redirect as RedirectReact } from 'react-router-dom'
+import { RouteProps, Redirect as RedirectReact } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { IReduxRootProps } from '../../rootReducer';
 

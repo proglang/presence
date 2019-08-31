@@ -9,6 +9,7 @@
 
   "label.edit": "Edit",
   "label.delete": "Delete",
+  "label.cancel": "Cancel",
   "label.name": "Name",
   "label.user": "User",
   "label.text": "Text",
@@ -82,5 +83,8 @@
   "user.rights.exam_viewlog": "View Log",
   "user.rights.exam_updatelog": "Update Log",
   "user.rights.exam_deletelog": "Delete Log",
-  "user.rights.exam_addlog": "Add Log"
+  "user.rights.exam_addlog": "Add Log",
+
+
+  "error.additionalInfo": "Additional Informations"
 }

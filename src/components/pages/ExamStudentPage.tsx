@@ -127,13 +127,13 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
         const mobile = Responsive.onlyComputer.minWidth > this.state.currentWidth;
         const { updatePresence } = this.state
 
-        const header:IObjectTableHeader<examstudent.IData>[] = [
+        const header: IObjectTableHeader<examstudent.IData>[] = [
             { k: "present", t: "label.present", fn: this.addPresence },
             { k: "ident", t: "label.ident" },
             { k: "name", t: "label.name" },
         ]
         if (!mobile) {
-            header.push({ k: 'btn', fn: this.addButtons, t: <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> })
+            header.push({ k: 'btn', fn: this.addButtons, t: <Button key="btn" basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> })
         }
         return (
             <Container as="main">
