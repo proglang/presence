@@ -41,12 +41,11 @@ export const select = (index: number) => (dispatch: any) => {
     return reload(index)(dispatch);
 }
 export const reload = (index: number) => (dispatch: any) => {
-    return new Promise((cb) => {
-        let i = 0;
-        user.list(index)(dispatch).then(() => { i = i + 1; if (i === 3) cb(); });
-        log.list(index)(dispatch).then(() => { i = i + 1; if (i === 3) cb(); });
-        student.list(index)(dispatch).then(() => { i = i + 1; if (i === 3) cb(); });
-    })
+    return Promise.all([
+        new Promise(res=>user.list(index)(dispatch).finally(()=>res())),
+        new Promise(res=>log.list(index)(dispatch).finally(()=>res())),
+        new Promise(res=>student.list(index)(dispatch).finally(()=>res())),
+    ])
 }
 
 export const update = (id: number, data: IUpdateExamData) => (dispatch: any) => axios.put(`exam/${id}`, { ...data, date: Math.floor(data.date / 1000) })

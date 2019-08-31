@@ -48,7 +48,7 @@ const IntlProvider = connect(mapStateToProps, null)(ip);
 //* ////////////////////////////////////////////////////////
 //*                     Implementation                    //
 //* ////////////////////////////////////////////////////////
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 initLoca()(store.dispatch);
 
 // App

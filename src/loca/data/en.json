@@ -30,6 +30,9 @@
   "validation.name.required": "you have to enter a name!",
   "validation.name.min": "a name must have at least {count} characters",
 
+  "validation.exam.min": "Exam Name must have at least {count} characters",
+
+  
   "validation.email.required": "you have to enter an email!",
   "validation.email.min": "an email must have at least {count} characters",
 
