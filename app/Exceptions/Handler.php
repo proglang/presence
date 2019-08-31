@@ -57,7 +57,10 @@ class Handler extends ExceptionHandler
     {
         $html = config('app.debug') == true ? parent::render($request, $exception)->original : null;
         if ($exception instanceof IRenderException) {
-            return $exception->render()->addJson("errorHTML", $html);
+            $response = $exception->render();
+            if ($html != null)
+                $response->addJson("errorHTML", $html);
+            return $response;
         }
         if ($exception instanceof _ValidationException) {
             foreach ($exception->validator->failed() as $key => $value) {
@@ -70,32 +73,12 @@ class Handler extends ExceptionHandler
             foreach ($exception->validator->errors()->messages() as $key => $value) {
                 $msg[] = $value;
             }
-            return $this->render($request, new ValidationException($msg, $err, $err_args)); /*self::toResponse(
-                $exception,
-                "validation",
-                "Validation Exception",
-                $err,
-                $msg,
-                $err_args,
-                422
-            );*/
+            return $this->render($request, new ValidationException($msg, $err, $err_args));
         }
 
-        $ret = self::createResponse(500);
+        $code = 500;
         if ($exception instanceof NotFoundHttpException)
-            $ret->setStatusCode(404);
-        if (config('app.debug') == true) {
-            $ret->addJson("errordata", [
-                "data" => null,
-                "message" => $exception->getMessage(),
-                "code" => $exception->getCode(),
-                "line" => $exception->getLine(),
-                "file" => $exception->getFile(),
-                "trace" => $exception->getTraceAsString()
-            ]);
-        }
-        $ret->addJsonArray("error", "server.internal");
-        $ret->addJson("errorHTML", $html);
-        return $ret;
+            $code(404);
+        return $this->render($request, new ServerException($exception, $code));
     }
 }

@@ -42,18 +42,11 @@ trait ExceptionHelper
             ];
         }
         if ($args != null)
-        $error_data["args"] =  $args;
-        $error_data["code"] =  [];
+            $error_data["args"] =  $args;
         if ($errorclass != null) {
-            if (is_array($machineMsg)) {
-                foreach ($machineMsg as  $value) {
-                    $error_data["code"][] = $errorclass . "." . $value;
-                }
-            } else {
-                $error_data["code"][] = $errorclass . "." . $machineMsg;
-            }
+            $error_data["code"] = $errorclass . "." . $machineMsg;
         } else {
-            $error_data["code"][] = $errorclass . "." . $machineMsg;
+            $error_data["code"] = $errorclass . "." . $machineMsg;
         }
         $ret->addJson("error", $error_data);
         return $ret;
