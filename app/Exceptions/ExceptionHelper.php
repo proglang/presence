@@ -21,37 +21,41 @@ trait ExceptionHelper
 {
     static protected function toResponse(Exception $error, $errorclass, $msg, $machineMsg, $data = null, $args = null, int $code = null): Response
     {
-        $code = $code==null?$error->getCode():$code;
+        $code = $code == null ? $error->getCode() : $code;
         $ret = self::createResponse($code == 0 ? 500 : $code);
+
+        $error_data = [];
         if ($msg) {
-            $ret->addJsonArray("error.msg", $msg);
+            $error_data["msg"] =  $msg;
         }
         if ($error->getMessage()) {
-            $ret->addJsonArray("error.msg", $error->getMessage());
+            $error_data["msg"] = $error->getMessage();;
         }
         if (config('app.debug') == true) {
-            $ret->addJson("error.debug", [
+            $error_data["debug"] = [
                 "data" => $data,
                 "message" => $error->getMessage(),
                 "code" => $error->getCode(),
                 "line" => $error->getLine(),
                 "file" => $error->getFile(),
                 "trace" => $error->getTraceAsString()
-            ]);
+            ];
         }
-        if ($args!=null)
-            $ret->addJson("error.args", $args);
+        if ($args != null)
+        $error_data["args"] =  $args;
+        $error_data["code"] =  [];
         if ($errorclass != null) {
             if (is_array($machineMsg)) {
                 foreach ($machineMsg as  $value) {
-                    $ret->addJsonArray("error", $errorclass . "." . $value);
+                    $error_data["code"][] = $errorclass . "." . $value;
                 }
-             } else {
-                $ret->addJsonArray("error", $errorclass . "." . $machineMsg);
+            } else {
+                $error_data["code"][] = $errorclass . "." . $machineMsg;
             }
         } else {
-            $ret->addJsonArray("error", $machineMsg);
+            $error_data["code"][] = $errorclass . "." . $machineMsg;
         }
+        $ret->addJson("error", $error_data);
         return $ret;
     }
 }
