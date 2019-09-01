@@ -75,6 +75,6 @@ export const del = () => (dispatch: any) => axios.delete('user')
 
 export const logout = () => (dispatch: any) => {
     setUser(undefined, dispatch);
-    axios.get('user/logout');
+    axios.get('user/logout').finally();
 }
 
