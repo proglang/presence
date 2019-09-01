@@ -1,0 +1,7 @@
+[submodule "api"]
+	path = www/API
+	url = https://github.com/Pyrr/exam_api
+
+[submodule "webapp"]
+	path = www/app
+	url = https://github.com/Pyrr/exam_react
