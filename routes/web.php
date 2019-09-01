@@ -14,7 +14,7 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-$router->group(['prefix' => ''], function ($router) {
+$router->group(['prefix' => 'api'], function ($router) {
     //! /auth
     $router->group(['prefix' => 'user'], function ($router) {
         $router->post('login', ['uses' => 'AuthController@login', 'res' => 'UserResource']);
@@ -88,7 +88,11 @@ $router->group(['prefix' => ''], function ($router) {
             });
         });
     });
-    $router->get('/', ['uses'=>'ApiController@version', 'res'=>'version']);
-    $router->get('/test', ['uses'=>'ApiController@test', 'res'=>'test']);
-    $router->get('/test/test', ['uses'=>'ApiController@test', 'res'=>'test']);
+    $router->get('/', ['uses' => 'ApiController@version', 'res' => 'version']);
+    $router->get('/test', ['uses' => 'ApiController@test', 'res' => 'test']);
+    $router->get('/test/test', ['uses' => 'ApiController@test', 'res' => 'test']);
+});
+
+$router->get('/{any:.*}', function ($any) {
+   return $any;
 });

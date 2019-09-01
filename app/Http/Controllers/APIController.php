@@ -8,6 +8,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Throwable;
 
 class ApiController extends Controller
 {
@@ -20,6 +21,11 @@ class ApiController extends Controller
     }
     public function test()
     {
+        //try {
+        \App\Models\User::find(1);
+        //} catch (Throwable $e) {
+            // return self::createResponse(200, null, false)->setContent('could not connect to database!');
+        //}
         return self::createResponse(200, null, false)
             ->addJson('test', 'test1');
     }

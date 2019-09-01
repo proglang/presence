@@ -55,7 +55,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        $html = config('app.debug') == true ? parent::render($request, $exception)->original : null;
+        $html = (config('app.debug') == true) ? parent::render($request, $exception)->original : null;
         if ($exception instanceof IRenderException) {
             $response = $exception->render();
             if ($html != null)
@@ -77,8 +77,8 @@ class Handler extends ExceptionHandler
         }
 
         $code = 500;
-        if ($exception instanceof NotFoundHttpException)
-            $code(404);
+        if ($exception instanceof NotFoundHttpException) 
+            $code = 404;
         return $this->render($request, new ServerException($exception, $code));
     }
 }
