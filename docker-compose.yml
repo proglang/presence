@@ -23,7 +23,7 @@ api:
   ports:
     - "9000:9000"
   volumes:
-    - ./www/exam_api/:/var/www/html/
+    - ./www/api/:/var/www/html/
   links:
     - mysql
   environment:
@@ -42,7 +42,7 @@ api:
 # Creating container REACT
 ####################################################################################################
 react:
-  build: ./www/exam_react/
+  build: ./www/app/
   ports:
     - "9001:80"
   environment:
