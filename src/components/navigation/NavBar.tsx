@@ -46,7 +46,7 @@ class _NavLinkItem extends React.Component<INavLinkItem & ReduxProps & RouteComp
             );
         }
         return ( // Mobile
-            <Link {...link} className="item" activeClassName="active" location={location} exact={link.exact === undefined ? true : link.exact}>
+            <Link {...link} to={String(link.to).replace("<ID>", redux.selected ? String(redux.selected) : '')} className="item" activeClassName="active" location={location} exact={link.exact === undefined ? true : link.exact}>
                 {icon && <Icon {...icon} />}
                 {label && <FormattedMessage id={label} />}
             </Link>
