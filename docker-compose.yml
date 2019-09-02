@@ -28,7 +28,6 @@ api:
       APP_NAME: api
       APP_ENV: local
       APP_KEY: AAAAAAAAAABBBBBBBBBBCCCCCCCCCCDD
-      APP_URL: http://192.168.2.103/api
       APP_DEBUG: "false"
 
       JWT_SECRET: SECRET_KEY
@@ -47,7 +46,7 @@ app:
   ports:
     - "9001:80"
   environment:
-    API_PATH: http://192.168.2.103/api
+    API_PATH: http://192.52.34.132/api
 
 ####################################################################################################
 # NGINX
