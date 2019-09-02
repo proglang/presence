@@ -30,8 +30,12 @@ export const parseDateString = (intl: IntlShape, str: string): number => {
     const day: number = +ret.groups.day;
     const month: number = +ret.groups.month;
     const year: number = +ret.groups.year;
-
-    if (ret.groups.am) hour = hour + 12;
+    if (ret.groups.am && hour === 12) { // 12AM == 00:00
+        hour = 0;
+    }
+    if (ret.groups.pm && hour !== 12) { // 12PM == 12:00
+        hour = hour + 12;
+    }
 
     return (new Date(year, month, day, hour, min)).getTime();
 }

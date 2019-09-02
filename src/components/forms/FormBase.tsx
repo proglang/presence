@@ -97,7 +97,7 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp & Wrapped
     public render() {
         const { errors, loading } = this.state;
         const { children, button } = this.props;
-        console.log(errors)
+        // console.log(errors)
         return (
             <Form onSubmit={() => this.onSubmit(children)} loading={loading} error={Object.keys(errors).length !== 0}>
                 {React.Children.map(children, (node, index) => {

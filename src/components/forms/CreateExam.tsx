@@ -33,6 +33,7 @@ class CreateExamForm extends React.Component<ICreateExamFormProps & ReduxFn & Wr
     }
     onChange = (e: ChangeEvent<HTMLInputElement>) => this.setState({ data: { ...this.state.data, [e.target.name]: e.target.value } });
     onChangeDate = (e: React.SyntheticEvent<HTMLElement, Event>, data: any) => {
+        
         this.setState({ data: { ...this.state.data, [data.name]: parseDateString(this.props.intl, data.value) } })
     }
     public render() {
@@ -54,6 +55,7 @@ class CreateExamForm extends React.Component<ICreateExamFormProps & ReduxFn & Wr
                     name="date"
                     label={date}
                     placeholder={date}
+                    closable={true}
                     duration={0}
                     value={getDateTimeString(this.props.intl, data.date)}
                     onChange={this.onChangeDate}

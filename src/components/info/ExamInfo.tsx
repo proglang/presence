@@ -32,7 +32,7 @@ class ExamInfo extends React.Component<IExamInfoProps & ReduxProps & WrappedComp
         if (!exams[id]) return (<FormattedMessage id="exam.notFound" values={{ id }} />)
         const exam = exams[id];
         const list = Object.entries(exam.rights)
-            .filter((val: [string, boolean | undefined]) => val[1])
+            .filter((val: [string, boolean | undefined]) => val[1] && examuser.getIcon(val[0]))
             .map((val: [string, boolean | undefined], index: number) =>
                 <List.Item key={index}>
                     <Icon color={examuser.getRightColor(val[0])} style={{ margin: 0, fontSize: "1.4em" }} size='small' name={examuser.getIcon(val[0])} />

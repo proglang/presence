@@ -2,9 +2,11 @@
   "name": "exam_react",
   "version": "0.1.0",
   "license": "MIT",
-  "author": {"name": "Stefan Schweizer"},
+  "author": {
+    "name": "Stefan Schweizer"
+  },
   "private": true,
-  "homepage" : ".",
+  "homepage": ".",
   "dependencies": {
     "@types/jest": "^24.0.15",
     "@types/node": "^12.0.8",
@@ -17,6 +19,7 @@
     "@types/react-router-dom": "^4.3.3",
     "axios": "^0.19.0",
     "flag-icon-css": "^3.3.0",
+    "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-dropzone": "^10.1.5",

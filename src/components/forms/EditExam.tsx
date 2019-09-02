@@ -65,6 +65,7 @@ class EditExamForm extends React.Component<IEditExamFormProps  & ReduxFn & Wrapp
                     label={date}
                     placeholder={date}
                     duration={0}
+                    closable={true}
                     value={getDateTimeString(this.props.intl, data.date)}
                     onChange={this.onChangeDate}
                     dateFormat={getDateFormat(this.props.intl)}
