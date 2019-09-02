@@ -15,6 +15,7 @@ import { IReduxRootProps } from '../../rootReducer';
 
 export interface IExamStudentFormProps {
     add: boolean;
+    onSuccess?: () => any
 }
 
 export interface IExamStudentFormState {
@@ -52,19 +53,28 @@ class ExamStudentForm extends React.Component<IExamStudentFormProps & ReduxFn & 
         if (!this.props.student) return this.setState(this.INIT_VALUES);
         this.setState({ data: this.props.student })
     }
+
+    asyncFn = (data: any) => {
+        if (this.props.onSuccess) {
+            this.props.onSuccess();
+        }
+        //Todo: Error Handling
+        console.log(data)
+    }
     addUser = () => {
         const { examid } = this.props;
         if (!examid) return;
+        // Todo: error Handling
         if (this.props.add)
-            return this.props.create(examid, this.state.data)
-        return this.props.update(examid, this.state.data.id, this.state.data)
+            return this.props.create(examid, this.state.data).then((data: any) => this.asyncFn(data))
+        return this.props.update(examid, this.state.data.id, this.state.data).then((data: any) => this.asyncFn(data))
     }
     public render() {
         const name = this.props.intl.formatMessage({ id: "label.name" })
         const ident = this.props.intl.formatMessage({ id: "label.ident" })
         const { data } = this.state;
         return (
-            <FormBase button={"submit" + (this.props.add ? "" : ".update")+".student"} onSubmit={this.addUser}>
+            <FormBase button={"submit" + (this.props.add ? "" : ".update") + ".student"} onSubmit={this.addUser}>
                 <Form.Input
                     name="ident"
                     type="text"

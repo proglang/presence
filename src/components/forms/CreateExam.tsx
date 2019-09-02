@@ -15,6 +15,7 @@ import * as validate from '../../validator/validator';
 
 
 export interface ICreateExamFormProps {
+    visible: boolean;
 }
 
 export interface ICreateExamFormState {
@@ -37,6 +38,9 @@ class CreateExamForm extends React.Component<ICreateExamFormProps & ReduxFn & Wr
         this.setState({ data: { ...this.state.data, [data.name]: parseDateString(this.props.intl, data.value) } })
     }
     public render() {
+        if (!this.props.visible) {
+            return null
+        }
         const name = this.props.intl.formatMessage({ id: "label.name" })
         const date = this.props.intl.formatMessage({ id: "label.date" })
         const { data } = this.state;

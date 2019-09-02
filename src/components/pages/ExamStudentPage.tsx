@@ -11,11 +11,12 @@ import * as examstudent from '../../api/api.exam.student';
 import * as examuser from '../../api/api.exam.user';
 
 import ObjectTable, { IObjectTableHeader } from '../table/ObjectTable';
-import { Popup, Button, Container, Checkbox, Responsive } from 'semantic-ui-react';
+import { Popup, Button, Container, Checkbox, Responsive, Modal } from 'semantic-ui-react';
 import ExamStudentForm from '../forms/ExamStudentForm';
 import DeleteExamStudentModal from '../modal/DeleteExamStudentModal';
 import AddStudentListForm from '../forms/AddStudentListForm';
 import Exporter from '../../util/exporter/exporter';
+import { RouteComponentProps } from 'react-router';
 class Table extends ObjectTable<examstudent.IData> { }
 
 export interface IExamStudentPageProps {
@@ -25,23 +26,23 @@ export interface IExamStudentPageState {
     loading: boolean;
     updatePresence: { [key: number]: boolean }
     currentWidth: number
+    editing: boolean
 }
 
-class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & ReduxProps & WrappedComponentProps, IExamStudentPageState> {
-    constructor(props: IExamStudentPageProps & ReduxFn & ReduxProps & WrappedComponentProps) {
+export interface IRouterParams {
+    new: any;
+}
+
+class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & ReduxProps & WrappedComponentProps & RouteComponentProps<IRouterParams>, IExamStudentPageState> {
+    constructor(props: IExamStudentPageProps & ReduxFn & ReduxProps & WrappedComponentProps & RouteComponentProps<IRouterParams>) {
         super(props);
         this.state = {
             loading: false,
             updatePresence: {},
-            currentWidth: 0
+            currentWidth: 0,
+            editing: false
         }
     }
-
-    /* componentDidMount = () => {
-        //| Send Request to Server
-        if (Object.keys(this.props.student).length === 0)
-            this.refreshTable();
-    }*/
     refreshTable = () => {
         if (!this.props.exam) {
             return;
@@ -74,7 +75,7 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
         if (exam.rights.exam_updatestudent) {
             const btn = <Popup
                 key="1"
-                trigger={<Button basic icon='edit' onClick={() => goto(data.id)} />}
+                trigger={<Button basic icon='edit' onClick={() => { goto(data.id); this.setState({ editing: true }) }} />}
                 content={(<FormattedMessage id="label.edit" />)}
             />
             ret.push(btn);
@@ -88,6 +89,30 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
             ret.push(btn);
         }
         return [ret, false];
+    }
+    addHeadButtons = () => {
+        let ret = [
+            <Button key="1" basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} />,
+        ]
+        const _new = this.props.match.params.new;
+
+        const onclick = (path?: string) => {
+            let current = this.props.location.pathname;
+            if (_new)
+                current = current.replace("/" + _new, "")
+            this.props.history.push((current + "/" + (path ? path : "")).replace("//", "/"))
+        }
+        if (_new !== "add") {
+            ret.push(<Button key="2" basic icon="plus" onClick={() => onclick("add")} />)
+        } else {
+            ret.push(<Button key="2" basic icon="minus" onClick={() => onclick()} />);
+        }
+        if (_new !== "list") {
+            ret.push(<Button key="3" basic icon="list" onClick={() => onclick("list")} />)
+        } else {
+            ret.push(<Button key="3" basic icon="minus" onClick={() => onclick()} />);
+        }
+        return ret;
     }
     addPresence = (data: examstudent.IData): [any, boolean] => {
         const { exam } = this.props
@@ -133,11 +158,15 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
             { k: "name", t: "label.name" },
         ]
         if (!mobile) {
-            header.push({ k: 'btn', fn: this.addButtons, t: <Button key="btn" basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> })
+            header.push({ k: 'btn', fn: this.addButtons, t: this.addHeadButtons() })
         }
+        // <Button onClick={this.export} content={'export'} />
         return (
             <Container as="main">
-                <Responsive key="1" fireOnMount onUpdate={(_, data: any) => this.setState({ currentWidth: data.width })} />,
+                {this.props.match.params.new === "list" && <AddStudentListForm />}
+                {this.props.match.params.new === "add" && <ExamStudentForm add={true} />}
+
+                <Responsive key="1" fireOnMount onUpdate={(_, data: any) => this.setState({ currentWidth: data.width })} />
                 <Table
                     format={{ 1: { collapsing: true } }}
                     sortable={{
@@ -155,10 +184,15 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
                     selectKey={'id'}
                     selected={this.props.selected ? [this.props.selected] : undefined}
                 />
-                <AddStudentListForm />
-                <ExamStudentForm add={true} />
-                {this.props.selected && <ExamStudentForm add={false} />}
-                <Button onClick={this.export} content={'export'} />
+                <Modal
+                    open={!!(this.props.selected && this.state.editing)}
+                    closeIcon={true}
+                    onClose={() => this.setState({ editing: false })}
+                >
+                    <Modal.Content>
+                        <ExamStudentForm add={false} onSuccess={() => this.setState({ editing: false })}/>
+                    </Modal.Content>
+                </Modal>
             </Container>
         );
     }

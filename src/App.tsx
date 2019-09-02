@@ -62,11 +62,6 @@ class App extends React.Component<IAppProps & { login: any, login2: any }, IAppS
     this.props.login()
       .then(() => this.setState({ loading: false }))
       .catch(() => this.setState({ loading: false }));
-    // todo remove!
-    //this.props.login2({ email: "test1@test.test", "password": "ABcd1234##" })
-    //  .then(() => this.setState({ loading: false }))
-    //  .catch(() => this.setState({ loading: false }));
-
   }
 
   public render() {
@@ -95,11 +90,11 @@ class App extends React.Component<IAppProps & { login: any, login2: any }, IAppS
 
             <GuestRoute path="/login" exact component={LoginPage} />
             <PublicRoute path="/logout" exact component={LogoutPage} />
-            <UserRoute path="/exam/list" exact component={ExamPage} />
+            <UserRoute path="/exam/list/:new?" exact component={ExamPage} />
             <UserRoute path="/user" exact component={UserPage} />
-            <UserRoute req="exam_viewuser" path="/exam/:id/user" exact component={ExamUserPage} />
-            <UserRoute req="exam_viewstudent" path="/exam/:id/student" exact component={ExamStudentPage} />
-            <UserRoute req="exam_viewlog" path="/exam/:id/log" exact component={ExamLogPage} />
+            <UserRoute req="exam_viewuser" path="/exam/:id/user/:new?" exact component={ExamUserPage} />
+            <UserRoute req="exam_viewstudent" path="/exam/:id/student/:new?" exact component={ExamStudentPage} />
+            <UserRoute req="exam_viewlog" path="/exam/:id/log/:new?" exact component={ExamLogPage} />
 
             <PublicRoute component={Error404} />
           </Switch>

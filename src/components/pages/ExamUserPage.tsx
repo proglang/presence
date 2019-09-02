@@ -8,10 +8,11 @@ import { injectIntl, WrappedComponentProps, FormattedMessage } from 'react-intl'
 import { IReduxRootProps } from '../../rootReducer';
 import { connect } from 'react-redux';
 import * as examuser from '../../api/api.exam.user';
-import { Popup, Button, Container, Icon, SemanticICONS } from 'semantic-ui-react';
+import { Popup, Button, Container, Icon, SemanticICONS, Modal } from 'semantic-ui-react';
 import ObjectTable from '../table/ObjectTable';
 import ExamUserForm from '../forms/ExamUserForm'
 import DeleteExamUserModal from '../modal/DeleteExamUserModal';
+import { RouteComponentProps } from 'react-router';
 
 class Table extends ObjectTable<examuser.IData> { }
 
@@ -20,14 +21,20 @@ export interface IExamUserPageProps {
 
 export interface IExamUserPageState {
   loading: boolean;
+  editing: boolean
 }
 
-class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxProps & WrappedComponentProps, IExamUserPageState> {
-  constructor(props: IExamUserPageProps & ReduxFn & ReduxProps & WrappedComponentProps) {
+export interface IRouterParams {
+  new: any;
+}
+
+class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxProps & WrappedComponentProps & RouteComponentProps<IRouterParams>, IExamUserPageState> {
+  constructor(props: IExamUserPageProps & ReduxFn & ReduxProps & WrappedComponentProps & RouteComponentProps<IRouterParams>) {
     super(props);
 
     this.state = {
       loading: false,
+      editing: false
     }
   }
   refreshTable = () => {
@@ -51,7 +58,7 @@ class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxP
     if (exam.rights.exam_updateuser) {
       const btn = <Popup
         key="1"
-        trigger={<Button basic icon='edit' onClick={() => goto(data.id)} />}
+        trigger={<Button basic icon='edit' onClick={() => { goto(data.id); this.setState({ editing: true }) }} />}
         content={(<FormattedMessage id="label.edit" />)}
       />
       ret.push(btn);
@@ -65,6 +72,25 @@ class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxP
       ret.push(btn);
     }
     return [ret, false];
+  }
+  addHeadButtons = () => {
+    let ret = [
+      <Button key="1" basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} />,
+    ]
+    const _new = this.props.match.params.new;
+
+    const onclick = (path?: string) => {
+      let current = this.props.location.pathname;
+      if (_new)
+        current = current.replace("/" + _new, "")
+      this.props.history.push((current + "/" + (path ? path : "")).replace("//", "/"))
+    }
+    if (_new !== "add") {
+      ret.push(<Button key="2" basic icon="plus" onClick={() => onclick("add")} />)
+    } else {
+      ret.push(<Button key="2" basic icon="minus" onClick={() => onclick()} />);
+    }
+    return ret;
   }
   addRights = (data: examuser.IData): [any, boolean] => {
     const urights: any = data.rights;
@@ -84,6 +110,7 @@ class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxP
   public render() {
     return (
       <Container as="main">
+      {this.props.match.params.new === "add" && <ExamUserForm add={true} />}
         <Table
           format={{ 1: { collapsing: true } }}
           sortable={{
@@ -94,15 +121,22 @@ class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxP
           header={[
             { k: "name", t: "label.name" }, { k: "email", t: "label.email" }, { k: "note", t: "label.note" },
             { k: 'rights', fn: this.addRights, t: "label.rights" },
-            { k: 'btn', fn: this.addButtons, t: <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
+            { k: 'btn', fn: this.addButtons, t: this.addHeadButtons() }]}
           data={this.props.user}
           filter={{ 'name': true, 'email': true, 'note': true }}
           onSelect={(data: examuser.IData) => { this.props.select(data.id) }}
           selectKey={'id'}
           selected={this.props.selected ? [this.props.selected] : undefined}
         />
-        <ExamUserForm add={true} />
-        {this.props.selected && <ExamUserForm add={false} />}
+        <Modal
+            open={!!(this.props.selected && this.state.editing)}
+            closeIcon={true}
+            onClose={() => this.setState({ editing: false })}
+        >
+            <Modal.Content>
+                <ExamUserForm add={false} onSuccess={() => this.setState({ editing: false })}/>
+            </Modal.Content>
+        </Modal>
       </Container>
     );
   }

@@ -5,31 +5,54 @@
  * https://opensource.org/licenses/MIT
  */
 .footer {
-    width: 100%;
-    background-color: black;
-    color: white;
-    min-height: 2em;
-    text-align: right;
+  width: 100%;
+  background-color: black;
+  color: white;
+  min-height: 2em;
+  text-align: right;
 }
 
 .ui.tempdata {
-    background-color: rgba(0, 119, 255, 0.40)
+  background-color: rgba(0, 119, 255, 0.4);
 }
 
 .ui.tempdata .ui.table {
-    background-color: rgba(255, 255, 255, 0.5)
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .ui.tempdata .ui.table thead th {
-    background-color: rgba(0, 0, 0, 0.5)
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .ui.tempdata .ui.sortable.table thead th:hover {
-    background-color: rgba(0, 0, 0, 0.4)
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .ui.table td > .ui.button {
-    margin: auto
+  margin: auto;
+}
+
+.ui.form .disabled.field,
+.ui.form .disabled.fields .field,
+.ui.form .field :disabled {
+  opacity: 0.7;
+}
+
+body {
+  background-color: rgb(240, 240, 240);
+}
+div#App > div.ui.container {
+    display:flex;
+}
+main, #App>nav>.ui.container {
+  background-color: rgb(50, 50, 50);
+  flex: 1 1 0%;
+  padding: 0 1em;
+}
+main > form {
+    background-color: white;
+    padding: 1em;
+    border-radius: 4px;
 }
 /*
 .ui.tempdata .ui.table thead th input {

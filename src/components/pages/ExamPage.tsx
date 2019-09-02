@@ -7,7 +7,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { IReduxRootProps } from '../../rootReducer';
-import { Container, Popup, Button} from 'semantic-ui-react';
+import { Container, Popup, Button, Modal } from 'semantic-ui-react';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import ObjectTable from '../table/ObjectTable';
 import { withRouter, RouteComponentProps } from 'react-router';
@@ -26,13 +26,18 @@ export interface IExamPageProps {
 
 export interface IExamPageState {
   loading: boolean;
+  editing: boolean;
 }
 
-class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & WrappedComponentProps & RouteComponentProps<{}>, IExamPageState> {
-  constructor(props: IExamPageProps & ReduxProps & ReduxFn & WrappedComponentProps & RouteComponentProps<{}>) {
+export interface IRouterParams {
+  new: any;
+}
+class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & WrappedComponentProps & RouteComponentProps<IRouterParams>, IExamPageState> {
+  constructor(props: IExamPageProps & ReduxProps & ReduxFn & WrappedComponentProps & RouteComponentProps<IRouterParams>) {
     super(props);
     this.state = {
       loading: false,
+      editing: false
     }
   }
   componentDidMount = () => {
@@ -45,7 +50,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
     this.setState({ loading: true });
     this.props.load().then(() => this.setState({ loading: false })).catch(() => this.setState({ loading: false }))
   }
-  addButtons = (data: exam.IData):[any, boolean] => {
+  addButtons = (data: exam.IData): [any, boolean] => {
     const goto = (id: number, path: string | null = null) => {
       this.props.select(id);
       if (path)
@@ -55,7 +60,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
     if (data.rights.update) {
       const btn = <Popup
         key="1"
-        trigger={<Button basic icon='edit' onClick={() => goto(data.id)} />}
+        trigger={<Button basic icon='edit' onClick={() => { goto(data.id); this.setState({ editing: true }) }} />}
         content={(<FormattedMessage id="label.edit" />)} />
       ret.push(btn);
     }
@@ -94,32 +99,51 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
     if (data.rights.delete) {
       const btn = <Popup
         key="7"
-        trigger={<DeleteExamModal key="7" id={data.id}/>}
+        trigger={<DeleteExamModal key="7" id={data.id} />}
         content={(<FormattedMessage id="nav.exam.log" />)}
       />
       ret.push(btn);
     }
     return [ret, false];
-    //return Object.entries(data.rights).map((value) => <p>{value[0]}{value[1] ? 1 : 0}</p>)
+  }
+  addHeadButtons = () => {
+    let ret = [
+      <Button key="1" basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} />,
+    ]
+
+    const _new = this.props.match.params.new;
+    !_new ? ret.push(<Button key="2" basic icon="plus" onClick={() => this.props.history.push(this.props.location.pathname + "/add")} />)
+      : ret.push(<Button key="3" basic icon="minus" onClick={() => this.props.history.push(this.props.location.pathname.replace("/add", ""))} />);
+
+    return ret;
   }
   public render() {
-    //Todo: Selection not visible if only 1 exam exists and page is opened the first time
+    const _new = this.props.match.params.new;
     return (
       <Container as="main">
+        <CreateExam visible={!!_new} />
         <Table
           format={{ 1: { collapsing: true } }}
           sortable={{ 'name': true, 'date': true }}
           header={[
             { "k": "name", "t": "label.name" }, { "k": "date", "t": "label.date" },
-            { "k": 'btn', 'fn': this.addButtons, "t": <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
+            { "k": 'btn', 'fn': this.addButtons, "t": this.addHeadButtons() }]}
           data={Object.values(this.props.exams).reduce((acc: any, cur) => { acc[cur.id] = { ...cur, date: getDateTimeString(this.props.intl, cur.date) }; return acc; }, {})}
           filter={{ 'name': true, 'date': true }}
           onSelect={(data: exam.IData) => { this.props.select(data.id) }}
           selectKey={'id'}
           selected={this.props.selected ? [this.props.selected] : undefined}
         />
-        {this.props.selected && <EditExam exam={this.props.exams[this.props.selected]} />}
-        {<CreateExam />}
+        {this.props.selected &&
+          <Modal
+            open={this.state.editing}
+            closeIcon={true}
+            onClose={() => this.setState({ editing: false })}
+          >
+            <Modal.Content>
+              <EditExam exam={this.props.exams[this.props.selected]} />
+            </Modal.Content>
+          </Modal>}
       </Container>
     );
   }
