@@ -100,7 +100,7 @@ class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxP
         position="top center"
         key={index}
         trigger={<Icon color={examuser.getRightColor(cur[0])} style={{ margin: 0, fontSize: "1.4em" }} size='small' name={cur[1]} />}
-        content={(<FormattedMessage id={"right.user." + cur[0]} />)}
+        content={(<FormattedMessage id={"user.rights." + cur[0]} />)}
       />
     }
     )

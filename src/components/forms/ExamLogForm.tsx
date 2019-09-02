@@ -3,13 +3,13 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, FormEvent } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { FormBase } from './FormBase'
 import { connect } from 'react-redux';
 import * as examlog from '../../api/api.exam.log';
 import * as examstudent from '../../api/api.exam.student';
-import { Form, Dropdown } from 'semantic-ui-react';
+import { Form, Dropdown, TextAreaProps } from 'semantic-ui-react';
 import { IReduxRootProps } from '../../rootReducer';
 
 
@@ -33,7 +33,7 @@ class ExamLogForm extends React.Component<IExamLogFormProps & ReduxFn & ReduxPro
 
         this.state = this.INIT_VALUES;
     }
-    onChange = (e: ChangeEvent<HTMLInputElement>) => this.setState({ text: e.target.value });
+    onChange = (event: FormEvent<HTMLTextAreaElement>, data: TextAreaProps) => this.setState({ text: String(data.value) });
     componentDidMount = () => {
         this.reset();
     }
@@ -66,7 +66,7 @@ class ExamLogForm extends React.Component<IExamLogFormProps & ReduxFn & ReduxPro
         const text = this.props.intl.formatMessage({ id: "label.text" })
         return (
             <FormBase button={"submit" + (this.props.add ? "" : ".update")+".log"} onSubmit={this.addLog}>
-                <Form.Input
+                <Form.TextArea
                     name="ident"
                     type="text"
                     label={text}
