@@ -1,9 +1,7 @@
 #!/bin/sh
-
-cd /usr/share/nginx/html/
 echo "SETTING API Path to $API_PATH"
-sed -i -e "s,___API_PATH___,$API_PATH,g" config.js
 
-exec "$@"
+cp /usr/share/nginx/html/config_default.js /usr/share/nginx/html/config.js
+sed -i -e "s,___API_PATH___,$API_PATH,g" /usr/share/nginx/html/config.js
 
-#nginx -g "daemon off;"
+nginx -g 'daemon off;'
