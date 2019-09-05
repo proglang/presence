@@ -1,4 +1,3 @@
-const app_config= {
-   // api_path:'___API_PATH___'
-    api_path:'http://192.168.2.103:80/api'
+const app_config = {
+  api_path: "___API_PATH___"
 };
