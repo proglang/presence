@@ -58,7 +58,7 @@ class AuthController extends Controller
         $data = $request->only('email', 'password', 'name');
         $user = UserRepository::registerUser($data['email'], $data['name'], $data['password']);
         if (!$this->guard()->onceUsingId($user->getID())) {
-            throw new UserException("unknown", "?", 400);
+            throw new UserException("unknown", "?", 500); // that should never happen
         }
         return self::createResponse(201, null, true)->addResource($user->getUserResource());
     }
@@ -70,7 +70,7 @@ class AuthController extends Controller
      *
      * @return App\Http\Response\Response
      */
-    public function verifyUser(int $user_id, string $token)
+    public function verifyUser(int $user_id, string $token) // currently unused
     {
         $user = UserRepository::fromID($user_id);
         if (!$user->verify($token)) {
