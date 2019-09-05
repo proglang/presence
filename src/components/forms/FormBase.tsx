@@ -5,7 +5,7 @@
 
 
 import React from 'react';
-import { Form, Message } from 'semantic-ui-react';
+import { Form, Message} from 'semantic-ui-react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect, DispatchProp } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
@@ -106,7 +106,7 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp & Wrapped
                     const { validator, ...childProps } = tsnode.props;
                     return React.createElement(tsnode.type, { key: index, error: errors.field[tsnode.props.name], ...childProps })
                 })}
-                <Form.Button fluid primary>{this.props.intl.formatMessage({ id: button })}</Form.Button>
+                <Form.Button primary>{this.props.intl.formatMessage({ id: button })}</Form.Button>
                 {(errors.global || errors.msg.length > 0) &&
                     <Message error>
                         <Message.List>

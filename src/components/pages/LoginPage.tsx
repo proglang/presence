@@ -6,12 +6,13 @@
 import * as React from 'react';
 
 import LoginForm from '../forms/LoginForm'
-import RegisterForm from '../forms/RegisterForm'
+import { Container } from 'semantic-ui-react';
 
 export interface ILoginPageProps {
 }
 
 export interface ILoginPageState {
+
 }
 
 export default class LoginPage extends React.Component<ILoginPageProps, ILoginPageState> {
@@ -19,13 +20,15 @@ export default class LoginPage extends React.Component<ILoginPageProps, ILoginPa
     super(props);
 
     this.state = {
+
     }
   }
 
   public render() {
     return (
-        [<LoginForm key="1"/>,
-        <RegisterForm key="2"/>]
+      <Container as="main">
+        <LoginForm/>
+      </Container>
     );
   }
 }

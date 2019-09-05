@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import React, { ChangeEvent } from 'react';
-import {  injectIntl, WrappedComponentProps } from 'react-intl';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { FormBase } from './FormBase'
 import { connect } from 'react-redux';
 import * as exam from '../../api/api.exam';
@@ -12,45 +12,76 @@ import { Form } from 'semantic-ui-react';
 import { DateTimeInput } from 'semantic-ui-calendar-react';
 import { getDateFormat, getTimeFormat, getDateTimeString, parseDateString } from '../../util/time';
 import * as validate from '../../validator/validator';
+import { IReduxRootProps } from '../../rootReducer';
 
 
-export interface IEditExamFormProps {
-    exam: exam.IData;
+export interface IExamFormProps {
+    create: boolean;
+    hidden?: boolean;
+    onSuccess?: () => any
 }
 
-export interface IEditExamFormState {
+export interface IExamFormState {
     data: exam.IUpdateExamData;
 }
 
-class EditExamForm extends React.Component<IEditExamFormProps  & ReduxFn & WrappedComponentProps, IEditExamFormState> {
-    constructor(props: IEditExamFormProps  & ReduxFn & WrappedComponentProps) {
-        super(props);
-        this.state = {
-            data: {
-                name: props.exam.name,
-                date: props.exam.date,
-            }
+type TExamProps = IExamFormProps & ReduxFn & WrappedComponentProps & ReduxProps
+
+class ExamForm extends React.Component<TExamProps, IExamFormState> {
+    INIT_VALUES: IExamFormState = {
+        data: {
+            name: "",
+            date: Date.now(),
         }
     }
-    componentDidUpdate =(prevProps:IEditExamFormProps) => {
-        if (prevProps.exam.id === this.props.exam.id)
-            return;
+    state = this.INIT_VALUES;
+    componentDidMount = () => {
+        this.reset();
+    }
+    componentDidUpdate = (prevProps: TExamProps) => {
+        const oldExam = prevProps.exam;
+        const currentExam = this.props.exam;
+        if (oldExam === null && currentExam === null) return;
+        if (oldExam !== null && currentExam !== null && oldExam.id === currentExam.id) return;
         this.reset();
 
     }
     reset = () => {
-        this.setState({ data: { name: this.props.exam.name, date: this.props.exam.date } })
+        const { exam, create } = this.props;
+        if (exam && !create) {
+            this.setState({ data: { name: exam.name, date: exam.date } })
+        } else {
+            this.setState(this.INIT_VALUES)
+        }
+    }
+
+    asyncFn = (data: any) => {
+        if (this.props.onSuccess) {
+            this.props.onSuccess();
+        }
+        //Todo: Error Handling
+        console.log(data)
+    }
+    submit = () => {
+        const { exam, create, updateExam, createExam } = this.props;
+        if (!create && exam)
+            return updateExam(exam.id, this.state.data).then(this.asyncFn);
+        if (create) return createExam(this.state.data).then(this.asyncFn);
+        return null;
     }
     onChange = (e: ChangeEvent<HTMLInputElement>) => this.setState({ data: { ...this.state.data, [e.target.name]: e.target.value } });
     onChangeDate = (e: React.SyntheticEvent<HTMLElement, Event>, data: any) => {
         this.setState({ data: { ...this.state.data, [data.name]: parseDateString(this.props.intl, data.value) } })
     }
     public render() {
+        if (this.props.hidden) {
+            return null
+        }
         const name = this.props.intl.formatMessage({ id: "label.name" })
         const date = this.props.intl.formatMessage({ id: "label.date" })
         const { data } = this.state;
         return (
-            <FormBase button="submit.update.exam" onSubmit={() => this.props.update(this.props.exam.id, this.state.data)}>
+            <FormBase button={this.props.create ? "submit.exam" : "submit.update.exam"} onSubmit={this.submit}>
                 <Form.Input
                     name="name"
                     type="text"
@@ -77,8 +108,20 @@ class EditExamForm extends React.Component<IEditExamFormProps  & ReduxFn & Wrapp
             </FormBase>)
     }
 }
-
 interface ReduxFn {
-    update: any;
+    updateExam: any;
+    createExam: any
 }
-export default connect(null, { update: exam.update })(injectIntl(EditExamForm));
+
+interface ReduxProps {
+    exam: exam.IData | null,
+}
+const mapStateToProps = (state: IReduxRootProps): ReduxProps => {
+    const { exams } = state;
+    const { selected, ...data } = exams;
+
+    return ({
+        exam: selected ? data[selected] : null
+    })
+}
+export default connect(mapStateToProps, { updateExam: exam.update, createExam: exam.create })(injectIntl(ExamForm));

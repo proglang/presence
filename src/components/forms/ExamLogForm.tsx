@@ -3,7 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import React, { ChangeEvent, FormEvent } from 'react';
+import React, { FormEvent } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { FormBase } from './FormBase'
 import { connect } from 'react-redux';

@@ -123,8 +123,12 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
             text: true, user: true, date: true, student: true
           }}
           header={[
-            { k: "text", t: "label.text" },
-            { k: "student", t: "label.ident", fn: this.addStudent },
+            {
+              k: "text", t: "label.text", fn: ((data) =>
+                [data.text.split("\n").map((val, index) =>
+                  [index > 0 ? <br key={-index} /> : null, <i style={{ fontStyle: "normal" }} key={index}>{val}</i>]), true])
+            },
+            { k: "student", t: "label.student", fn: this.addStudent },
             { k: "date", t: "label.date", fn: (val) => [getDateTimeString(this.props.intl, val.date), true] },
             { k: "user", t: "label.user" },
             { k: 'btn', fn: this.addButtons, t: <Button basic icon="refresh" loading={this.state.loading} onClick={this.refreshTable} /> }]}
@@ -135,7 +139,7 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
           selected={this.props.selected ? [this.props.selected] : undefined}
         />
         <ExamLogForm add={true} />
-        {/*this.props.selected && <ExamLogForm add={false} />*/}
+        {this.props.selected && <ExamLogForm add={false} />}
 
         {/*<Button onClick={this.export} content={'export'} />*/}
         {<Button onClick={this.export2} content="ts" />}

@@ -42,18 +42,20 @@ body {
   background-color: rgb(240, 240, 240);
 }
 div#App > div.ui.container {
-    display:flex;
+  display: flex;
 }
-main, #App>nav>.ui.container {
+main,
+#App > nav > .ui.container {
   background-color: rgb(50, 50, 50);
   flex: 1 1 0%;
   padding: 0 1em;
 }
 main > form {
-    background-color: white;
-    padding: 1em;
-    border-radius: 4px;
+  background-color: white;
+  padding: 1em;
+  border-radius: 4px;
 }
+
 /*
 .ui.tempdata .ui.table thead th input {
     background-color: rgba(255,255,255,0.5)

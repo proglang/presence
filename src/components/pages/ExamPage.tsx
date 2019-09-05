@@ -11,15 +11,12 @@ import { Container, Popup, Button, Modal } from 'semantic-ui-react';
 import { FormattedMessage, WrappedComponentProps, injectIntl } from 'react-intl';
 import ObjectTable from '../table/ObjectTable';
 import { withRouter, RouteComponentProps } from 'react-router';
-import EditExam from '../forms/EditExam';
+import ExamForm from '../forms/ExamForm';
 import { getDateTimeString } from '../../util/time';
-import CreateExam from '../forms/CreateExam';
 import DeleteExamModal from '../modal/DeleteExamModal';
 import * as exam from '../../api/api.exam';
 
 class Table extends ObjectTable<exam.IData> { }
-
-
 
 export interface IExamPageProps {
 }
@@ -121,7 +118,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
     const _new = this.props.match.params.new;
     return (
       <Container as="main">
-        <CreateExam visible={!!_new} />
+        <ExamForm create={true} hidden={!_new} />
         <Table
           format={{ 1: { collapsing: true } }}
           sortable={{ 'name': true, 'date': true }}
@@ -141,7 +138,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
             onClose={() => this.setState({ editing: false })}
           >
             <Modal.Content>
-              <EditExam exam={this.props.exams[this.props.selected]} />
+              <ExamForm create={false} onSuccess={() => this.setState({ editing: false })} />
             </Modal.Content>
           </Modal>}
       </Container>

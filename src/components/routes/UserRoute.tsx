@@ -13,8 +13,6 @@ import * as exam from '../../api/api.exam'
 import { Loader, Dimmer } from 'semantic-ui-react';
 
 
-
-
 export interface IUserRouteProps {
   req?: TRight;
 }

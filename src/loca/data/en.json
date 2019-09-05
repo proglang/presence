@@ -26,6 +26,7 @@
   "label.password.repeat": "Repeat Password",
   "label.date": "Date",
   "label.reset": "Reset",
+  "label.student": "Student",
 
   "validation.name.required": "you have to enter a name!",
   "validation.name.min": "a name must have at least {count} characters",
