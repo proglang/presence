@@ -8,6 +8,7 @@
   "nav.exam.log": "Logs",
   "nav.logout": "Logout",
 
+  "label.register": "registration",
   "label.edit": "Edit",
   "label.delete": "Delete",
   "label.cancel": "Cancel",
@@ -33,8 +34,8 @@
 
   "validation.exam.min": "Exam Name must have at least {count} characters",
 
-  
   "validation.email.required": "you have to enter an email!",
+  "validation.email.unique": "email is already in use!",
   "validation.email.min": "an email must have at least {count} characters",
 
   "validation.password.required": "you have to enter a password!",
@@ -46,6 +47,10 @@
   "validation.password.haslower": "a password must have at least {count} lowercase characters: a-z",
   "validation.password.hasdigit": "a password must have at least {count} digits: 0-9",
   "validation.password.hasspecial": "a password must have at least {count} special characters: {allowed}",
+
+  "validation.ident.unique": "Matriculation numbers have to be unique!",
+
+  "error.logindata": "Email or password wrong",
 
   "submit.login": "Login!",
   "submit.register": "Register Account!",
@@ -89,7 +94,6 @@
   "user.rights.exam_updatelog": "Update Log",
   "user.rights.exam_deletelog": "Delete Log",
   "user.rights.exam_addlog": "Add Log",
-
 
   "error.additionalInfo": "Additional Informations"
 }

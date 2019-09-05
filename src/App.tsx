@@ -22,11 +22,13 @@ import ConfigPage from './components/pages/ConfigPage';
 */
 import { Error404, ErrorConfig } from "./components/pages/ErrorPage";
 
-import { Container } from 'semantic-ui-react';
+import { Container, Modal, Button, Icon } from 'semantic-ui-react';
 import { trace } from './util/debug';
 import { getToken } from './util/login';
 import { connect } from 'react-redux';
-import * as  user from './api/api.user';
+import * as user from './api/api.user';
+import * as error from './api/api.error';
+
 import ExamUserPage from './components/pages/ExamUserPage';
 import ExamStudentPage from './components/pages/ExamStudentPage';
 import ExamLogPage from './components/pages/ExamLogPage';
@@ -36,6 +38,10 @@ import Redirect from './components/routes/Redirect';
 import GuestRoute from './components/routes/GuestRoute';
 import UserRoute from './components/routes/UserRoute';
 
+import { IReduxRootProps } from './rootReducer';
+import { TError } from './reducer/error';
+import { FormattedMessage } from 'react-intl';
+
 
 export interface IAppProps {
 }
@@ -44,8 +50,8 @@ export interface IAppState {
   loading: boolean
 }
 
-class App extends React.Component<IAppProps & { login: any, login2: any }, IAppState> {
-  constructor(props: IAppProps & { login: any, login2: any }) {
+class App extends React.Component<IAppProps & ReduxProps & ReduxFn, IAppState> {
+  constructor(props: IAppProps & ReduxProps & ReduxFn) {
     super(props);
 
     trace("App.tsx", "App()");
@@ -66,8 +72,9 @@ class App extends React.Component<IAppProps & { login: any, login2: any }, IAppS
 
   public render() {
     //active={this.state.loading}
+    const { error } = this.props
     if (!checkConfig()) {
-     return  <div
+      return <div
         id="App"
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
@@ -85,6 +92,16 @@ class App extends React.Component<IAppProps & { login: any, login2: any }, IAppS
       >
         <NavBar />
         <Container style={{ flex: 1 }}>
+          <Modal basic open={!!error} onClose={() => this.props.closeError()} >
+            <Modal.Content>
+              {error && <FormattedMessage id={error} />}
+            </Modal.Content>
+            <Modal.Actions>
+              <Button basic color='red' inverted onClick={() => this.props.closeError()}>
+                <Icon name='remove' /> No
+            </Button>
+            </Modal.Actions>
+          </Modal>
           <Switch>
             <Redirect path="/" exact auth="/exam/list" default="/login" />
 
@@ -103,4 +120,19 @@ class App extends React.Component<IAppProps & { login: any, login2: any }, IAppS
       </div>);
   }
 }
-export default connect(null, { login: user.token_login, login2: user.login })(App)
+
+interface ReduxFn {
+  login: any;
+  login2: any;
+  closeError: any;
+}
+
+interface ReduxProps {
+  error: TError;
+}
+const mapStateToProps = (state: IReduxRootProps): ReduxProps => {
+  return ({
+    error: state.error
+  })
+}
+export default connect(mapStateToProps, { login: user.token_login, login2: user.login, closeError: error.set })(App)

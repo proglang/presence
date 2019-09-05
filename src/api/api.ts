@@ -13,6 +13,8 @@ import * as _user from './api.user'
 import { setToken } from '../util/login';
 import { API_PATH } from '../util/settings';
 import { IValidationErrorMsg } from '../validator/validator';
+import * as eR from '../reducer/error';
+import { store } from '..';
 
 
 // axios.defaults.withCredentials = true;
@@ -48,6 +50,9 @@ class ValidationError {
         return !!this.data[field][type];
 
     }
+    getFields = () => {
+        return Object.keys(this.data);
+    }
     getTypes = (field: string): string[] => {
         if (!this.check(field)) return [];
         return Object.keys(this.data[field]);
@@ -81,6 +86,7 @@ export interface IError {
     validation?: ValidationError,
     internal?: true,
     unhandled?: true,
+    login?: true
 }
 
 export interface IResponse {
@@ -115,7 +121,18 @@ export const handleError = (res: AxiosError<IResponse>): IError => {
         case "validation.error":
             //@ts-ignore
             return { validation: new ValidationError(error.args) }
+        case "user.unauthorized":
+            return { login: true }
+        case "auth.unknown": // JWT-Token Error
+        case "auth.user": // JWT-Token Error
+        case "auth.token.disabled":
+        case "auth.token.expired":
+        case "auth.token.invalid":
+            store.dispatch(eR._SET("error.token"))
+            _user.logout()(store.dispatch)
+            return {}
         default:
+            store.dispatch(eR._SET("error.unhandled"))
             break;
     }
 

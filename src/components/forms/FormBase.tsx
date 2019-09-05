@@ -5,7 +5,7 @@
 
 
 import React from 'react';
-import { Form, Message} from 'semantic-ui-react';
+import { Form, Message } from 'semantic-ui-react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 import { connect, DispatchProp } from 'react-redux';
 import { Dispatch, AnyAction } from 'redux';
@@ -57,7 +57,7 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp & Wrapped
                 this.setState({ loading: false })
                 if (typeof (res) !== 'object') return;
                 const errors: IFormBase_Errors = { msg: [], field: {} };
-                const validation = res.validation;
+                const { validation, login } = res;
                 if (validation) {
                     React.Children.forEach(children, (child) => {
                         // Todo: Check Node Type -> Validation depending on type
@@ -70,8 +70,10 @@ class FormBaseNI extends React.Component<IFormBaseProps & DispatchProp & Wrapped
                             errors.field[name] = true;
                         }
                     })
-                } else {
-                    errors.msg.push({ id: "Unknown Error!" });
+                } else if (login) {
+                    errors.msg.push({ id: "error.logindata" });
+                } else if (res.unhandled){
+                    errors.msg.push({ id: "Error was not handled!!!" });
                 }
                 this.setState({ errors });
             })

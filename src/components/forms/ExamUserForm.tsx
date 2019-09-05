@@ -58,20 +58,19 @@ class ExamUserForm extends React.Component<IExamUserFormProps & ReduxFn & ReduxP
         if (!this.props.user) return this.setState(this.INIT_VALUES);
         this.setState({ data: this.props.user, self: this.props.self, level: "" })
     }
-    addUser = () => {
+    addUser = (): Promise<any> => {
         const { examid } = this.props;
+        //@ts-ignore
         if (!examid) return;
         if (this.props.add)
-            return this.props.create(examid, this.state.data).then((data: any) => this.asyncFn(data))
-        return this.props.update(examid, this.state.data.id, this.state.data).then((data: any) => this.asyncFn(data))
+            return new Promise((res) => this.props.create(examid, this.state.data).then((data: any) => { this.asyncFn(data); res(data) }))
+        return new Promise((res) => this.props.update(examid, this.state.data.id, this.state.data).then((data: any) => { this.asyncFn(data); res(data) }))
     }
 
     asyncFn = (data: any) => {
         if (this.props.onSuccess) {
             this.props.onSuccess();
         }
-        //Todo: Error Handling
-        console.log(data)
     }
     selectRight = (e: any, { value }: any) => {
         const rights: { [key in examuser.TRight]: boolean } = Object(examuser.rank)[value];
@@ -93,7 +92,7 @@ class ExamUserForm extends React.Component<IExamUserFormProps & ReduxFn & ReduxP
             <FormBase button={"submit" + (this.props.add ? "" : ".update") + ".user"} onSubmit={this.addUser}>
                 <Form.Input
                     disabled={!this.props.add}
-                    style={{opacity: 1}}
+                    style={{ opacity: 1 }}
                     name="email"
                     type="email"
                     label={email}
