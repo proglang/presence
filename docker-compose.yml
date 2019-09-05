@@ -22,19 +22,21 @@ api:
     - "9000:9000"
   links:
     - mysql
+  volumes:
+    - ./image/api/:/var/www/html/storage
   environment:
-      APP_NAME: api
-      APP_ENV: local
-      APP_KEY: AAAAAAAAAABBBBBBBBBBCCCCCCCCCCDD
-      APP_DEBUG: "false"
+    APP_NAME: api
+    APP_ENV: local
+    APP_KEY: AAAAAAAAAABBBBBBBBBBCCCCCCCCCCDD
+    APP_DEBUG: "false"
 
-      JWT_SECRET: SECRET_KEY
+    JWT_SECRET: SECRET_KEY
 
-      DB_CONNECTION: mysql
-      DB_HOST: mysql
-      DB_DATABASE: lumen
-      DB_USERNAME: lumen
-      DB_PASSWORD: secret
+    DB_CONNECTION: mysql
+    DB_HOST: mysql
+    DB_DATABASE: lumen
+    DB_USERNAME: lumen
+    DB_PASSWORD: secret
 
 ####################################################################################################
 # APP
@@ -44,7 +46,7 @@ app:
   ports:
     - "9001:80"
   environment:
-    API_PATH: http://192.168.2.103/api
+    API_PATH: http://192.52.34.132/api
 
 ####################################################################################################
 # NGINX
