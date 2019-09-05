@@ -7,6 +7,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as user from '../../api/api.user';
+import { Redirect } from 'react-router';
 
 
 export interface ILogoutPageProps {
@@ -15,8 +16,8 @@ export interface ILogoutPageProps {
 export interface ILogoutPageState {
 }
 
-class LogoutPageC extends React.Component<ILogoutPageProps & {logout: any}, ILogoutPageState> {
-  constructor(props: ILogoutPageProps & {logout: any}) {
+class LogoutPageC extends React.Component<ILogoutPageProps & { logout: any }, ILogoutPageState> {
+  constructor(props: ILogoutPageProps & { logout: any }) {
     super(props);
     this.state = {
     }
@@ -24,16 +25,10 @@ class LogoutPageC extends React.Component<ILogoutPageProps & {logout: any}, ILog
   componentDidMount = () => {
     //| Send Request to Server
     this.props.logout()
-    // Todo: Error Handling
   }
   public render() {
-      //Todo: Loca
-      //Todo: Actual logout page
-    return (
-      <div>
-        <h1>Fancy Logout Page</h1>
-      </div>
+    return (<Redirect to="/" />
     );
   }
 }
-export default connect(null, {logout: user.logout})(LogoutPageC)
+export default connect(null, { logout: user.logout })(LogoutPageC)

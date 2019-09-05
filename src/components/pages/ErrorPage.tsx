@@ -7,6 +7,7 @@ import React from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Message, Icon, Button, Accordion, Container } from 'semantic-ui-react'
 import { FormattedMessage } from 'react-intl';
+import { setTitle } from '../../util/helper';
 
 export interface ICodeErrorProps {
     data?: any;
@@ -16,6 +17,9 @@ export interface IErrorProps extends ICodeErrorProps {
     code: number;
 }
 class ErrorInternal extends React.Component<IErrorProps & RouteComponentProps<{}>> {
+    componentDidMount = () => {
+      setTitle("__error__") // Todo: Loca
+    }
     public render() {
         const { code, children, data, location, canReport } = this.props;
         const js = JSON.stringify({ code: code, data: data, page: location.pathname });

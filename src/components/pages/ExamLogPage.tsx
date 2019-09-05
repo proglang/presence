@@ -16,6 +16,7 @@ import ExamLogForm from '../forms/ExamLogForm'
 import DeleteExamLogModal from '../modal/DeleteExamLogModal';
 import Exporter from '../../util/exporter/exporter';
 import { getDateTimeString } from '../../util/time';
+import { setTitle } from '../../util/helper';
 
 class Table extends ObjectTable<examlog.IData> { }
 
@@ -34,11 +35,9 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
       loading: false,
     }
   }
-  /*componentDidMount = () => {
-    //| Send Request to Server
-    if (Object.keys(this.props.log).length === 0)
-      this.refreshTable();
-  }*/
+  componentDidMount = () => {
+    setTitle("__log__") // Todo: Loca
+  }
   refreshTable = () => {
     if (!this.props.exam) {
       return;
@@ -99,21 +98,6 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
     ])
     Exporter.toXLSX('logfile', ex.toSheet('log'), ex2.toSheet('student'))
   }
-  export = () => {
-    const _s = this.props.student
-    const student = (log: examlog.IData) => !log.student ? "" : `${_s[log.student].name} (${_s[log.student].ident})`;
-    const date = (log: examlog.IData) => getDateTimeString(this.props.intl, log.date);
-    const ex = new Exporter(Object.values(this.props.log), [
-      { k: 'id', t: 'id' },
-      { k: 'text', t: 'text' },
-      { k: student, t: 'student' },
-      { k: date, t: 'date' }
-    ])
-    //ex.toCSV('log');
-    // ex.toXLS('log');
-    // ex.toJSON('log');
-    ex.toXLSX('log')
-  }
   public render() {
     return (
       <Container as="main">
@@ -158,7 +142,7 @@ interface ReduxProps {
   selected?: number
   exam?: { id: number, rights: examuser.TRights }
   self: number | null
-  student: examstudent.IList
+  student: { [key: number]: examstudent.IData }
 }
 const mapStateToProps = (state: IReduxRootProps): ReduxProps => {
   const { examlog, exams: examlist, user: self, examstudent } = state;

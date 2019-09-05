@@ -13,6 +13,7 @@ import ObjectTable from '../table/ObjectTable';
 import ExamUserForm from '../forms/ExamUserForm'
 import DeleteExamUserModal from '../modal/DeleteExamUserModal';
 import { RouteComponentProps } from 'react-router';
+import { setTitle } from '../../util/helper';
 
 class Table extends ObjectTable<examuser.IData> { }
 
@@ -36,6 +37,9 @@ class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxP
       loading: false,
       editing: false
     }
+  }
+  componentDidMount = () => {
+    setTitle("exam user") // Todo: Loca
   }
   refreshTable = () => {
     if (!this.props.exam) {

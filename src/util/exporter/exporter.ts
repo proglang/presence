@@ -5,7 +5,7 @@
 
 
 import XLSX from 'xlsx';
-import { APP_PATH } from '../settings';
+import { APP_NAME } from '../settings';
 
 export type TExportHeadType<T> = { k: string | number | ((val: T) => string), t: string }
 interface IExporterProps<T> {
@@ -29,7 +29,7 @@ class Exporter<T> implements IExporterProps<T> {
         var wb = XLSX.utils.book_new();
         wb.Props = {
             Title: name,
-            Author: APP_PATH,
+            Author: APP_NAME,
             CreatedDate: new Date(Date.now())
         };
         sheets.forEach((val)=> {

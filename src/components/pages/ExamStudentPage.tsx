@@ -17,6 +17,7 @@ import DeleteExamStudentModal from '../modal/DeleteExamStudentModal';
 import AddStudentListForm from '../forms/AddStudentListForm';
 import Exporter from '../../util/exporter/exporter';
 import { RouteComponentProps } from 'react-router';
+import { setTitle } from '../../util/helper';
 class Table extends ObjectTable<examstudent.IData> { }
 
 export interface IExamStudentPageProps {
@@ -43,6 +44,10 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
             editing: false
         }
     }
+    componentDidMount = () => {
+      setTitle("__student__") // Todo: Loca
+    }
+
     refreshTable = () => {
         if (!this.props.exam) {
             return;

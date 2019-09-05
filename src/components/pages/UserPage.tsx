@@ -4,11 +4,12 @@
 // https://opensource.org/licenses/MIT
 
 import * as React from 'react';
-import { Button } from 'semantic-ui-react';
+import { Button, Container } from 'semantic-ui-react';
 import { IReduxRootProps } from '../../rootReducer';
 import * as user from '../../api/api.user';
 import { connect } from 'react-redux';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { setTitle } from '../../util/helper';
 
 export interface IUserPageProps {
 }
@@ -23,12 +24,18 @@ class UserPage extends React.Component<IUserPageProps & ReduxProps & ReduxFn & W
         this.state = {
         }
     }
+    componentDidMount = () => {
+      setTitle("__user__") // Todo: Loca
+    }
+  
     del = () => {
         this.props.delete();
     }
     public render() {
         return (
-            <Button onClick={this.del} />
+            <Container as="main">
+                <Button onClick={this.del} />
+            </Container>
         );
     }
 }

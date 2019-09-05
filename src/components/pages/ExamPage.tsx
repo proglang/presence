@@ -15,6 +15,7 @@ import ExamForm from '../forms/ExamForm';
 import { getDateTimeString } from '../../util/time';
 import DeleteExamModal from '../modal/DeleteExamModal';
 import * as exam from '../../api/api.exam';
+import { setTitle } from '../../util/helper';
 
 class Table extends ObjectTable<exam.IData> { }
 
@@ -38,6 +39,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
     }
   }
   componentDidMount = () => {
+    setTitle("___exams___") // Todo: Loca
     //| Send Request to Server
     if (Object.keys(this.props.exams).length === 0)
       this.refreshTable();
