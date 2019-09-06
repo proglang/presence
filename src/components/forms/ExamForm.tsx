@@ -11,7 +11,6 @@ import * as exam from '../../api/api.exam';
 import { Form } from 'semantic-ui-react';
 import { DateTimeInput } from 'semantic-ui-calendar-react';
 import { getDateFormat, getTimeFormat, getDateTimeString, parseDateString } from '../../util/time';
-import * as validate from '../../validator/validator';
 import { IReduxRootProps } from '../../rootReducer';
 
 
@@ -54,21 +53,23 @@ class ExamForm extends React.Component<TExamProps, IExamFormState> {
             this.setState(this.INIT_VALUES)
         }
     }
-
     asyncFn = (data: any) => {
+        if (data !== true) return;
+        if (this.props.create) {
+            this.setState({ data: { name: "", date: Date.now() } })
+        }
         if (this.props.onSuccess) {
             this.props.onSuccess();
         }
-        //Todo: Error Handling
-        console.log(data)
     }
-    submit = () => {
+    send = (): Promise<any> => {
         const { exam, create, updateExam, createExam } = this.props;
-        if (!create && exam)
-            return updateExam(exam.id, this.state.data).then(this.asyncFn);
-        if (create) return createExam(this.state.data).then(this.asyncFn);
-        return null;
+        if (create)
+            return new Promise((res) => createExam(this.state.data).then((data: any) => { this.asyncFn(data); res(data) }))
+        //@ts-ignore
+        return new Promise((res) => updateExam(exam.id, this.state.data).then((data: any) => { this.asyncFn(data); res(data) }))
     }
+
     onChange = (e: ChangeEvent<HTMLInputElement>) => this.setState({ data: { ...this.state.data, [e.target.name]: e.target.value } });
     onChangeDate = (e: React.SyntheticEvent<HTMLElement, Event>, data: any) => {
         this.setState({ data: { ...this.state.data, [data.name]: parseDateString(this.props.intl, data.value) } })
@@ -81,7 +82,7 @@ class ExamForm extends React.Component<TExamProps, IExamFormState> {
         const date = this.props.intl.formatMessage({ id: "label.date" })
         const { data } = this.state;
         return (
-            <FormBase button={this.props.create ? "submit.exam" : "submit.update.exam"} onSubmit={this.submit}>
+            <FormBase button={this.props.create ? "submit.exam" : "submit.update.exam"} onSubmit={this.send}>
                 <Form.Input
                     name="name"
                     type="text"
@@ -89,9 +90,10 @@ class ExamForm extends React.Component<TExamProps, IExamFormState> {
                     placeholder={name}
                     value={data.name ? data.name : ""}
                     onChange={this.onChange}
-                    validator={() => validate.exam_name(data.name)}
+                    required
                 />
                 <DateTimeInput
+                    required
                     name="date"
                     label={date}
                     placeholder={date}
@@ -102,7 +104,6 @@ class ExamForm extends React.Component<TExamProps, IExamFormState> {
                     dateFormat={getDateFormat(this.props.intl)}
                     timeFormat={getTimeFormat(this.props.intl)}
                     preserveViewMode={false}
-                    validator={() => validate.date(data.date)}
                     localization={this.props.intl.locale}
                 />
             </FormBase>)

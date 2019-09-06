@@ -16,6 +16,7 @@ import { IReduxRootProps } from '../../rootReducer';
 
 export interface IExamLogFormProps {
     add: boolean;
+    onSuccess?: () => void;
 }
 
 export interface IExamLogFormState {
@@ -49,23 +50,37 @@ class ExamLogForm extends React.Component<IExamLogFormProps & ReduxFn & ReduxPro
         if (!this.props.log) return this.setState(this.INIT_VALUES);
         this.setState({ text: this.props.log.text, student: this.props.log.student })
     }
-    addLog = () => {
+    asyncFn = (data: any) => {
+        if (data !== true) return;
+        if (this.props.add) {
+            this.setState({ text: "", student: null })
+        }
+        if (this.props.onSuccess) {
+            this.props.onSuccess();
+        }
+    }
+    send = (): Promise<any> => {
         const { examid } = this.props;
+        //@ts-ignore
         if (!examid) return;
         if (!this.props.add) {
-            if (!this.props.log) return;
-            return this.props.update(examid, this.props.log.id, this.state.text)
+            //@ts-ignore
+            return new Promise((res) => this.props.update(examid, this.props.log.id, this.state.text).then((data: any) => { this.asyncFn(data); res(data) }))
         }
-        if (this.state.student)
+        if (this.state.student) {
             return this.props.create2(examid, this.state.student, this.state.text)
-        return this.props.create(examid, this.state.text)
+        }
+        return new Promise((res) => this.props.create(examid, this.state.text).then((data: any) => { this.asyncFn(data); res(data) }))
+
     }
+
+
     selectStudent = (e: any, { value }: any) => this.setState({ student: typeof (value) === "number" ? value : null })
     public render() {
         const student = this.props.intl.formatMessage({ id: "label.select.student" })
         const text = this.props.intl.formatMessage({ id: "label.text" })
         return (
-            <FormBase button={"submit" + (this.props.add ? "" : ".update")+".log"} onSubmit={this.addLog}>
+            <FormBase button={"submit" + (this.props.add ? "" : ".update") + ".log"} onSubmit={this.send}>
                 <Form.TextArea
                     name="ident"
                     type="text"

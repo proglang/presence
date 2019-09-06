@@ -61,7 +61,7 @@ class DeleteExamStudentModal extends React.Component<IDeleteExamStudentModalProp
                     closeIcon
                 >
                     <Modal.Header>
-                        <FormattedMessage id="exam.student.delete" />
+                        <FormattedMessage id="label.delete" />
                     </Modal.Header>
                     <Modal.Content>
                         <ExamStudentInfo id={this.props.id} />

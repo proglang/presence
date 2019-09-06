@@ -60,7 +60,7 @@ class DeleteExamModal extends React.Component<IDeleteExamModalProps & ReduxFn & 
                     closeIcon
                 >
                     <Modal.Header>
-                        <FormattedMessage id="exam.delete" />
+                        <FormattedMessage id="label.delete" />
                     </Modal.Header>
                     <Modal.Content>
                         <ExamInfo id={this.props.id} />

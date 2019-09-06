@@ -55,26 +55,28 @@ class ExamStudentForm extends React.Component<IExamStudentFormProps & ReduxFn & 
     }
 
     asyncFn = (data: any) => {
+        if (data !== true) return;
+        if (this.props.add) {
+            this.setState({ data: { name: "", ident: "", ...this.state.data } })
+        }
         if (this.props.onSuccess) {
             this.props.onSuccess();
         }
-        //Todo: Error Handling
-        console.log(data)
     }
-    addUser = () => {
+    send = (): Promise<any> => {
         const { examid } = this.props;
+        //@ts-ignore
         if (!examid) return;
-        // Todo: error Handling
         if (this.props.add)
-            return this.props.create(examid, this.state.data).then((data: any) => this.asyncFn(data))
-        return this.props.update(examid, this.state.data.id, this.state.data).then((data: any) => this.asyncFn(data))
+            return new Promise((res) => this.props.create(examid, this.state.data).then((data: any) => { this.asyncFn(data); res(data) }))
+        return new Promise((res) => this.props.update(examid, this.state.data.id, this.state.data).then((data: any) => { this.asyncFn(data); res(data) }))
     }
     public render() {
         const name = this.props.intl.formatMessage({ id: "label.name" })
         const ident = this.props.intl.formatMessage({ id: "label.ident" })
         const { data } = this.state;
         return (
-            <FormBase button={"submit" + (this.props.add ? "" : ".update") + ".student"} onSubmit={this.addUser}>
+            <FormBase button={"submit" + (this.props.add ? "" : ".update") + ".student"} onSubmit={this.send}>
                 <Form.Input
                     name="ident"
                     type="text"
@@ -82,6 +84,7 @@ class ExamStudentForm extends React.Component<IExamStudentFormProps & ReduxFn & 
                     placeholder={ident}
                     value={data.ident}
                     onChange={this.onChange}
+                    required
                 />
                 <Form.Input
                     name="name"
@@ -90,6 +93,7 @@ class ExamStudentForm extends React.Component<IExamStudentFormProps & ReduxFn & 
                     placeholder={name}
                     value={data.name}
                     onChange={this.onChange}
+                    required
                 />
             </FormBase>
         );

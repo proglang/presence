@@ -4,7 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import React from 'react';
-import { Route, RouteProps, Redirect as RedirectReact, withRouter, RouteComponentProps } from 'react-router-dom'
+import { Route, RouteProps, /*Redirect as RedirectReact,*/ withRouter, RouteComponentProps } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { Error401 } from '../pages/ErrorPage'
 import { IReduxRootProps } from '../../rootReducer';
@@ -17,39 +17,39 @@ export interface IUserRouteProps {
   req?: TRight;
 }
 interface IUserRouteState {
-  ret: boolean
+  loading: boolean
+  loaded: boolean
 }
-class UserRoute extends React.Component<IUserRouteProps & RouteProps & ReduxProps & RouteComponentProps & ReduxFn, IUserRouteState> {
+type TProps = IUserRouteProps & RouteProps & ReduxProps & RouteComponentProps & ReduxFn
+class UserRoute extends React.Component<TProps, IUserRouteState> {
   state: IUserRouteState = {
-    ret: false
+    loading: false,
+    loaded: false,
   }
-  wait = false;
+  componentDidUpdate = (props: TProps) => {
+    const { login } = this.props;
+    const { loading, loaded } = this.state;
+    if (!login) return;
+
+
+    //@ts-ignore
+    const id = this.props.computedMatch.params.id
+    if (id === this.props.examid) return;
+    if (loaded) return //this.setState({ loaded: false })
+    if (loading) return;
+
+    if (this.props.examlist[id] && !loading) {
+      this.setState({ loading: true })
+      this.props.loadexam(id).then(() => this.setState({ loading: false, loaded: true }))
+    }
+  }
   public render() {
     const { login, access, req } = this.props;
     if (!login) return (<Error401 />);
-    const { component, ...props } = this.props;
-    if (!this.state.ret) {
-      return <Route {...props} render={(data) => {
-        const params = data.match.params;
-        if (!!params.id && params.id !== this.props.examid) {
-          if (!this.wait) {
-            this.wait = true;
-            if (this.props.examlist[params.id]) {
-              // this.props.selectexam(params.id).then(() => this.setState({ ret: true }))
-              if (req && (!access || !access[req])) return (<RedirectReact to="/" />)
-              return (<Route {...this.props} />);
-            } else {
-              this.props.loadexam(params.id).then(() => this.setState({ ret: true }))
-            }
-          }
-          return <Dimmer active><Loader /></Dimmer>
-        }
-        if (req && (!access || !access[req])) return (<RedirectReact to="/" />)
-        return (<Route {...this.props} />);
-      }
-      } />
+    if (this.state.loading) {
+      return <Dimmer active><Loader /></Dimmer>
     }
-    if (req && (!access || !access[req])) return (<RedirectReact to="/" />)
+    if (req && (!access || !access[req])) return (<Error401 />)
     return (<Route {...this.props} />);
   }
 }

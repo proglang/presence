@@ -36,7 +36,7 @@ class ExamInfo extends React.Component<IExamInfoProps & ReduxProps & WrappedComp
             .map((val: [string, boolean | undefined], index: number) =>
                 <List.Item key={index}>
                     <Icon color={examuser.getRightColor(val[0])} style={{ margin: 0, fontSize: "1.4em" }} size='small' name={examuser.getIcon(val[0])} />
-                    <FormattedMessage id={"user.right." + val[0]} />
+                    <FormattedMessage id={"user.rights." + val[0]} />
                 </List.Item>);
         return (
             <Card fluid centered>
@@ -47,7 +47,7 @@ class ExamInfo extends React.Component<IExamInfoProps & ReduxProps & WrappedComp
                     </Card.Meta>
                     <Card.Description>
                         <Message>
-                            <Message.Header><FormattedMessage id='user.rights' /></Message.Header>
+                            <Message.Header><FormattedMessage id='label.rights' /></Message.Header>
                             <List>{list}</List>
                         </Message>
                     </Card.Description>

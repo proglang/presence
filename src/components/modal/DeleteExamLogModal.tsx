@@ -61,7 +61,7 @@ class DeleteExamLogModal extends React.Component<IDeleteExamLogModalProps & Redu
                     closeIcon
                 >
                     <Modal.Header>
-                        <FormattedMessage id="exam.log.delete" />
+                        <FormattedMessage id="label.delete" />
                     </Modal.Header>
                     <Modal.Content>
                         <ExamLogInfo id={this.props.id} />
