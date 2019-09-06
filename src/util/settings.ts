@@ -21,3 +21,4 @@ export const checkConfig = () => data !== null;
 
 export const API_PATH = getValue('api_path', '/api');
 export const APP_NAME = getValue('app_name', null);
+
