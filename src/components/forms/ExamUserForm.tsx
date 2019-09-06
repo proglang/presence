@@ -102,6 +102,7 @@ class ExamUserForm extends React.Component<IExamUserFormProps & ReduxFn & ReduxP
                     placeholder={email}
                     value={data.email}
                     onChange={this.onChange}
+                    required
                 />
                 <Form.Input
                     name="note"

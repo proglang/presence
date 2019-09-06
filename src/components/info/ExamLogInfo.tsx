@@ -62,7 +62,7 @@ interface ReduxProps {
 const mapStateToProps = (state: IReduxRootProps): ReduxProps => {
     const { selected, ...log } = state.examlog;
     return ({
-        log
+        log:log
     })
 }
 export default connect(mapStateToProps, null)(injectIntl(ExamLogInfo))

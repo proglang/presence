@@ -16,7 +16,7 @@ export interface IExamInfoProps {
     id: number;
 }
 
-export interface IExamInfoState {
+interface IExamInfoState {
 }
 
 class ExamInfo extends React.Component<IExamInfoProps & ReduxProps & WrappedComponentProps, IExamInfoState> {
