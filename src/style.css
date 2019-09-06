@@ -55,7 +55,12 @@ main > form {
   padding: 1em;
   border-radius: 4px;
 }
-
+@media only screen and (max-width: 767px) {
+  .ui.container {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
 /*
 .ui.tempdata .ui.table thead th input {
     background-color: rgba(255,255,255,0.5)
