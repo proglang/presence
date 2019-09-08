@@ -132,6 +132,9 @@ export const handleError = (res: AxiosError<IResponse>): IError => {
             _user.logout()(store.dispatch)
             return {}
         default:
+            if (error.code.includes("useraccess")) {
+                return {};
+            }
             store.dispatch(eR._SET("error.unhandled"))
             break;
     }

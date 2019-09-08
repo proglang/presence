@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import * as examlog from '../../api/api.exam.log';
 import * as examuser from '../../api/api.exam.user';
 import * as examstudent from '../../api/api.exam.student';
-import { Popup, Button, Container } from 'semantic-ui-react';
+import { Popup, Button, Container, Modal } from 'semantic-ui-react';
 import ObjectTable from '../table/ObjectTable';
 import ExamLogForm from '../forms/ExamLogForm'
 import DeleteExamLogModal from '../modal/DeleteExamLogModal';
@@ -25,6 +25,7 @@ export interface IExamLogPageProps {
 
 export interface IExamLogPageState {
   loading: boolean;
+  editing: boolean;
 }
 
 class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxProps & WrappedComponentProps, IExamLogPageState> {
@@ -33,6 +34,7 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
 
     this.state = {
       loading: false,
+      editing: false
     }
   }
   componentDidMount = () => {
@@ -54,15 +56,15 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
     const { exam } = this.props
     if (!exam) return [[], false]
     let ret = [];
-    if (exam.rights.exam_updateuser) {
+    if (exam.rights.exam_updatelog) {
       const btn = <Popup
         key="1"
-        trigger={<Button basic icon='edit' onClick={() => goto(data.id)} />}
+        trigger={<Button basic icon='edit' onClick={() => { goto(data.id); this.setState({ editing: true }) }} />}
         content={(<FormattedMessage id="label.edit" />)}
       />
       ret.push(btn);
     }
-    if (exam.rights.exam_deleteuser) {
+    if (exam.rights.exam_deletelog) {
       const btn = <Popup
         key="7"
         trigger={<DeleteExamLogModal key="7" exam={exam.id} id={data.id} />}
@@ -123,9 +125,16 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
           selected={this.props.selected ? [this.props.selected] : undefined}
         />
         <ExamLogForm add={true} />
-        {this.props.selected && <ExamLogForm add={false} />}
 
-        {/*<Button onClick={this.export} content={'export'} />*/}
+        <Modal
+            open={!!(this.props.selected && this.state.editing)}
+            closeIcon={true}
+            onClose={() => this.setState({ editing: false })}
+        >
+            <Modal.Content>
+                <ExamLogForm add={false} onSuccess={() => this.setState({ editing: false })}/>
+            </Modal.Content>
+        </Modal>
         {<Button onClick={this.export2} content="ts" />}
       </Container>
     );

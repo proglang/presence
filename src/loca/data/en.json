@@ -29,6 +29,13 @@
   "label.reset": "Reset",
   "label.student": "Student",
 
+  "page.exam": "Exams",
+  "page.user": "User",
+  "page.exam.user": "Exam: Users",
+  "page.exam.student": "Exam: Students",
+  "page.exam.log":"Exam: Log",
+  "page.exam.export": "Exam: Export",
+
   "validation.name.required": "you have to enter a name!",
   "validation.name.min": "a name must have at least {count} characters",
 

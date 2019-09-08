@@ -91,7 +91,7 @@ class App extends React.Component<IAppProps & ReduxProps & ReduxFn, IAppState> {
         style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
         <NavBar />
-        <Container style={{ flex: 1 }}>
+        <Container className= {"noMargin"} style={{ flex: 1 }}>
           <Modal basic open={!!error} onClose={() => this.props.closeError()} >
             <Modal.Content>
               {error && <FormattedMessage id={error} />}
