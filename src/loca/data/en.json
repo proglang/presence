@@ -7,6 +7,7 @@
   "nav.exam.user": "Userlist",
   "nav.exam.log": "Logs",
   "nav.logout": "Logout",
+  "nav.exam.export": "Export",
 
   "label.register": "registration",
   "label.edit": "Edit",
@@ -29,14 +30,25 @@
   "label.reset": "Reset",
   "label.student": "Student",
 
+  "label.export.data": "Select Data",
+  "label.export.log": "Log",
+  "label.export.student":"Studentlist",
+
+  "label.export.format": "Select Format",
+  "label.export.xls": ".xls",
+  "label.export.xlsx": ".xlsx",
+  "label.export.csv": ".csv",
+
   "page.exam": "Exams",
   "page.user": "User",
   "page.exam.user": "Exam: Users",
   "page.exam.student": "Exam: Students",
-  "page.exam.log":"Exam: Log",
+  "page.exam.log": "Exam: Log",
   "page.exam.export": "Exam: Export",
   "page.error": "Error!",
   "page.login": "Login",
+
+  "validation.text.required": "you have to enter a text!",
 
   "validation.name.required": "you have to enter a name!",
   "validation.name.min": "a name must have at least {count} characters",
@@ -63,6 +75,8 @@
 
   "submit.login": "Login!",
   "submit.register": "Register Account!",
+
+  "submit.export": "Export!",
 
   "submit.exam": "Create Exam!",
   "submit.update.exam": "Update Exam!",

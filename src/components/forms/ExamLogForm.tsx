@@ -82,12 +82,13 @@ class ExamLogForm extends React.Component<IExamLogFormProps & ReduxFn & ReduxPro
         return (
             <FormBase button={"submit" + (this.props.add ? "" : ".update") + ".log"} onSubmit={this.send}>
                 <Form.TextArea
-                    name="ident"
+                    name="text"
                     type="text"
                     label={text}
                     placeholder={text}
                     value={this.state.text}
                     onChange={this.onChange}
+                    required
                 />
                 <Dropdown
                     disabled={!this.props.add}

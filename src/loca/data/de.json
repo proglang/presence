@@ -7,6 +7,7 @@
   "nav.exam.user": "Nutzer",
   "nav.exam.log": "Logs",
   "nav.logout": "Logout",
+  "nav.exam.export": "Exportieren",
 
   "label.register": "Registrieren",
   "label.edit": "Bearbeiten",
@@ -29,6 +30,15 @@
   "label.reset": "Zurücksetzen",
   "label.student": "Student",
 
+  "label.export.data": "Daten auswählen",
+  "label.export.log": "Protokoll",
+  "label.export.student":"Studenten",
+
+  "label.export.format": "Format auswählen",
+  "label.export.xls": ".xls",
+  "label.export.xlsx": ".xlsx",
+  "label.export.csv": ".csv",
+
   "page.exam": "Prüfungen",
   "page.user": "Nutzer",
   "page.exam.user": "Prüfung: Nutzer",
@@ -37,6 +47,8 @@
   "page.exam.export": "Prüfung: Export",
   "page.error": "Fehler",
   "page.login": "Login",
+
+  "validation.text.required": "Bitte geben Sie einen Text ein!",
 
   "validation.name.required": "Bitte geben Sie einen Namen ein!",
   "validation.name.min": "Ein Name muss mindestens {count} Zeichen lang sein",
@@ -63,6 +75,8 @@
 
   "submit.login": "Einloggen",
   "submit.register": "Account erstellen",
+
+  "submit.export": "Exportieren",
 
   "submit.exam": "Prüfung erstellen",
   "submit.update.exam": "Prüfung bearbeiten",

@@ -135,7 +135,6 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
                 <ExamLogForm add={false} onSuccess={() => this.setState({ editing: false })}/>
             </Modal.Content>
         </Modal>
-        {<Button onClick={this.export2} content="ts" />}
       </Container>
     );
   }
