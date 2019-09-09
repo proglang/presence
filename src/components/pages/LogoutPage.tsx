@@ -17,11 +17,6 @@ export interface ILogoutPageState {
 }
 
 class LogoutPageC extends React.Component<ILogoutPageProps & { logout: any }, ILogoutPageState> {
-  constructor(props: ILogoutPageProps & { logout: any }) {
-    super(props);
-    this.state = {
-    }
-  }
   componentDidMount = () => {
     //| Send Request to Server
     this.props.logout()

@@ -39,7 +39,7 @@ class ExamPage extends React.Component<IExamPageProps & ReduxProps & ReduxFn & W
     }
   }
   componentDidMount = () => {
-    setTitle("___exams___") // Todo: Loca
+    setTitle(this.props.intl.formatMessage({ id: "page.exam" }))
     //| Send Request to Server
     if (Object.keys(this.props.exams).length === 0)
       this.refreshTable();

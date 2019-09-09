@@ -38,7 +38,7 @@ class ExamLogPage extends React.Component<IExamLogPageProps & ReduxFn & ReduxPro
     }
   }
   componentDidMount = () => {
-    setTitle("__log__") // Todo: Loca
+    setTitle(this.props.intl.formatMessage({ id: "page.exam.log" }))
   }
   refreshTable = () => {
     if (!this.props.exam) {

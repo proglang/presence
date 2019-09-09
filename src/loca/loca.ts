@@ -26,11 +26,15 @@ const images:{[key:string]:string} = {
 /// switch Language and update redux state
 export const update = (lang:string) => (dispatch:any) => {
   const [lg, msg] = getLocale(lang);
+  localStorage["lang"] = lang;
   dispatch(updateIntl({locale: lg, messages: msg }));
 };
 
 export const init = () => (dispatch:any) =>  {
-    update('en')(dispatch); // Todo: Use Saved Language #9
+    let lang = 'en';
+    if (localStorage.lang)
+        lang = localStorage.lang;
+    update(lang)(dispatch);
 }
 export function getAvailableLanguages(): string[] {
     return Object.keys(messages);

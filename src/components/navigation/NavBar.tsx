@@ -21,7 +21,7 @@ interface INavLinkItem {
     icon?: IconProps;
     label?: string;
     type: "guest" | "public" | "user";
-    right?: TRight;
+    right?: TRight | TRight[];
 }
 class _NavLinkItem extends React.Component<INavLinkItem & ReduxProps & RouteComponentProps<{}>> {
     public render() {
@@ -31,9 +31,15 @@ class _NavLinkItem extends React.Component<INavLinkItem & ReduxProps & RouteComp
         }
         if (type === "user") {
             if (!redux.login) return null;
-            if (this.props.right) {
-                if (!redux.access) return null;
-                if (!redux.access[this.props.right]) return null;
+            const { right } = this.props;
+            if (right) {
+                const {access} = redux;
+                if (!access) return null;
+                if (typeof (right) == "string") {
+                    if (!access[right]) return null;
+                } else {
+                    if (right.some((val) => !access[val])) return null;
+                }
             }
         }
         if (!mobile) { // Desktop
@@ -83,6 +89,7 @@ const getLeft = [
     <NavLinkItem type="user" right={'exam_viewstudent'} link={{ to: `/exam/<ID>/student`, exact: false }} icon={{ name: "graduation cap" }} label="nav.exam.student" />,
     <NavLinkItem type="user" right={'exam_viewuser'} link={{ to: `/exam/<ID>/user`, exact: false }} icon={{ name: "address book" }} label="nav.exam.user" />,
     <NavLinkItem type="user" right={'exam_viewlog'} link={{ to: `/exam/<ID>/log`, exact: false }} icon={{ name: "tasks" }} label="nav.exam.log" />,
+    <NavLinkItem type="user" right={['exam_viewlog', 'exam_viewstudent']} link={{ to: `/exam/<ID>/export`, exact: false }} icon={{ name: "download" }} label="nav.exam.export" />,
 
     // <NavLinkItem type="public" link={{ to: "/about", exact: false }} icon={{ name: "question circle" }} label="nav.about" />
 ]

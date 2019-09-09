@@ -35,6 +35,8 @@
   "page.exam.student": "Exam: Students",
   "page.exam.log":"Exam: Log",
   "page.exam.export": "Exam: Export",
+  "page.error": "Error!",
+  "page.login": "Login",
 
   "validation.name.required": "you have to enter a name!",
   "validation.name.min": "a name must have at least {count} characters",
@@ -102,5 +104,6 @@
   "user.rights.exam_deletelog": "Delete Log",
   "user.rights.exam_addlog": "Add Log",
 
-  "error.additionalInfo": "Additional Informations"
+  "error.additionalInfo": "Additional Informations",
+  "error.token": "Login Token invalid!"
 }

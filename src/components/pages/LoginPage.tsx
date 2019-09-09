@@ -8,6 +8,7 @@ import * as React from 'react';
 import LoginForm from '../forms/LoginForm'
 import { Container } from 'semantic-ui-react';
 import { setTitle } from '../../util/helper';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
 
 export interface ILoginPageProps {
 }
@@ -16,23 +17,18 @@ export interface ILoginPageState {
 
 }
 
-export default class LoginPage extends React.Component<ILoginPageProps, ILoginPageState> {
-  constructor(props: ILoginPageProps) {
-    super(props);
-
-    this.state = {
-
-    }
-  }
+class LoginPage extends React.Component<ILoginPageProps & WrappedComponentProps, ILoginPageState> {
   componentDidMount = () => {
-    setTitle("__login__") // Todo: Loca
+    setTitle(this.props.intl.formatMessage({ id: "page.login" }))
   }
 
   public render() {
     return (
       <Container as="main">
-        <LoginForm/>
+        <LoginForm />
       </Container>
     );
   }
 }
+
+export default injectIntl(LoginPage)

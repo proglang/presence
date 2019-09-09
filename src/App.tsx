@@ -41,6 +41,7 @@ import UserRoute from './components/routes/UserRoute';
 import { IReduxRootProps } from './rootReducer';
 import { TError } from './reducer/error';
 import { FormattedMessage } from 'react-intl';
+import ExamExportPage from './components/pages/ExamExportPage';
 
 
 export interface IAppProps {
@@ -112,6 +113,7 @@ class App extends React.Component<IAppProps & ReduxProps & ReduxFn, IAppState> {
             <UserRoute req="exam_viewuser" path="/exam/:id/user/:new?" exact component={ExamUserPage} />
             <UserRoute req="exam_viewstudent" path="/exam/:id/student/:new?" exact component={ExamStudentPage} />
             <UserRoute req="exam_viewlog" path="/exam/:id/log/:new?" exact component={ExamLogPage} />
+            <UserRoute req="exam_viewlog" path="/exam/:id/export/" exact component={ExamExportPage} />
 
             <PublicRoute component={Error404} />
           </Switch>

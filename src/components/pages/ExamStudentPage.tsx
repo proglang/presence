@@ -45,7 +45,7 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
         }
     }
     componentDidMount = () => {
-      setTitle("__student__") // Todo: Loca
+        setTitle(this.props.intl.formatMessage({ id: "page.exam.student" }))
     }
 
     refreshTable = () => {
