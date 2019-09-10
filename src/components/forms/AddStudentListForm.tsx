@@ -99,7 +99,7 @@ class AddStudentListForm extends React.Component<IAddStudentListFormProps & Redu
                 <Dropzone
                     callback={this.setList}
                     head={[{ key: 'ident', index: 1, fn: (val) => String(val) }, { key: 'name', index: 0 }]}
-                    startRow={5}
+                    startRow={4}
                 />
             </Segment >
         return (
