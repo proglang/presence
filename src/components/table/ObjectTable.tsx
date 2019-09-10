@@ -36,6 +36,7 @@ export interface IObjectTableProps<T> {
 
     rowPropFn?: ((val: T) => any)
     colPropFn?: ((val: T, key: string | number) => any)
+
 }
 
 
@@ -176,6 +177,7 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                     filtered.reverse()
             }
         }
+        const cols: any = header.length;
         return ([
             <Responsive key="1" fireOnMount onUpdate={(_, data: any) => this.setState({ currentWidth: data.width })} />,
             <Table key="2" celled striped sortable={!!sortable}>
@@ -273,6 +275,13 @@ export default class ObjectTable<T> extends React.Component<IObjectTableProps<T>
                     }
                     )}
                 </Table.Body>
+                <Table.Footer style={{textAlign: 'right' }}>
+                    <Table.Row>
+                        <Table.Cell colSpan={cols}>
+                            {filtered.length}/{Object.keys(data).length}
+                        </Table.Cell>
+                    </Table.Row>
+                </Table.Footer>
             </Table>
         ]);
     }

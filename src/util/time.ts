@@ -36,8 +36,7 @@ export const parseDateString = (intl: IntlShape, str: string): number => {
     if (ret.groups.pm && hour !== 12) { // 12PM == 12:00
         hour = hour + 12;
     }
-
-    return (new Date(year, month, day, hour, min)).getTime();
+    return (new Date(year, month-1, day, hour, min)).getTime();
 }
 
 export const getDateFormat = (intl: IntlShape) => {
