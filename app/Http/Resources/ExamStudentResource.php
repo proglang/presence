@@ -8,6 +8,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
+use App\Models\User;
 
 class ExamStudentResource extends Resource
 {
@@ -32,7 +33,8 @@ class ExamStudentResource extends Resource
             'id' => $this->id,
             'name'  => $this->name,
             'ident' => $this->ident,
-            'present' => $ret==null?false:$ret->present,
+            'present' => $ret == null ? false : $ret->present,
+            'user' => $ret == null ? null : User::find($ret->user_id)->name,
         ];
     }
 }
