@@ -80,10 +80,11 @@ class UserPage extends React.Component<IUserPageProps & ReduxProps & ReduxFn & W
     ExportStudent = () => {
         const present = (log: examstudent.IData) => log.present ? "y" : "n";
         const ex = new Exporter(Object.values(this.props.student), [
-            { k: 'id', t: 'id' },
+            //{ k: 'id', t: 'id' },
             { k: 'ident', t: 'ident' },
             { k: 'name', t: 'name' },
             { k: present, t: 'present' },
+            { k: 'user', t: 'user' }
         ])
         return ex.toSheet('student')
     }
@@ -107,7 +108,7 @@ class UserPage extends React.Component<IUserPageProps & ReduxProps & ReduxFn & W
                         name={"format"}
                         placeholder={"label.export.format"}
                         selection
-                        options={this.formats.map((data) => ({...data, text: this.props.intl.formatMessage({ id: data.text }) }))}
+                        options={this.formats.map((data) => ({ ...data, text: this.props.intl.formatMessage({ id: data.text }) }))}
                         onChange={this.onChange}
                         value={this.state.format}
                     />
@@ -117,7 +118,7 @@ class UserPage extends React.Component<IUserPageProps & ReduxProps & ReduxFn & W
                         placeholder={"label.export.data"}
                         onChange={this.onChange}
                         multiple
-                        options={this.data.map((data) => ({...data, text: this.props.intl.formatMessage({ id: data.text }) }))}
+                        options={this.data.map((data) => ({ ...data, text: this.props.intl.formatMessage({ id: data.text }) }))}
                         value={this.state.data}
                     />
                 </FormBase>

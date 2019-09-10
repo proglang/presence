@@ -15,7 +15,6 @@ import { Popup, Button, Container, Checkbox, Responsive, Modal } from 'semantic-
 import ExamStudentForm from '../forms/ExamStudentForm';
 import DeleteExamStudentModal from '../modal/DeleteExamStudentModal';
 import AddStudentListForm from '../forms/AddStudentListForm';
-import Exporter from '../../util/exporter/exporter';
 import { RouteComponentProps } from 'react-router';
 import { setTitle } from '../../util/helper';
 class Table extends ObjectTable<examstudent.IData> { }
@@ -138,20 +137,6 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
         />
         return [ret, false];
     }
-
-    export = () => {
-        const present = (log: examstudent.IData) => log.present ? "y" : "n";
-        const ex = new Exporter(Object.values(this.props.student), [
-            { k: 'id', t: 'id' },
-            { k: 'ident', t: 'ident' },
-            { k: 'name', t: 'name' },
-            { k: present, t: 'present' },
-        ])
-        //ex.toCSV('log');
-        // ex.toXLS('log');
-        // ex.toJSON('log');
-        ex.toXLSX('student')
-    }
     public render() {
         //@ts-ignore
         const mobile = Responsive.onlyComputer.minWidth > this.state.currentWidth;
@@ -165,7 +150,6 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
         if (!mobile) {
             header.push({ k: 'btn', fn: this.addButtons, t: this.addHeadButtons() })
         }
-        // <Button onClick={this.export} content={'export'} />
         return (
             <Container as="main">
                 {this.props.match.params.new === "list" && <AddStudentListForm />}
@@ -195,7 +179,7 @@ class ExamStudentPage extends React.Component<IExamStudentPageProps & ReduxFn & 
                     onClose={() => this.setState({ editing: false })}
                 >
                     <Modal.Content>
-                        <ExamStudentForm add={false} onSuccess={() => this.setState({ editing: false })}/>
+                        <ExamStudentForm add={false} onSuccess={() => this.setState({ editing: false })} />
                     </Modal.Content>
                 </Modal>
             </Container>
