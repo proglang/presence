@@ -1,4 +1,18 @@
 # exam
 
-sudo docker-compose -f "docker-compose.yml" up -d --build
-sudo chown www-data:www-data ./image/api
+To install the App run 
+`./install.sh`
+after configuring.
+
+## config
+
+All configuration is done in _docker-compose.yml_
+
+- Set a _secure_ sql password.
+- Set a random 32 character string as _APP_KEY_
+- Set `API_PATH` to the url the API is located at
+- Set `APP_NAME` to the desired name of the App
+
+## Requirements
+* docker
+* docker-compose
