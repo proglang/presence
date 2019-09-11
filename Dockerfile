@@ -8,11 +8,28 @@ RUN docker-php-ext-install -j$(nproc) mysqli &&\
     apt-get update && apt-get install -y zip unzip git libmcrypt-dev &&\
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+
+# Add user for laravel application
+RUN groupadd -g 1000 www
+RUN useradd -u 1000 -ms /bin/bash -g www www
+
+# Copy existing application directory contents
 COPY . /var/www/html/
-RUN cd /var/www/html/ && composer install --verbose --no-dev --optimize-autoloader
+
+# Copy existing application directory permissions
+COPY --chown=www:www . /var/www/html/
 
 COPY /docker/start.sh /start.sh
-RUN chmod +x /start.sh
+RUN chmod u+x /start.sh && chown www:www /start.sh
+
+# Change current user to www
+USER www
+
+#COPY . /var/www/html/
+RUN cd /var/www/html/ && composer install --verbose --no-dev --optimize-autoloader
+
+
+
 
 ENTRYPOINT [ "/start.sh", "docker-php-entrypoint" ]
 CMD ["php-fpm"]
