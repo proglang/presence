@@ -16,7 +16,7 @@ export interface ICodeErrorProps {
 export interface IErrorProps extends ICodeErrorProps {
     code: number;
 }
-class ErrorInternal extends React.Component<IErrorProps & RouteComponentProps<{}> & WrappedComponentProps> {
+class ErrorInternal extends React.Component<IErrorProps & RouteComponentProps<any> & WrappedComponentProps> {
     componentDidMount = () => {
         setTitle(this.props.intl.formatMessage({ id: "page.error" }))
     }
