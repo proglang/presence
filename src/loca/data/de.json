@@ -9,6 +9,11 @@
   "nav.logout": "Logout",
   "nav.exam.export": "Exportieren",
 
+  "data.id": "<ID: {id}>",
+  "data.present": "anwesend: {present}",
+  "data.edited": "{edited} mal bearbeitet",
+  "data.notFound": "ID nicht gefunden: {id}",
+
   "label.register": "Registrieren",
   "label.edit": "Bearbeiten",
   "label.delete": "Löschen",

@@ -24,10 +24,9 @@ class ExamStudentInfo extends React.Component<IExamStudentInfoProps & ReduxProps
         this.state = {
         }
     }
-    //Todo: Add Student Notes (if right)
     public render() {
         const { id, student } = this.props;
-        if (!student[id]) return (<FormattedMessage id="exam.student.notFound" values={{ id }} />)
+        if (!student[id]) return (<FormattedMessage id="data.notFound" values={{ id }} />)
         const _student = student[id];
         return (
             <Card fluid centered>
@@ -38,14 +37,11 @@ class ExamStudentInfo extends React.Component<IExamStudentInfoProps & ReduxProps
                     </Card.Meta>
 
                     <Card.Description>
-                        <Message>
-                            <Message.Header><FormattedMessage id='label.present' /></Message.Header>
-                            {_student.present ? 1 : 0}
-                        </Message>
+                        <Message.Header><FormattedMessage id='data.present' values={{ present: _student.present ? 'y' : 'n' }} /></Message.Header>
                     </Card.Description>
                 </Card.Content>
                 <Card.Content extra>
-                    {<FormattedMessage id="student.id" values={{ id: _student.id }} defaultMessage={"<ID: {id}>"} />}
+                    {<FormattedMessage id="data.id" values={{ id: _student.id }} defaultMessage={"<ID: {id}>"} />}
                 </Card.Content>
             </Card>
         );

@@ -36,7 +36,7 @@ class UserInfo extends React.Component<IUserInfoProps & ReduxProps & WrappedComp
                     </Card.Meta>
                 </Card.Content>
                 <Card.Content extra>
-                    {<FormattedMessage id="exam.id" values={{ id: user.id }} defaultMessage={"<ID: {id}>"} />}
+                    {<FormattedMessage id="data.id" values={{ id: user.id }} defaultMessage={"<ID: {id}>"} />}
                 </Card.Content>
             </Card>
         );

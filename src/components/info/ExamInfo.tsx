@@ -29,7 +29,7 @@ class ExamInfo extends React.Component<IExamInfoProps & ReduxProps & WrappedComp
 
     public render() {
         const { id, exams } = this.props;
-        if (!exams[id]) return (<FormattedMessage id="exam.notFound" values={{ id }} />)
+        if (!exams[id]) return (<FormattedMessage id="data.notFound" values={{ id }} />)
         const exam = exams[id];
         const list = Object.entries(exam.rights)
             .filter((val: [string, boolean | undefined]) => val[1] && examuser.getIcon(val[0]))

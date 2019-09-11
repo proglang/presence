@@ -27,14 +27,14 @@ class ExamUserInfo extends React.Component<IExamUserInfoProps & ReduxProps & Wra
 
     public render() {
         const { id, user } = this.props;
-        if (!user[id]) return (<FormattedMessage id="exam.user.notFound" values={{ id }} />)
+        if (!user[id]) return (<FormattedMessage id="data.notFound" values={{ id }} />)
         const _user = user[id];
         const list = Object.entries(_user.rights)
             .filter((val: [string, boolean | undefined]) => val[1])
             .map((val: [string, boolean | undefined], index: number) =>
                 <List.Item key={index}>
                     <Icon color={examuser.getRightColor(val[0])} style={{ margin: 0, fontSize: "1.4em" }} size='small' name={examuser.getIcon(val[0])} />
-                    <FormattedMessage id={"user.right." + val[0]} />
+                    <FormattedMessage id={"user.rights." + val[0]} />
                 </List.Item>);
         return (
             <Card fluid centered>
@@ -46,17 +46,17 @@ class ExamUserInfo extends React.Component<IExamUserInfoProps & ReduxProps & Wra
 
                     <Card.Description>
                         <Message>
-                            <Message.Header><FormattedMessage id='user.note' /></Message.Header>
+                            <Message.Header><FormattedMessage id='label.note' /></Message.Header>
                             {_user.note}
                         </Message>
                         <Message>
-                            <Message.Header><FormattedMessage id='user.rights' /></Message.Header>
+                            <Message.Header><FormattedMessage id='label.rights' /></Message.Header>
                             <List>{list}</List>
                         </Message>
                     </Card.Description>
                 </Card.Content>
                 <Card.Content extra>
-                    {<FormattedMessage id="user.id" values={{ id: _user.id }} defaultMessage={"<ID: {id}>"} />}
+                    {<FormattedMessage id="data.id" values={{ id: _user.id }} defaultMessage={"<ID: {id}>"} />}
                 </Card.Content>
             </Card>
         );

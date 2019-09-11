@@ -9,6 +9,11 @@
   "nav.logout": "Logout",
   "nav.exam.export": "Export",
 
+  "data.id": "<ID: {id}>",
+  "data.present": "present: {present}",
+  "data.edited": "edited {edited} time(s)",
+  "data.notFound": "Couldn't find ID: {id}",
+
   "label.register": "registration",
   "label.edit": "Edit",
   "label.delete": "Delete",
@@ -32,7 +37,7 @@
 
   "label.export.data": "Select Data",
   "label.export.log": "Log",
-  "label.export.student":"Studentlist",
+  "label.export.student": "Studentlist",
 
   "label.export.format": "Select Format",
   "label.export.xls": ".xls",
