@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Database\QueryException;
 
 class InstallCommand extends Command
 {
@@ -40,6 +41,15 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-        $this->call('migrate:fresh', ['--force' => true]);
+        for ($i = 0; $i < 6; ++$i) {
+            try {
+                $this->call('migrate', ['--force' => true]);
+                break;
+            } catch (QueryException $e) {
+                echo ("Error creating database: retrying...\n");
+                echo($e->getMessage()."\n");
+                sleep(10);
+            }
+        }
     }
 }
