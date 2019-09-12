@@ -8,7 +8,6 @@ RUN docker-php-ext-install -j$(nproc) mysqli &&\
     apt-get update && apt-get install -y zip unzip git libmcrypt-dev &&\
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-
 # Add user for laravel application
 RUN groupadd -g 999 www
 RUN useradd -u 999 -ms /bin/bash -g www www
