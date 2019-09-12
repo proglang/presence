@@ -3,11 +3,11 @@
 ####################################################################################################
 mysql:
   image: mysql:5.7
-  container_name: db
+  container_name: mysql
   ports:
     - "3306:3306"
   volumes:
-    - ./image/mysql/data/:/var/lib/mysql
+    - ./image/mysql/data:/var/lib/mysql:rw,delegated
   environment:
     MYSQL_ROOT_PASSWORD: secret
     MYSQL_DATABASE: lumen
@@ -16,7 +16,7 @@ mysql:
 
 ####################################################################################################
 # API
-####################################################################################################
+#########################################################
 api:
   build: ./www/api/
   container_name: api
