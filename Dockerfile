@@ -28,8 +28,5 @@ USER www
 #COPY . /var/www/html/
 RUN cd /var/www/html/ && composer install --verbose --no-dev --optimize-autoloader
 
-
-
-
 ENTRYPOINT [ "/start.sh", "docker-php-entrypoint" ]
 CMD ["php-fpm"]
