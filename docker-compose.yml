@@ -5,9 +5,9 @@ mysql:
   image: mysql:5.7
   container_name: database
   ports:
-    - "3306:3306"
+    - "3307:3306"
   volumes:
-    - ./image/mysql/data/:/var/lib/mysql
+    - ./image/mysql/data/:/var/lib/mysql/:rw
   environment:
     MYSQL_ROOT_PASSWORD: secret
     MYSQL_DATABASE: lumen
@@ -26,7 +26,7 @@ api:
   links:
     - mysql
   volumes:
-    - ./image/api/:/var/www/html/storage
+    - ./image/api/:/var/www/html/storage/:rw
   environment:
     APP_NAME: api
     APP_ENV: local
@@ -50,7 +50,8 @@ app:
   ports:
     - "9001:80"
   environment:
-    API_PATH: http://192.52.34.132/api
+    #API_PATH: http://192.52.34.132/api
+    API_PATH: http://localhost/api
     APP_NAME: app
 
 ####################################################################################################
