@@ -3,7 +3,7 @@
 ####################################################################################################
 mysql:
   image: mysql:5.7
-  container_name: database
+  container_name: presence_database
   ports:
     - "3307:3306"
   volumes:
@@ -18,9 +18,9 @@ mysql:
 ####################################################################################################
 # API
 ####################################################################################################
-api:
+presence_api:
   build: ./www/api/
-  container_name: api
+  container_name: presence_api
   ports:
     - "9000:9000"
   links:
@@ -44,15 +44,15 @@ api:
 ####################################################################################################
 # APP
 ####################################################################################################
-app:
+presence_app:
   build: ./www/app/
-  container_name: app
+  container_name: presence_app
   ports:
     - "9001:80"
   environment:
     #API_PATH: http://192.52.34.132/api
     API_PATH: http://localhost/api
-    APP_NAME: app
+    APP_NAME: Presence
 
 ####################################################################################################
 # NGINX
@@ -65,5 +65,5 @@ nginx:
   volumes:
     - ./image/nginx/default.conf:/etc/nginx/conf.d/default.conf
   links:
-    - api
-    - app
+    - presence_api
+    - presence_app
