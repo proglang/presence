@@ -1,0 +1,129 @@
+{
+  "nav.home": "Startseite",
+  "nav.login": "Login",
+  "nav.user": "Benutzer",
+  "nav.exam.list": "Prüfungen",
+  "nav.exam.student": "Studenten",
+  "nav.exam.user": "Nutzer",
+  "nav.exam.log": "Logs",
+  "nav.logout": "Logout",
+  "nav.exam.export": "Exportieren",
+
+  "data.id": "<ID: {id}>",
+  "data.present": "anwesend: {present}",
+  "data.edited": "{edited} mal bearbeitet",
+  "data.notFound": "ID nicht gefunden: {id}",
+
+  "label.register": "Registrieren",
+  "label.edit": "Bearbeiten",
+  "label.delete": "Löschen",
+  "label.cancel": "Abbrechen",
+  "label.name": "Name",
+  "label.error": "Fehler",
+  "label.user": "Nutzer",
+  "label.text": "Text",
+  "label.select.student": "Student auswählen",
+  "label.rights": "Rechte",
+  "label.present": "Anwesend",
+  "label.presence.set": "Anwesenheit setzen",
+  "label.file.load": "Datei laden",
+  "label.note": "Notiz",
+  "label.ident": "Matrikelnummer",
+  "label.email": "E-Mail",
+  "label.password": "Passwort",
+  "label.password.repeat": "Passwort wiederholen",
+  "label.date": "Datum",
+  "label.reset": "Zurücksetzen",
+  "label.student": "Student",
+
+  "label.export.data": "Daten auswählen",
+  "label.export.log": "Protokoll",
+  "label.export.student":"Studenten",
+
+  "label.export.format": "Format auswählen",
+  "label.export.xls": ".xls",
+  "label.export.xlsx": ".xlsx",
+  "label.export.csv": ".csv",
+
+  "page.exam": "Prüfungen",
+  "page.user": "Nutzer",
+  "page.exam.user": "Prüfung: Nutzer",
+  "page.exam.student": "Prüfung: Studenten",
+  "page.exam.log":"Prüfung: Protokoll",
+  "page.exam.export": "Prüfung: Export",
+  "page.error": "Fehler",
+  "page.login": "Login",
+
+  "validation.text.required": "Bitte geben Sie einen Text ein!",
+
+  "validation.name.required": "Bitte geben Sie einen Namen ein!",
+  "validation.name.min": "Ein Name muss mindestens {count} Zeichen lang sein",
+
+  "validation.exam.min": "Ein Name muss mindestens {count} Zeichen lang sein",
+
+  "validation.email.required": "Bitte geben Sie eine E-Mail ein!",
+  "validation.email.unique": "E-Mail wird bereits verwendet!",
+  "validation.email.min": "Eine E-Mail muss mindestens {count} Zeichen lang sein",
+
+  "validation.password.required": "Bitte geben Sie ein Passwort ein!",
+  "validation.password.min": "Ein Name muss mindestens {count} Zeichen lang sein",
+  "validation.password.max":  "Ein Passwort kann nicht mehr als {count} Zeichen lang sein",
+  "validation.password.same": "Password doesn't match!",
+
+  "validation.password.hasupper": "Ein Passwort muss mindestens {count} Großbuchstaben enthalten: A-Z",
+  "validation.password.haslower": "Ein Passwort muss mindestens {count} Kleinbuchstaben enthalten: A-Z",
+  "validation.password.hasdigit": "Ein Passwort muss mindestens {count} Zahlen enthalten: 0-9",
+  "validation.password.hasspecial": "Ein Passwort muss mindestens {count} Sonderzeichen enthalten: {allowed}",
+
+  "validation.ident.unique": "Matriculation numbers have to be unique!",
+
+  "error.logindata": "E-Mail oder Passwort falsch",
+
+  "submit.login": "Einloggen",
+  "submit.register": "Account erstellen",
+
+  "submit.export": "Exportieren",
+
+  "submit.exam": "Prüfung erstellen",
+  "submit.update.exam": "Prüfung bearbeiten",
+
+  "submit.user": "Nutzer hinzufügen",
+  "submit.update.user": "Nutzer bearbeiten",
+
+  "submit.log": "Protokolleintrag hinzufügen",
+  "submit.update.log": "Protokolleintrag bearbeiten",
+
+  "submit.student": "Student hinzufügen",
+  "submit.update.student": "Student bearbeiten",
+  "submit.student.list": "Studenten hinzufügen",
+
+  "submit": "Abschicken",
+  "submit.update": "Bearbeiten",
+
+  "user.rank.null": "NULL",
+  "user.rank.updater": "Updater",
+  "user.rank.admin": "Admin",
+
+  "user.rights.view": "Prüfung anzeigen",
+  "user.rights.update": "Prüfung bearbeiten",
+  "user.rights.delete": "Prüfung löschen",
+
+  "user.rights.exam_viewuser": "Nutzer anzeigen",
+  "user.rights.exam_updateuser": "Nutzer bearbeiten",
+  "user.rights.exam_deleteuser": "Nutzer löschen",
+  "user.rights.exam_adduser": "Nutzer hinzufügen",
+
+  "user.rights.exam_viewstudent": "Student anzeigen",
+  "user.rights.exam_updatestudent": "Student bearbeiten",
+  "user.rights.exam_deletestudent": "Student löschen",
+  "user.rights.exam_addstudent": "Student hinzufügen",
+  "user.rights.exam_updatestudent_presence": "Anwesenheit setzen",
+
+  "user.rights.exam_viewlog": "Protokoll anzeigen",
+  "user.rights.exam_updatelog": "Protokolleintrag bearbeiten",
+  "user.rights.exam_deletelog": "Protokolleintrag löschen",
+  "user.rights.exam_addlog": "Protokolleintrag hinzufügen",
+
+  "error.additionalInfo": "Zusätzliche Informationen",
+  "error.token": "Login Token ungültig!"
+}

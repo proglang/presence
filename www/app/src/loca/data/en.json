@@ -1,0 +1,129 @@
+{
+  "nav.home": "Home",
+  "nav.login": "Login",
+  "nav.user": "User",
+  "nav.exam.list": "Examlist",
+  "nav.exam.student": "Studentlist",
+  "nav.exam.user": "Userlist",
+  "nav.exam.log": "Logs",
+  "nav.logout": "Logout",
+  "nav.exam.export": "Export",
+
+  "data.id": "<ID: {id}>",
+  "data.present": "present: {present}",
+  "data.edited": "edited {edited} time(s)",
+  "data.notFound": "Couldn't find ID: {id}",
+
+  "label.register": "registration",
+  "label.edit": "Edit",
+  "label.delete": "Delete",
+  "label.cancel": "Cancel",
+  "label.name": "Name",
+  "label.error": "Errors",
+  "label.user": "User",
+  "label.text": "Text",
+  "label.select.student": "Select Student",
+  "label.rights": "Rights",
+  "label.present": "Present",
+  "label.presence.set": "Set Presence",
+  "label.file.load": "Load File",
+  "label.note": "Note",
+  "label.ident": "Matriculation Number",
+  "label.email": "Email",
+  "label.password": "Password",
+  "label.password.repeat": "Repeat Password",
+  "label.date": "Date",
+  "label.reset": "Reset",
+  "label.student": "Student",
+
+  "label.export.data": "Select Data",
+  "label.export.log": "Log",
+  "label.export.student": "Studentlist",
+
+  "label.export.format": "Select Format",
+  "label.export.xls": ".xls",
+  "label.export.xlsx": ".xlsx",
+  "label.export.csv": ".csv",
+
+  "page.exam": "Exams",
+  "page.user": "User",
+  "page.exam.user": "Exam: Users",
+  "page.exam.student": "Exam: Students",
+  "page.exam.log": "Exam: Log",
+  "page.exam.export": "Exam: Export",
+  "page.error": "Error!",
+  "page.login": "Login",
+
+  "validation.text.required": "you have to enter a text!",
+
+  "validation.name.required": "you have to enter a name!",
+  "validation.name.min": "a name must have at least {count} characters",
+
+  "validation.exam.min": "Exam Name must have at least {count} characters",
+
+  "validation.email.required": "you have to enter an email!",
+  "validation.email.unique": "email is already in use!",
+  "validation.email.min": "an email must have at least {count} characters",
+
+  "validation.password.required": "you have to enter a password!",
+  "validation.password.min": "a password must have at least {count} characters",
+  "validation.password.max": "a password cannot have more than {count} characters",
+  "validation.password.same": "Password doesn't match!",
+
+  "validation.password.hasupper": "a password must have at least {count} uppercase characters: A-Z",
+  "validation.password.haslower": "a password must have at least {count} lowercase characters: a-z",
+  "validation.password.hasdigit": "a password must have at least {count} digits: 0-9",
+  "validation.password.hasspecial": "a password must have at least {count} special characters: {allowed}",
+
+  "validation.ident.unique": "Matriculation numbers have to be unique!",
+
+  "error.logindata": "Email or password wrong",
+
+  "submit.login": "Login!",
+  "submit.register": "Register Account!",
+
+  "submit.export": "Export!",
+
+  "submit.exam": "Create Exam!",
+  "submit.update.exam": "Update Exam!",
+
+  "submit.user": "Add User",
+  "submit.update.user": "Update User",
+
+  "submit.log": "Add Log Entry",
+  "submit.update.log": "Update Log Entry",
+
+  "submit.student": "Add Student",
+  "submit.update.student": "Update Student",
+  "submit.student.list": "Add Students",
+
+  "submit": "Submit!",
+  "submit.update": "Update!",
+
+  "user.rank.null": "NULL",
+  "user.rank.updater": "Updater",
+  "user.rank.admin": "Admin",
+
+  "user.rights.view": "View Exam",
+  "user.rights.update": "Update Exam",
+  "user.rights.delete": "Delete Exam",
+
+  "user.rights.exam_viewuser": "View User",
+  "user.rights.exam_updateuser": "Update User",
+  "user.rights.exam_deleteuser": "Delete User",
+  "user.rights.exam_adduser": "Add User",
+
+  "user.rights.exam_viewstudent": "View Student",
+  "user.rights.exam_updatestudent": "Update Student",
+  "user.rights.exam_deletestudent": "Delete Student",
+  "user.rights.exam_addstudent": "Add Student",
+  "user.rights.exam_updatestudent_presence": "Set Student Presence",
+
+  "user.rights.exam_viewlog": "View Log",
+  "user.rights.exam_updatelog": "Update Log",
+  "user.rights.exam_deletelog": "Delete Log",
+  "user.rights.exam_addlog": "Add Log",
+
+  "error.additionalInfo": "Additional Informations",
+  "error.token": "Login Token invalid!"
+}
