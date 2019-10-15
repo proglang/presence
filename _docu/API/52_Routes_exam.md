@@ -16,4 +16,4 @@
 | ---- | ------ | -------------- |
 | date | int    | UNIX timestamp |
 | name | string |                |
-| eid  | int    |                |
+| eid  | int    | exam id        |

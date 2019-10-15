@@ -157,8 +157,6 @@ run commands with `*command*` e.g. `vendor/bin/phpunit`
 | ---- | ------ | -------------- |
 | auth | string | JSON Web Token |
 
-## Errors
-
 ## Routes
 
 **_Notes:_**
