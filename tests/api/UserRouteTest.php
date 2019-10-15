@@ -46,7 +46,17 @@ class UserRouteTest extends TestCase
         $res = $this->json('POST', '/user/register', ['email' => $myuser->email, 'password' => $pw, 'name' => $myuser->name]);
         $this->assertEquals(422, $this->response->status());
         $res->seeJson(
-            ['error' => ["validation.error"]]
+            ["error" =>
+            [
+                "args" =>
+                [
+                    "args" => ["email.Unique" => ["NULL", "email", "id", "users"]],
+                    "keys" => ["email.Unique"],
+                    "text" => [["The email hash has already been taken."]]
+                ],
+                "code" => "validation.error",
+                "msg" => "Validation Error"
+            ]]
         );
 
         $myuser = factory(User::class)->make();
@@ -55,12 +65,25 @@ class UserRouteTest extends TestCase
         $res = $this->json('POST', '/user/register', ['email' => $myuser->email, 'password' => '', 'name' => $myuser->name]);
         $this->assertEquals(422, $this->response->status());
         $res->seeJson(
-            ['error' => ["validation.error"]]
+            ["error" =>
+            [
+                "args" =>
+                [
+                    "args" => ["password.Required" => []],
+                    "keys" => ["password.Required"],
+                    "text" => [["The password field is required."]]
+                ],
+                "code" => "validation.error",
+                "msg" => "Validation Error"
+            ]]
         );
         $res = $this->json('POST', '/user/register', ['email' => $myuser->email, 'password' => 'a', 'name' => $myuser->name]);
         $this->assertEquals(422, $this->response->status());
         $res->seeJson(
-            ['error' => [ "validation.error"]]
+            [
+                "code" => "validation.error",
+                "msg" => "Validation Error"
+            ]
         );
     }
 

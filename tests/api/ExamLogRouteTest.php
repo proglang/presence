@@ -68,7 +68,7 @@ class ExamLogRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -77,7 +77,7 @@ class ExamLogRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.viewlog"]
+                "error" => ["code"=>"useraccess.viewlog", "msg"=>"Cannot view log of this exam"]
             ]
         );
 
@@ -137,7 +137,7 @@ class ExamLogRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -146,7 +146,7 @@ class ExamLogRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.addlog"]
+                "error" => ["code"=>"useraccess.addlog", "msg"=>"Cannot add logentry to exam"]
             ]
         );
 
@@ -187,7 +187,7 @@ class ExamLogRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -196,7 +196,7 @@ class ExamLogRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.addlog"]
+                "error" => ["code"=>"useraccess.addlog", "msg"=>"Cannot add logentry to exam"]
             ]
         );
 
@@ -223,7 +223,7 @@ class ExamLogRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -232,7 +232,7 @@ class ExamLogRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.viewlog"]
+                "error" => ["code"=>"useraccess.viewlog", "msg"=>"Cannot view log of this exam"]
             ]
         );
 
@@ -285,7 +285,7 @@ class ExamLogRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -294,7 +294,7 @@ class ExamLogRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.update.log"]
+                "error" => ["code"=>"useraccess.update.log", "msg"=>"Cannot update logentries of this exam"]
             ]
         );
 
@@ -327,7 +327,7 @@ class ExamLogRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -338,7 +338,7 @@ class ExamLogRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.dellog"]
+                "error" => ["code"=>"useraccess.dellog", "msg"=>"Cannot delete log of this exam"]
             ]
         );
 

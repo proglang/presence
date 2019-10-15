@@ -50,7 +50,7 @@ class ExamRoomRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -59,7 +59,7 @@ class ExamRoomRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.viewroom"]
+                "error" => ["code"=>"useraccess.viewroom", "msg"=>"Cannot view rooms of this exam"]
             ]
         );
 
@@ -114,7 +114,7 @@ class ExamRoomRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -123,7 +123,7 @@ class ExamRoomRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.addroom"]
+                "error" => ["code"=>"useraccess.addroom", "msg"=>"Cannot add room to exam"]
             ]
         );
 
@@ -163,7 +163,7 @@ class ExamRoomRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -172,7 +172,7 @@ class ExamRoomRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.viewroom"]
+                "error" => ["code"=>"useraccess.viewroom", "msg"=>"Cannot view rooms of this exam"]
             ]
         );
 
@@ -207,7 +207,7 @@ class ExamRoomRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -216,7 +216,7 @@ class ExamRoomRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.update.room"]
+                "error" => ["code"=>"useraccess.update.room", "msg"=>"Cannot update users of this exam"]
             ]
         );
 
@@ -248,7 +248,7 @@ class ExamRoomRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -258,7 +258,7 @@ class ExamRoomRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.delroom"]
+                "error" => ["code"=>"useraccess.delroom", "msg"=>"Cannot delete users of this exam"]
             ]
         );
 

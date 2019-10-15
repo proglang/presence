@@ -27,7 +27,7 @@ class ExamStudentRouteTest extends TestCase
         }
         return $url;
     }
-    static protected function _getResult(ExamStudent $student, ?int $id = null, ?bool $present = null)
+    static protected function _getResult(ExamStudent $student, ?int $id = null, ?bool $present = null,?string $name=null)
     {
         // $student = $student->fresh();
         $student->refresh();
@@ -38,6 +38,7 @@ class ExamStudentRouteTest extends TestCase
             'name' => $student->name,
             'ident' => $student->ident,
             'present' => $present,
+            'user'=>$name
         ];
         return $ret;
     }
@@ -59,7 +60,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -68,7 +69,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.viewstudent"]
+                "error" => ["code"=>"useraccess.viewstudent","msg"=>"Cannot view students of this exam"]
             ]
         );
 
@@ -123,7 +124,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -132,7 +133,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.addstudent"]
+                "error" => ["code"=>"useraccess.addstudent","msg"=>"Cannot add student to exam"]
             ]
         );
 
@@ -172,7 +173,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -181,7 +182,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.viewstudent"]
+                "error" => ["code"=>"useraccess.viewstudent","msg"=>"Cannot view students of this exam"]
             ]
         );
 
@@ -199,7 +200,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(200, $this->response->status());
         $res->seeJson(
             [
-                "examstudent" => self::_getResult($student, null, true)
+                "examstudent" => self::_getResult($student, null, true, $user->name)
             ]
         );
 
@@ -208,7 +209,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(200, $this->response->status());
         $res->seeJson(
             [
-                "examstudent" => self::_getResult($student, null, false)
+                "examstudent" => self::_getResult($student, null, false, $user->name)
             ]
         );
     }
@@ -234,7 +235,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -243,7 +244,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.update.student"]
+                "error" => ["code"=>"useraccess.update.student","msg"=>"Cannot update students of this exam"]
             ]
         );
 
@@ -269,14 +270,14 @@ class ExamStudentRouteTest extends TestCase
         $res = $this->actingAs($admin)->json('PUT', self::_getURL($exam->id, $student->id, true), ['val'=>1]);
         $this->assertEquals(200, $this->response->status());
         $res->seeJson(
-           [ "examstudent" => self::_getResult($student, null, true)]
+           [ "examstudent" => self::_getResult($student, null, true, $admin->name)]
         );
 
         $res = $this->actingAs($user)->json('PUT', self::_getURL($exam->id, $student->id, true));
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -285,7 +286,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.update.student.presence"]
+                "error" => ["code"=>"useraccess.update.student.presence","msg"=>"Cannot update student presence of this exam"]
             ]
         );
 
@@ -293,7 +294,7 @@ class ExamStudentRouteTest extends TestCase
         $res = $this->actingAs($user)->json('PUT', self::_getURL($exam->id, $student->id, true), ['val'=>0]);
         $this->assertEquals(200, $this->response->status());
         $res->seeJson(
-            [ "examstudent" => self::_getResult($student, null, false)]
+            [ "examstudent" => self::_getResult($student, null, false, $user->name)]
         );
     }
 
@@ -314,7 +315,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(404, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["404.exam"]
+                "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
             ]
         );
 
@@ -324,7 +325,7 @@ class ExamStudentRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.delstudent"]
+                "error" => ["code"=>"useraccess.delstudent","msg"=>"Cannot delete users of this exam"]
             ]
         );
 

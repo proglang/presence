@@ -194,7 +194,7 @@ class ExamUserRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.update.user.self"]
+                "error" => ["code"=> "useraccess.update.user.self", "msg"=>"You cannot update yourself!"]
             ]
         );
         $user2 = factory(User::class)->create();
@@ -229,7 +229,7 @@ class ExamUserRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.deluser.self"]
+                "error" => ["code"=> "useraccess.deluser.self", "msg"=>"You cannot delete yourself!"]
             ]
         );
 
@@ -240,7 +240,7 @@ class ExamUserRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.deluser"]
+                "error" => ["code"=> "useraccess.deluser", "msg"=>"Cannot delete users of this exam"]
             ]
         );
 
@@ -250,7 +250,7 @@ class ExamUserRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.deluser.creator"]
+                "error" => ["code"=> "useraccess.deluser.creator", "msg"=>"Exam Creator cannot be deleted!"]
             ]
         );
 
@@ -272,7 +272,7 @@ class ExamUserRouteTest extends TestCase
         $this->assertEquals(403, $this->response->status());
         $res->seeJson(
             [
-                "error" => ["useraccess.deluser.samelv"]
+                "error" => ["code"=> "useraccess.deluser.samelv", "msg"=>"User cannot be deleted: Only creator can delete this user!"]
             ]
         );
 

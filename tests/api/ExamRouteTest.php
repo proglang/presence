@@ -121,14 +121,14 @@ class ExamRouteTest extends TestCase
         $user2 = factory(User::class)->create();
         $res = $this->actingAs($user2)->json('GET', "/exam/$id");
         $res->seeJson([
-            "error" => ["404.exam"],
+            "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
         ]);
 
         $user3 = factory(User::class)->create();
         ExamUser::create(['exam_id' => $exam->id, 'user_id' => $user3->id, 'rights' => 0]);
         $res = $this->actingAs($user3)->json('GET', "/exam/$id");
         $res->seeJson([
-            "error" => ["useraccess.view"],
+            "error" => ["code"=>"useraccess.view","msg"=>"Cannot show exam"],
         ]);
 
         $user4 = factory(User::class)->create();
@@ -156,7 +156,7 @@ class ExamRouteTest extends TestCase
         $res = $this->actingAs($user2)->json('PUT', "/exam/$id", ['name' => $exam_n->name, 'date' => $exam_n->date]);
         $this->assertEquals(404, $this->response->status());
         $res->seeJson([
-            "error" => ["404.exam"],
+            "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
         ]);
 
         $user3 = factory(User::class)->create();
@@ -164,7 +164,7 @@ class ExamRouteTest extends TestCase
         $res = $this->actingAs($user3)->json('PUT', "/exam/$id", ['name' => $exam_n->name, 'date' => $exam_n->date]);
         $this->assertEquals(403, $this->response->status());
         $res->seeJson([
-            "error" => ["useraccess.update"],
+            "error" => ["code"=>"useraccess.update","msg"=>"Cannot update exam"],
         ]);
 
         $user4 = factory(User::class)->create();
@@ -188,7 +188,7 @@ class ExamRouteTest extends TestCase
         $id = $exam->id;
         $res = $this->actingAs($user2)->json('DELETE', "/exam/$id");
         $res->seeJson([
-            "error" => ["404.exam"],
+            "error" => ["code"=>"404.exam", "msg"=>"Exam not found"]
         ]);
 
         $user3 = factory(User::class)->create();
@@ -197,7 +197,7 @@ class ExamRouteTest extends TestCase
         ExamUser::create(['exam_id' => $exam->id, 'user_id' => $user3->id, 'rights' => 0]);
         $res = $this->actingAs($user3)->json('DELETE', "/exam/$id");
         $res->seeJson([
-            "error" => ["useraccess.delete"],
+            "error" => ["code"=>"useraccess.delete","msg"=>"Cannot delete exam"],
         ]);
 
         $user4 = factory(User::class)->create();
