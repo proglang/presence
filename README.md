@@ -1,6 +1,6 @@
 # exam
 
-To install the App run 
+To install the App run
 `./install.sh`
 after configuring.
 
@@ -13,6 +13,9 @@ All configuration is done in _docker-compose.yml_
 - Set `API_PATH` to the url the API is located at
 - Set `APP_NAME` to the desired name of the App
 
+**_Read Config.md for more details_**
+
 ## Requirements
-* docker
-* docker-compose
+
+- docker
+- docker-compose

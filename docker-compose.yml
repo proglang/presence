@@ -28,10 +28,8 @@ presence_api:
   volumes:
     - ./image/api/:/var/www/html/storage/:rw
   environment:
-    APP_NAME: api
-    APP_ENV: local
     APP_KEY: AAAAAAAAAABBBBBBBBBBCCCCCCCCCCDD
-    APP_DEBUG: "false"
+    APP_DEBUG: false
 
     JWT_SECRET: SECRET_KEY
 
