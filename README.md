@@ -1,4 +1,4 @@
-# exam
+# Presence
 
 To install the App run
 `./install.sh`
