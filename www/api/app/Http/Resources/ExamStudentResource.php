@@ -27,7 +27,7 @@ class ExamStudentResource extends Resource
      */
     public function toArray($request)
     {
-        $this->refresh(); // force reload of relations
+        // $this->refresh(); // force reload of relations
         $ret = $this->presence->first();
         return [
             'id' => $this->id,
