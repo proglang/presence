@@ -101,6 +101,7 @@ class UserPage extends React.Component<IUserPageProps & ReduxProps & ReduxFn & W
         return ex.toSheet('log')
     }
     public render() {
+        const datalabel = this.props.intl.formatMessage({ id: "label.export.data" });
         return (
             <Container as="main">
                 <FormBase button={"submit.export"} onSubmit={this.export}>
@@ -115,7 +116,7 @@ class UserPage extends React.Component<IUserPageProps & ReduxProps & ReduxFn & W
                     <Form.Dropdown
                         name={"data"}
                         selection
-                        placeholder={"label.export.data"}
+                        placeholder={datalabel}
                         onChange={this.onChange}
                         multiple
                         options={this.data.map((data) => ({ ...data, text: this.props.intl.formatMessage({ id: data.text }) }))}

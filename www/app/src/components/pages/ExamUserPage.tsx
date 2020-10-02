@@ -123,6 +123,7 @@ class ExamUserPage extends React.Component<IExamUserPageProps & ReduxFn & ReduxP
             }
           }}
           header={[
+            { k:'id', t:'label.id'},
             { k: "name", t: "label.name" }, { k: "email", t: "label.email" }, { k: "note", t: "label.note" },
             { k: 'rights', fn: this.addRights, t: "label.rights" },
             { k: 'btn', fn: this.addButtons, t: this.addHeadButtons() }]}
