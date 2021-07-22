@@ -36,7 +36,7 @@
     "semantic-ui-react": "0.88.0",
     "stacktrace-parser": "0.1.6",
     "typescript": "3.5.2",
-    "xlsx": "0.14.3"
+    "xlsx": "0.17.0"
   },
   "scripts": {
     "start": "react-scripts start",
