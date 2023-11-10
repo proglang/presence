@@ -17,7 +17,7 @@
     "@types/react-intl-redux": "0.1.13",
     "@types/react-redux": "7.0.9",
     "@types/react-router-dom": "4.3.3",
-    "axios": "0.21.2",
+    "axios": "1.6.0",
     "flag-icon-css": "3.3.0",
     "moment": "2.29.4",
     "react": "16.8.6",
